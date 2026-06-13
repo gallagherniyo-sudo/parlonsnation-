@@ -84,10 +84,11 @@
 
         <div class="form-group">
           <label class="form-label" for="telephone">
-            Numéro de téléphone <span style="color:var(--text-muted);font-weight:400;">(optionnel)</span>
+            Numéro de téléphone <span class="required">*</span>
           </label>
-          <input type="tel" id="telephone" class="form-control" placeholder="Ex: +243 81 234 5678" autocomplete="off">
-          <div class="form-hint">Utilisé uniquement pour éviter les doublons. Jamais stocké en clair.</div>
+          <input type="tel" id="telephone" class="form-control" placeholder="Ex: +243812345678 ou 0812345678" autocomplete="off" required>
+          <div class="form-hint">Formats acceptés : +243XXXXXXXXX · 08XXXXXXXX · 09XXXXXXXX (minimum 10 chiffres)</div>
+          <div class="form-error" id="telephone-error">Numéro invalide. Exemples : +243812345678, 0812345678, 0912345678</div>
         </div>
 
         <div class="form-check">
@@ -99,6 +100,47 @@
         </div>
 
         <button class="btn btn-primary btn-block mt-3" id="nextStep1">Continuer →</button>
+      </div>
+
+      <!-- OTP : Vérification téléphone -->
+      <div id="formOTP" class="card hidden">
+        <h2 style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.25rem;">Vérification du téléphone</h2>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.5rem;">
+          En production, ce code sera envoyé par SMS via <strong>Africa's Talking</strong>. Pour l'instant, utilisez le code affiché ci-dessous.
+        </p>
+
+        <div style="background:#fefce8;border:2px solid #ca8a04;border-radius:var(--radius-sm);padding:1.25rem;margin-bottom:1.25rem;">
+          <div style="font-size:0.8rem;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;">
+            📱 Simulation SMS — Africa's Talking (à intégrer)
+          </div>
+          <div style="font-size:0.82rem;color:#78350f;margin-bottom:0.5rem;">
+            Numéro enregistré : <strong id="phoneDisplay" style="font-family:monospace;"></strong>
+          </div>
+          <div style="font-size:0.82rem;color:#78350f;margin-bottom:0.3rem;">Votre code de vérification :</div>
+          <div id="otpDisplay" style="font-size:2.4rem;font-weight:700;letter-spacing:0.4em;color:var(--green-dark);font-family:var(--font-head);margin:0.25rem 0 0.5rem;"></div>
+          <div style="font-size:0.72rem;color:#92400e;opacity:0.8;">Ce code ne sera affiché qu'en mode simulation. En production : envoi SMS automatique.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="otpInput">
+            Saisissez le code à 6 chiffres <span class="required">*</span>
+          </label>
+          <input type="text" id="otpInput" class="form-control"
+                 placeholder="_ _ _ _ _ _"
+                 maxlength="6" inputmode="numeric" autocomplete="one-time-code"
+                 style="font-size:1.8rem;letter-spacing:0.5em;text-align:center;font-weight:700;padding:0.65rem 0.5rem;">
+          <div class="form-error" id="otp-error">Code incorrect. Vérifiez et réessayez.</div>
+        </div>
+
+        <div style="display:flex;gap:1rem;margin-top:1.5rem;">
+          <button class="btn btn-outline" id="backOTP">← Retour</button>
+          <button class="btn btn-primary" style="flex:1;" id="verifyOTP">Confirmer le code →</button>
+        </div>
+
+        <p style="text-align:center;margin-top:1rem;font-size:0.82rem;color:var(--text-muted);">
+          Code expiré ou incorrect ?
+          <button id="resendOTP" style="background:none;border:none;color:var(--green);font-weight:600;cursor:pointer;text-decoration:underline;font-size:0.82rem;padding:0;">Générer un nouveau code</button>
+        </p>
       </div>
 
       <!-- ÉTAPE 2 : Localisation -->
@@ -305,6 +347,17 @@ document.querySelectorAll('input[name="modeAffichage"]').forEach(radio => {
 // Initialiser
 document.getElementById('card-anonyme').style.borderColor = 'var(--green)';
 
+// ── Validation téléphone ──────────────────────────────
+function validatePhone(raw) {
+  const n = raw.replace(/[\s\-\.\(\)]/g, '');
+  return /^(\+?243\d{9}|0[89]\d{8})$/.test(n);
+}
+function normalizePhone(raw) {
+  return raw.replace(/[\s\-\.\(\)]/g, '');
+}
+let generatedOTP = null;
+let phoneVerified = false;
+
 // ── Navigation entre étapes ───────────────────────────
 let currentStep = 1;
 
@@ -323,16 +376,46 @@ function showStep(n) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Étape 1 → 2
+// Étape 1 → OTP → 2
 document.getElementById('nextStep1').addEventListener('click', () => {
-  const cin = document.getElementById('cin').value.trim();
+  const cin   = document.getElementById('cin').value.trim();
+  const phone = document.getElementById('telephone').value.trim();
+  let valid = true;
+
   if (cin.length < 6) {
     document.getElementById('cin-error').classList.add('show');
     document.getElementById('cin').focus();
-    return;
+    valid = false;
+  } else {
+    document.getElementById('cin-error').classList.remove('show');
   }
-  document.getElementById('cin-error').classList.remove('show');
-  showStep(2);
+
+  if (!phone) {
+    document.getElementById('telephone-error').textContent = 'Le numéro de téléphone est obligatoire.';
+    document.getElementById('telephone-error').classList.add('show');
+    if (valid) document.getElementById('telephone').focus();
+    valid = false;
+  } else if (!validatePhone(phone)) {
+    document.getElementById('telephone-error').textContent = 'Format invalide. Exemples : +243812345678 · 0812345678 · 0912345678';
+    document.getElementById('telephone-error').classList.add('show');
+    if (valid) document.getElementById('telephone').focus();
+    valid = false;
+  } else {
+    document.getElementById('telephone-error').classList.remove('show');
+  }
+
+  if (!valid) return;
+
+  // Générer OTP et afficher le panel de vérification
+  generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+  document.getElementById('phoneDisplay').textContent = normalizePhone(phone);
+  document.getElementById('otpDisplay').textContent = generatedOTP;
+  document.getElementById('otpInput').value = '';
+  document.getElementById('otp-error').classList.remove('show');
+  document.getElementById('formStep1').classList.add('hidden');
+  document.getElementById('formOTP').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(() => document.getElementById('otpInput').focus(), 150);
 });
 
 // Étape 2 → 3
@@ -354,6 +437,53 @@ document.getElementById('nextStep2').addEventListener('click', () => {
 document.getElementById('backStep1').addEventListener('click', () => showStep(1));
 // Retour 3 → 2
 document.getElementById('backStep2').addEventListener('click', () => showStep(2));
+
+// ── OTP : retour vers étape 1 ─────────────────────────
+document.getElementById('backOTP').addEventListener('click', () => {
+  document.getElementById('formOTP').classList.add('hidden');
+  document.getElementById('formStep1').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// ── OTP : vérification du code ────────────────────────
+document.getElementById('verifyOTP').addEventListener('click', () => {
+  const entered = document.getElementById('otpInput').value.trim();
+  if (entered.length !== 6) {
+    document.getElementById('otp-error').textContent = 'Entrez les 6 chiffres du code.';
+    document.getElementById('otp-error').classList.add('show');
+    document.getElementById('otpInput').focus();
+    return;
+  }
+  if (entered !== generatedOTP) {
+    document.getElementById('otp-error').textContent = 'Code incorrect. Vérifiez et réessayez.';
+    document.getElementById('otp-error').classList.add('show');
+    document.getElementById('otpInput').select();
+    return;
+  }
+  document.getElementById('otp-error').classList.remove('show');
+  phoneVerified = true;
+  document.getElementById('formOTP').classList.add('hidden');
+  showStep(2);
+  toast('Téléphone vérifié avec succès !');
+});
+
+// ── OTP : auto-vérification à 6 chiffres ─────────────
+document.getElementById('otpInput').addEventListener('input', function() {
+  this.value = this.value.replace(/\D/g, '').slice(0, 6);
+  if (this.value.length === 6) {
+    setTimeout(() => document.getElementById('verifyOTP').click(), 250);
+  }
+});
+
+// ── OTP : renvoyer un nouveau code ────────────────────
+document.getElementById('resendOTP').addEventListener('click', () => {
+  generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+  document.getElementById('otpDisplay').textContent = generatedOTP;
+  document.getElementById('otpInput').value = '';
+  document.getElementById('otp-error').classList.remove('show');
+  document.getElementById('otpInput').focus();
+  toast('Nouveau code généré : ' + generatedOTP);
+});
 
 // ── Soumission finale ─────────────────────────────────
 document.getElementById('submitInscription').addEventListener('click', async () => {
@@ -398,10 +528,17 @@ document.getElementById('submitInscription').addEventListener('click', async () 
       territoire:     territoire || null,
       mode_affichage: modeAffichage,
       pseudo:         modeAffichage === 'public' ? pseudo : null,
-      diaspora:       isDiaspora
+      diaspora:          isDiaspora,
+      telephone_verifie: phoneVerified
     };
 
-    const { data, error } = await db.from('citoyens').insert(payload).select('id').single();
+    let { data, error } = await db.from('citoyens').insert(payload).select('id').single();
+
+    // Fallback : si la colonne telephone_verifie n'existe pas encore dans Supabase
+    if (error && error.message && error.message.includes('telephone_verifie')) {
+      const { telephone_verifie, ...payloadSans } = payload;
+      ({ data, error } = await db.from('citoyens').insert(payloadSans).select('id').single());
+    }
 
     if (error) {
       if (error.code === '23505') {
