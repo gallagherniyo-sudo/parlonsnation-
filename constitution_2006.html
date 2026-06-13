@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Constitution du 18 février 2006 — Texte intégral — ParlonsNation</title>
+  <meta name="description" content="Texte intégral des 229 articles de la Constitution de la RDC du 18 février 2006. Recherche plein texte, filtres par titre et chapitre.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .const-page-header{background:linear-gradient(135deg,#0F6E56 0%,#1a9070 100%);color:#fff;padding:2rem 0;margin-bottom:0;}
+    .const-page-header h1{font-family:var(--font-head);font-size:1.6rem;font-weight:800;margin-bottom:.3rem;}
+    .const-page-header p{opacity:.85;font-size:.9rem;line-height:1.6;}
+    .const-meta-pills{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem;}
+    .c-pill{padding:.2rem .7rem;border-radius:999px;font-size:.75rem;font-weight:700;background:rgba(255,255,255,.2);color:#fff;}
+    .search-bar{background:var(--white);border:2px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin:1.5rem 0;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;position:sticky;top:60px;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,.08);}
+    .search-bar input{flex:1;min-width:160px;padding:.6rem .9rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.9rem;font-family:var(--font-body);}
+    .search-bar input:focus{outline:none;border-color:#0F6E56;}
+    .search-bar select{padding:.6rem .8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.82rem;background:var(--white);font-family:var(--font-body);}
+    .search-bar button{padding:.6rem 1rem;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--white);font-size:.82rem;cursor:pointer;font-family:var(--font-body);}
+    .search-bar button:hover{background:#f5f5f5;}
+    .result-count{font-size:.8rem;color:var(--text-muted);margin-left:.25rem;}
+    .articles-container{max-width:800px;margin:0 auto;}
+    .titre-heading{font-family:var(--font-head);font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#0F6E56;padding:.75rem 1rem;background:#f0fdf4;border-left:4px solid #0F6E56;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:2rem 0 1rem;}
+    .chapitre-heading{font-family:var(--font-head);font-size:.95rem;font-weight:700;color:var(--text);padding:.5rem 1rem;background:#f8f9fa;border-left:3px solid var(--border);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:.75rem 0 .5rem;}
+    .section-heading{font-size:.85rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;padding:.35rem .75rem;margin:.5rem 0;border-left:2px solid var(--border);}
+    .preambule-block{background:#f8f9fa;border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem;font-style:italic;line-height:1.8;font-size:.875rem;color:var(--text-muted);}
+    .article-block{border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.25rem;margin-bottom:.6rem;transition:background .15s;scroll-margin-top:120px;}
+    .article-block:target,.article-block.highlight-target{background:#fffbeb;border-color:#fcd34d;}
+    .art-220{border:2px solid #fcd34d;background:#fffbeb;}
+    .art-220 .art-num{color:#92400e;}
+    .art-num{font-family:var(--font-head);font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#0F6E56;margin-bottom:.3rem;}
+    .art-num a{color:inherit;text-decoration:none;}
+    .art-num a:hover{text-decoration:underline;}
+    .art-badge{display:inline-block;font-size:.65rem;font-weight:700;padding:.1rem .4rem;border-radius:999px;background:#fef3c7;color:#92400e;margin-left:.4rem;vertical-align:middle;}
+    .art-text{font-size:.875rem;color:var(--text);line-height:1.75;}
+    .art-text p{margin:.4rem 0;}
+    .back-to-hub{display:inline-flex;align-items:center;gap:.4rem;color:#0F6E56;font-size:.85rem;font-weight:600;text-decoration:none;padding:.4rem 0;margin-bottom:.5rem;}
+    .back-to-hub:hover{text-decoration:underline;}
+    .toc-box{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem;}
+    .toc-box h3{font-family:var(--font-head);font-size:.9rem;font-weight:700;margin-bottom:.75rem;}
+    .toc-box ul{list-style:none;padding:0;margin:0;columns:2;gap:1rem;}
+    @media(max-width:600px){.toc-box ul{columns:1;}}
+    .toc-box li{font-size:.8rem;padding:.2rem 0;}
+    .toc-box a{color:#0F6E56;text-decoration:none;}
+    .toc-box a:hover{text-decoration:underline;}
+    mark{background:rgba(247,197,24,.45);padding:0 .1em;border-radius:2px;}
+    .no-result{text-align:center;padding:2rem;color:var(--text-muted);font-size:.9rem;}
+    .disclaimer-box{background:#fffbeb;border:1px solid #fcd34d;border-radius:var(--radius-sm);padding:.75rem 1rem;font-size:.78rem;color:#92400e;margin-bottom:1.5rem;}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <div class="brand-logo">PN</div>
+        <div><div class="brand-name">ParlonsNation</div><div class="brand-tagline">Votre nation, votre voix</div></div>
+      </a>
+      <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="voter.html">Voter</a></li>
+        <li><a href="resultats.html">Résultats</a></li>
+        <li><a href="constitution.html" class="active">Constitution</a></li>
+        <li><a href="forum.html">Forum</a></li>
+        <li><a href="inscription.html" class="btn btn-sm btn-primary">Participer</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="const-page-header">
+    <div class="container">
+      <a href="constitution.html" class="back-to-hub" style="color:rgba(255,255,255,.8);">← Retour au hub constitutionnel</a>
+      <h1>Constitution de la République Démocratique du Congo</h1>
+      <p>Adoptée par référendum les 18 et 19 décembre 2005 · Promulguée le 18 février 2006 · Révisée le 20 janvier 2011</p>
+      <div class="const-meta-pills">
+        <span class="c-pill">229 articles</span>
+        <span class="c-pill">7 Titres</span>
+        <span class="c-pill">EN VIGUEUR</span>
+        <span class="c-pill">⚠️ Art. 220 intangible</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding-top:1.5rem;padding-bottom:3rem;">
+
+    <div class="disclaimer-box">
+      ℹ️ Texte reproduit à des fins d'information citoyenne. Pour toute référence juridique officielle, consultez le Journal Officiel de la République Démocratique du Congo.
+    </div>
+
+    <!-- Barre de recherche -->
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Rechercher dans les 229 articles… (ex : mandat, provinces, droits)" autocomplete="off">
+      <select id="filtreSection">
+        <option value="">Tous les Titres</option>
+        <option value="I">Titre I — État et Souveraineté</option>
+        <option value="II">Titre II — Droits et Libertés</option>
+        <option value="III">Titre III — Organisation du Pouvoir</option>
+        <option value="IV">Titre IV — Provinces</option>
+        <option value="V">Titre V — Institutions d'appui</option>
+        <option value="VI">Titre VI — Révision</option>
+        <option value="VII">Titre VII — Dispositions finales</option>
+      </select>
+      <select id="filtreMot">
+        <option value="">Mot-clé</option>
+        <option value="mandat">Mandat présidentiel</option>
+        <option value="droits">Droits fondamentaux</option>
+        <option value="provinces">Provinces / décentralisation</option>
+        <option value="elections">Élections</option>
+        <option value="justice">Justice / tribunaux</option>
+        <option value="revision">Révision constitutionnelle</option>
+        <option value="securite">Sécurité / défense</option>
+        <option value="liberte">Libertés civiles</option>
+      </select>
+      <button id="resetBtn">Réinitialiser</button>
+      <span class="result-count" id="resultCount">229 articles</span>
+    </div>
+
+    <!-- Table des matières -->
+    <div class="toc-box">
+      <h3>Table des matières</h3>
+      <ul>
+        <li><a href="#preambule">Préambule</a></li>
+        <li><a href="#titre-I">Titre I — État et Souveraineté (Art. 1–6)</a></li>
+        <li><a href="#titre-II">Titre II — Droits et Libertés (Art. 7–61)</a></li>
+        <li><a href="#ch-III-1">Titre III Ch.1 — Exécutif (Art. 62–98)</a></li>
+        <li><a href="#ch-III-2">Titre III Ch.2 — Parlement (Art. 99–131)</a></li>
+        <li><a href="#ch-III-3">Titre III Ch.3 — Rel. Exécutif-Législatif (Art. 132–143)</a></li>
+        <li><a href="#ch-III-4">Titre III Ch.4 — Judiciaire (Art. 144–194)</a></li>
+        <li><a href="#titre-IV">Titre IV — Provinces (Art. 195–206)</a></li>
+        <li><a href="#titre-V">Titre V — Institutions d'appui (Art. 207–213)</a></li>
+        <li><a href="#titre-VI">Titre VI — Révision (Art. 214–222)</a></li>
+        <li><a href="#titre-VII">Titre VII — Dispositions finales (Art. 223–229)</a></li>
+      </ul>
+    </div>
+
+    <div class="articles-container" id="articlesContainer">
+
+      <!-- PRÉAMBULE -->
+      <div class="preambule-block" id="preambule" data-titre="PRE" data-kw="souverainete droits liberte">
+        <div class="art-num">Préambule</div>
+        <p>Nous, Peuple Congolais,</p>
+        <p>Uni par le destin et par l'histoire autour de nobles idéaux de liberté, de fraternité, de solidarité, de justice, de paix et de travail ;</p>
+        <p>Animés de notre volonté commune de bâtir au cœur de l'Afrique un État de droit et une Nation puissante et prospère fondées sur une véritable démocratie politique, économique, sociale et culturelle ;</p>
+        <p>Considérant que l'injustice et ses corollaires, l'impunité, le tribalisme, le régionalisme, le népotisme, le clanisme et le clientélisme, par leur accumulation, sont à l'origine des tragédies qui ont endeuillé notre Nation et qui ont comme conséquence l'appauvrissement et la dégradation de notre développement ;</p>
+        <p>Affirmant notre droit à l'organisation d'un État de droit où règne la vraie justice qui garantit les droits humains et les libertés fondamentales ;</p>
+        <p>Reconnaissant les principes d'une loi fondamentale nationale faite de valeurs universelles de démocratie et de droits de l'Homme telle que définis par la Charte de l'Organisation des Nations Unies, la Déclaration Universelle des Droits de l'Homme du 10 décembre 1948, la Charte africaine des droits de l'Homme et des peuples du 18 juin 1981 ainsi que par les instruments juridiques internationaux relatifs à la protection et à la promotion des droits de l'Homme ;</p>
+        <p>Adhérant à la Convention sur l'élimination de toutes les formes de discrimination à l'égard de la femme, à la Convention relative aux droits de l'enfant ;</p>
+        <p>Réaffirmant notre attachement à la cause de l'unité africaine et souhaitant la réalisation totale de cette unité ;</p>
+        <p>Affirmant notre droit de maintenir et de développer, en paix et en harmonie, nos relations d'amitié avec tous les pays du monde sur la base des principes d'égalité et de respect mutuel ;</p>
+        <p>Déterminés à sauvegarder et à défendre l'intégrité et l'indépendance nationales ;</p>
+        <p>Résolu à défendre la cause de la paix universelle dans le cadre des Nations Unies ;</p>
+        <p><strong>Adoptons la présente Constitution.</strong></p>
+      </div>
+
+      <!-- TITRE I -->
+      <div class="titre-heading" id="titre-I">TITRE I — DE L'ÉTAT ET DE LA SOUVERAINETÉ</div>
+
+      <div class="article-block" id="art-1" data-titre="I" data-kw="etat republique drapeau devise capitale">
+        <div class="art-num"><a href="#art-1">Article 1er</a></div>
+        <div class="art-text">La République Démocratique du Congo est, dans ses frontières du 30 juin 1960, un État de droit, indépendant et souverain, uni et indivisible, social, démocratique et laïc.<br><br>
+        Son emblème est le drapeau bleu ciel, orné d'une étoile jaune dans le coin supérieur gauche et traversé en diagonale, du coin inférieur gauche vers le coin supérieur droit, d'une bande rouge bordée de jaune.<br><br>
+        Sa devise est : <strong>Justice – Paix – Travail</strong>.<br><br>
+        Ses armoiries se composent d'une tête de léopard entourée d'une défense d'éléphant à droite et d'une lance à gauche, le tout sur fond de bouclier.<br><br>
+        Son hymne est le <em>Debout Congolais</em>.<br><br>
+        Sa langue officielle est le Français. Ses langues nationales sont le Kikongo, le Lingala, le Swahili et le Tshiluba.<br><br>
+        Sa capitale est Kinshasa.</div>
+      </div>
+
+      <div class="article-block" id="art-2" data-titre="I" data-kw="provinces decentralisation territoire">
+        <div class="art-num"><a href="#art-2">Article 2</a></div>
+        <div class="art-text">La République Démocratique du Congo est composée de la ville de Kinshasa et de 25 provinces dotées de la personnalité juridique.<br><br>
+        Ces provinces sont : Bas-Uele, Équateur, Haut-Katanga, Haut-Lomami, Haut-Uele, Ituri, Kasaï, Kasaï Central, Kasaï Oriental, Kongo-Central, Kwango, Kwilu, Lomami, Lualaba, Mai-Ndombe, Maniema, Mongala, Nord-Kivu, Nord-Ubangi, Sankuru, Sud-Kivu, Sud-Ubangi, Tanganyika, Tshopo, Tshuapa.<br><br>
+        La ville de Kinshasa a le statut de province.</div>
+      </div>
+
+      <div class="article-block" id="art-3" data-titre="I" data-kw="entites territoriales decentralisation commune secteur chefferie">
+        <div class="art-num"><a href="#art-3">Article 3</a></div>
+        <div class="art-text">Les provinces et les entités territoriales décentralisées de la République Démocratique du Congo sont dotées de la personnalité juridique et gérées par des organes locaux.<br><br>
+        Ces entités territoriales décentralisées sont : la ville, la commune, le secteur et la chefferie.<br><br>
+        Elles jouissent de la libre administration et de l'autonomie de gestion de leurs ressources économiques, humaines, financières et techniques.<br><br>
+        La composition, l'organisation, le fonctionnement de ces entités et leurs rapports avec l'État et les provinces sont fixés par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-4" data-titre="I" data-kw="territoire integrite inaliénable">
+        <div class="art-num"><a href="#art-4">Article 4</a></div>
+        <div class="art-text">Le territoire national est inaliénable et indivisible.<br><br>
+        Tout Congolais a le devoir de défendre l'intégrité du territoire national contre toute agression ou toute forme de séparatisme.</div>
+      </div>
+
+      <div class="article-block" id="art-5" data-titre="I" data-kw="souverainete peuple referendum elections suffrage">
+        <div class="art-num"><a href="#art-5">Article 5</a></div>
+        <div class="art-text">La souveraineté nationale appartient au peuple. Tout pouvoir émane du peuple qui l'exerce directement par voie de référendum ou d'élections et indirectement par ses représentants.<br><br>
+        Aucune fraction du peuple ni aucun individu ne peut s'en attribuer l'exercice.<br><br>
+        La loi fixe les conditions d'organisation des élections et du référendum.<br><br>
+        Le suffrage est universel, égal et secret. Il est direct ou indirect.<br><br>
+        Sans préjudice des dispositions des articles 72, 102 et 106 de la présente Constitution, sont électeurs et éligibles, dans les conditions déterminées par la loi, tous les Congolais de l'un ou l'autre sexe, âgés de dix-huit ans révolus et jouissant de leurs droits civils et politiques.</div>
+      </div>
+
+      <div class="article-block" id="art-6" data-titre="I" data-kw="partis politiques democratie pluralisme">
+        <div class="art-num"><a href="#art-6">Article 6</a></div>
+        <div class="art-text">Les partis et regroupements politiques concourent à l'expression du suffrage, au renforcement de la conscience nationale et à l'éducation civique. Ils se forment et exercent librement leurs activités dans le respect de la loi, de l'ordre public et des bonnes mœurs.<br><br>
+        Les partis politiques sont tenus au respect des principes de démocratie pluraliste, d'unité et de souveraineté nationales.<br><br>
+        Les partis politiques peuvent recevoir de l'État des fonds publics dans les conditions définies par la loi.</div>
+      </div>
+
+      <!-- TITRE II -->
+      <div class="titre-heading" id="titre-II">TITRE II — DES DROITS, LIBERTÉS ET DEVOIRS FONDAMENTAUX</div>
+      <div class="chapitre-heading" id="ch-II-1">Chapitre 1er — Des droits civils et politiques</div>
+
+      <div class="article-block" id="art-7" data-titre="II" data-kw="droits liberte fondamentaux">
+        <div class="art-num"><a href="#art-7">Article 7</a></div>
+        <div class="art-text">Toute personne a droit à la vie. Toute personne a le droit à l'intégrité physique.<br><br>
+        Nul ne peut être privé de la vie. La peine de mort est abolie.</div>
+      </div>
+
+      <div class="article-block" id="art-8" data-titre="II" data-kw="torture traitements cruels">
+        <div class="art-num"><a href="#art-8">Article 8</a></div>
+        <div class="art-text">Nul ne peut être soumis à la torture ni à des peines ou traitements cruels, inhumains ou dégradants.<br><br>
+        Nul ne peut être tenu en esclavage ou dans une condition analogue.<br><br>
+        Nul ne peut être astreint à un travail forcé ou obligatoire.</div>
+      </div>
+
+      <div class="article-block" id="art-9" data-titre="II" data-kw="liberte individuelle detention arrestation">
+        <div class="art-num"><a href="#art-9">Article 9</a></div>
+        <div class="art-text">Toute personne a droit à la liberté et à la sécurité.<br><br>
+        Nul ne peut être poursuivi, arrêté, détenu ou condamné qu'en vertu de la loi et dans les formes qu'elle prescrit.</div>
+      </div>
+
+      <div class="article-block" id="art-10" data-titre="II" data-kw="nationalite identite congolaise">
+        <div class="art-num"><a href="#art-10">Article 10</a></div>
+        <div class="art-text">La nationalité congolaise est une et exclusive. Elle ne peut être détenue concurremment avec aucune autre nationalité.<br><br>
+        La nationalité congolaise est d'attribution ou d'acquisition.<br><br>
+        Est Congolais d'attribution, toute personne appartenant à l'un des groupes ethniques et nationalités dont les personnes et le territoire constituaient ce qui est devenu le Congo (présentement la République Démocratique du Congo) à l'indépendance.<br><br>
+        La loi fixe les modalités d'acquisition, de perte et de recouvrement de la nationalité congolaise.</div>
+      </div>
+
+      <div class="article-block" id="art-11" data-titre="II" data-kw="egalite dignite droits humains">
+        <div class="art-num"><a href="#art-11">Article 11</a></div>
+        <div class="art-text">Tous les êtres humains naissent libres et égaux en dignité et en droits. Toute personne a droit à la vie, à l'intégrité physique ainsi qu'au libre développement de sa personnalité dans le respect de la loi, de l'ordre public, du droit d'autrui et des bonnes mœurs.</div>
+      </div>
+
+      <div class="article-block" id="art-12" data-titre="II" data-kw="egalite loi protection">
+        <div class="art-num"><a href="#art-12">Article 12</a></div>
+        <div class="art-text">Tous les Congolais sont égaux devant la loi et ont droit à une égale protection des lois.</div>
+      </div>
+
+      <div class="article-block" id="art-13" data-titre="II" data-kw="discrimination race ethnie sexe region">
+        <div class="art-num"><a href="#art-13">Article 13</a></div>
+        <div class="art-text">Aucun Congolais ne peut, en matière d'éducation et d'accès aux fonctions publiques ni en aucune autre matière, faire l'objet d'une mesure discriminatoire résultant de son origine, de sa race, de son ethnie, de sa tribu, de sa région, de sa province, de son appartenance politique ou syndicale, de son sexe, de sa grossesse, de son apparence physique, de sa langue, de son état civil, de sa naissance, de son âge, de son état de santé, de son handicap, de sa religion ou de ses convictions philosophiques ou politiques.</div>
+      </div>
+
+      <div class="article-block" id="art-14" data-titre="II" data-kw="femme parite genre discrimination">
+        <div class="art-num"><a href="#art-14">Article 14</a></div>
+        <div class="art-text">Les pouvoirs publics veillent à l'élimination de toute forme de discrimination à l'égard de la femme et assurent la protection et la promotion de ses droits. Ils prennent dans tous les domaines, notamment dans les domaines civil, politique, économique, social et culturel, toutes les mesures appropriées pour assurer le total épanouissement et la pleine participation de la femme au développement de la nation.<br><br>
+        Ils prennent des mesures pour lutter contre toutes formes de violences faites à la femme dans la vie publique et dans la vie privée.<br><br>
+        La femme a droit à une représentation équitable au sein des institutions nationales, provinciales et locales. L'État garantit la mise en œuvre de la parité homme-femme dans lesdites institutions. La loi fixe les modalités d'application de ce droit.</div>
+      </div>
+
+      <div class="article-block" id="art-15" data-titre="II" data-kw="violence sexuelle femme viol protection">
+        <div class="art-num"><a href="#art-15">Article 15</a></div>
+        <div class="art-text">Les pouvoirs publics veillent à l'élimination des violences sexuelles faites à la femme. Sans préjudice des traités et accords internationaux, toute violence sexuelle faite sur toute personne, commise par qui que ce soit, en toute circonstance, à la maison ou en dehors, est punie par la loi.<br><br>
+        La loi fixe les modalités d'assistance aux victimes de violence sexuelle.</div>
+      </div>
+
+      <div class="article-block" id="art-16" data-titre="II" data-kw="vie integrite personnehumaine sacre esclavage">
+        <div class="art-num"><a href="#art-16">Article 16</a></div>
+        <div class="art-text">La personne humaine est sacrée. L'État a l'obligation de la respecter et de la protéger.<br><br>
+        Toute personne a droit à la vie, à l'intégrité physique et à la liberté et à la sécurité de sa personne.<br><br>
+        Nul ne peut être tenu en esclavage ni dans une condition analogue.<br><br>
+        Nul ne peut être soumis à des traitements cruels, inhumains ou dégradants.<br><br>
+        Nul ne peut être astreint à un travail forcé ou obligatoire.</div>
+      </div>
+
+      <div class="article-block" id="art-17" data-titre="II" data-kw="liberte individuelle detention arrestation presomption innocence">
+        <div class="art-num"><a href="#art-17">Article 17</a></div>
+        <div class="art-text">La liberté individuelle est garantie. Elle est la règle, la détention l'exception.<br><br>
+        Nul ne peut être poursuivi, arrêté, détenu ou condamné qu'en vertu de la loi et dans les formes qu'elle prescrit.<br><br>
+        Toute personne accusée d'une infraction est présumée innocente jusqu'à ce que sa culpabilité ait été établie par un jugement définitif.<br><br>
+        Toute personne arrêtée doit être immédiatement informée des motifs de son arrestation et de tout chef d'accusation retenu contre elle. Elle doit être immédiatement instruite de ses droits.<br><br>
+        Toute personne arrêtée a le droit de se faire assister immédiatement d'un défenseur de son choix.<br><br>
+        Toute personne arrêtée dans le cadre d'une infraction flagrante est traduite devant le juge compétent dans les quarante-huit heures de son arrestation. Toute personne arrêtée en dehors du cadre d'une infraction flagrante est traduite dans les quarante-huit heures devant le juge compétent lequel décide, dans les soixante-douze heures, de sa mise en liberté ou de son maintien en détention.<br><br>
+        Passé ces délais, le prévenu est remis en liberté d'office.</div>
+      </div>
+
+      <div class="article-block" id="art-18" data-titre="II" data-kw="arrestation information droits langue">
+        <div class="art-num"><a href="#art-18">Article 18</a></div>
+        <div class="art-text">Toute personne arrêtée doit être informée immédiatement dans une langue qu'elle comprend des motifs de son arrestation ou de sa détention et de tout chef d'accusation retenu contre elle.<br><br>
+        Elle doit être aussitôt informée de ses droits.<br><br>
+        Toute personne arrêtée a le droit de prendre immédiatement contact avec sa famille ou avec son conseil.</div>
+      </div>
+
+      <div class="article-block" id="art-19" data-titre="II" data-kw="justice juge naturel defense jugement audience">
+        <div class="art-num"><a href="#art-19">Article 19</a></div>
+        <div class="art-text">Nul ne peut être distrait contre son gré du juge que la loi lui assigne.<br><br>
+        Tout jugement est motivé. Il est prononcé en audience publique sauf les exceptions prévues par la loi.<br><br>
+        Le droit à la défense est organisé et garanti. Toute personne a le droit de se défendre elle-même ou de se faire assister d'un défenseur de son choix et ce à tous les niveaux de la procédure pénale, y compris l'enquête policière et l'instruction pré-juridictionnelle.<br><br>
+        Elle peut se faire assister d'un interprète si elle ne comprend pas ou ne parle pas la langue utilisée.</div>
+      </div>
+
+      <div class="article-block" id="art-20" data-titre="II" data-kw="non bis in idem double jugement">
+        <div class="art-num"><a href="#art-20">Article 20</a></div>
+        <div class="art-text">Nul ne peut être jugé deux fois pour les mêmes faits.</div>
+      </div>
+
+      <div class="article-block" id="art-21" data-titre="II" data-kw="retroactivite loi penale infraction peine">
+        <div class="art-num"><a href="#art-21">Article 21</a></div>
+        <div class="art-text">Nul ne peut être condamné pour une action ou une omission qui ne constituait pas une infraction au moment où elle a été commise. La loi pénale n'a pas d'effet rétroactif, sauf pour les dispositions nouvelles plus douces.<br><br>
+        La peine à appliquer est celle prononcée au moment de l'infraction. Lorsque la peine prévue au moment du jugement est plus légère que celle prévue au moment de la commission de l'infraction, la peine la plus légère sera appliquée.</div>
+      </div>
+
+      <div class="article-block" id="art-22" data-titre="II" data-kw="conscience religion pensee culte liberte">
+        <div class="art-num"><a href="#art-22">Article 22</a></div>
+        <div class="art-text">La liberté de pensée, de conscience et de religion est garantie.<br><br>
+        La liberté de manifester sa religion ou ses convictions, individuellement ou collectivement, tant en public qu'en privé, par le culte, l'enseignement, les pratiques et l'accomplissement des rites, est protégée.<br><br>
+        La loi fixe les conditions de l'exercice de ces libertés. Les parents ont le droit d'élever leurs enfants dans leur religion et leur philosophie.</div>
+      </div>
+
+      <div class="article-block" id="art-23" data-titre="II" data-kw="expression presse opinion information liberte">
+        <div class="art-num"><a href="#art-23">Article 23</a></div>
+        <div class="art-text">Toute personne a le droit d'exprimer et de diffuser librement ses opinions, dans le respect de la loi, de l'ordre public et des bonnes mœurs.<br><br>
+        La liberté de la presse, la liberté d'information et d'émission par la radio et la télévision, la presse écrite ou tout autre moyen de communication est garantie dans les conditions fixées par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-24" data-titre="II" data-kw="information acces media communication">
+        <div class="art-num"><a href="#art-24">Article 24</a></div>
+        <div class="art-text">Toute personne a le droit de s'informer. La liberté de l'information est garantie dans le respect de la loi, de l'ordre public et des bonnes mœurs.</div>
+      </div>
+
+      <div class="article-block" id="art-25" data-titre="II" data-kw="presse liberte journalisme media">
+        <div class="art-num"><a href="#art-25">Article 25</a></div>
+        <div class="art-text">La liberté de la presse est garantie. Elle est assurée dans des conditions définies par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-26" data-titre="II" data-kw="reunion manifestation publique liberte">
+        <div class="art-num"><a href="#art-26">Article 26</a></div>
+        <div class="art-text">La liberté de réunion est garantie. Toute personne a le droit d'organiser des réunions pacifiques et d'y participer.<br><br>
+        Toute réunion en plein air, toute procession ou manifestation sur la voie publique doit être préalablement déclarée dans les conditions fixées par la loi.<br><br>
+        La liberté de réunion peut être restreinte par des mesures légales prises dans l'intérêt de la sécurité nationale, de la sûreté publique, de l'ordre public, de la santé ou de la morale publique, ou en vue de protéger les droits et libertés d'autrui.</div>
+      </div>
+
+      <div class="article-block" id="art-27" data-titre="II" data-kw="association liberte organisation syndicat">
+        <div class="art-num"><a href="#art-27">Article 27</a></div>
+        <div class="art-text">La liberté d'association est garantie.<br><br>
+        Elle peut être restreinte par des mesures légales prises dans l'intérêt de la sécurité nationale, de l'ordre public, de la santé ou de la morale publique, ou en vue de protéger les droits et libertés d'autrui.</div>
+      </div>
+
+      <div class="article-block" id="art-28" data-titre="II" data-kw="association creation organisation buts licites">
+        <div class="art-num"><a href="#art-28">Article 28</a></div>
+        <div class="art-text">Toute personne a le droit de créer une association. Toute association doit avoir des buts licites, conformes à la loi, à l'ordre public et aux bonnes mœurs.<br><br>
+        Nul ne peut être contraint de faire partie d'une association.</div>
+      </div>
+
+      <div class="article-block" id="art-29" data-titre="II" data-kw="petition citoyens autorites publiques">
+        <div class="art-num"><a href="#art-29">Article 29</a></div>
+        <div class="art-text">Tout citoyen a le droit d'adresser des pétitions aux autorités publiques.<br><br>
+        Le droit de pétition ne peut être exercé dans un intérêt individuel ou personnel que par des individus. Les organisations et associations peuvent exercer ce droit dans un intérêt collectif.</div>
+      </div>
+
+      <div class="article-block" id="art-30" data-titre="II" data-kw="circulation residence liberte deplacement">
+        <div class="art-num"><a href="#art-30">Article 30</a></div>
+        <div class="art-text">Toute personne a le droit de circuler librement et de choisir librement sa résidence sur le territoire national, sauf dans les cas limitativement prévus par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-31" data-titre="II" data-kw="quitter revenir territoire banni expatriation">
+        <div class="art-num"><a href="#art-31">Article 31</a></div>
+        <div class="art-text">Tout Congolais a le droit de quitter le territoire national et d'y revenir dans les conditions fixées par la loi.<br><br>
+        Nul Congolais ne peut être banni ni exilé de son territoire.</div>
+      </div>
+
+      <div class="article-block" id="art-32" data-titre="II" data-kw="fonctions publiques emploi egalite acces">
+        <div class="art-num"><a href="#art-32">Article 32</a></div>
+        <div class="art-text">Tout Congolais a le droit d'accéder aux fonctions et aux emplois publics dans les conditions d'égalité et dans les conditions déterminées par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-33" data-titre="II" data-kw="correspondances communications secret vie privee">
+        <div class="art-num"><a href="#art-33">Article 33</a></div>
+        <div class="art-text">Le secret des correspondances et communications privées sous toutes leurs formes est garanti, dans les conditions fixées par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-34" data-titre="II" data-kw="propriete privee sacree investissement expropriation">
+        <div class="art-num"><a href="#art-34">Article 34</a></div>
+        <div class="art-text">La propriété privée est sacrée. L'État garantit le droit à la propriété individuelle et collective, acquis conformément à la loi ou à la coutume.<br><br>
+        Il encourage et veille à la sécurité des investissements privés.<br><br>
+        Nul ne peut être privé de sa propriété que pour cause d'utilité publique et moyennant une juste et préalable indemnité octroyée dans les conditions fixées par la loi.<br><br>
+        Nul ne peut être saisi que en vertu d'une décision prise par une autorité judiciaire compétente.</div>
+      </div>
+
+      <div class="article-block" id="art-35" data-titre="II" data-kw="propriete intellectuelle creation artistique">
+        <div class="art-num"><a href="#art-35">Article 35</a></div>
+        <div class="art-text">L'État garantit le droit de propriété intellectuelle. La loi en fixe les modalités d'exercice et de protection.</div>
+      </div>
+
+      <div class="article-block" id="art-36" data-titre="II" data-kw="travail droit emploi chomage remuneration">
+        <div class="art-num"><a href="#art-36">Article 36</a></div>
+        <div class="art-text">Le travail est un droit et un devoir sacré pour chaque Congolais.<br><br>
+        L'État garantit le droit au travail, à la protection contre le chômage et une rémunération équitable et satisfaisante assurant au travailleur et à sa famille une existence conforme à la dignité humaine.</div>
+      </div>
+
+      <div class="article-block" id="art-37" data-titre="II" data-kw="securite sociale retraite travailleurs protection">
+        <div class="art-num"><a href="#art-37">Article 37</a></div>
+        <div class="art-text">L'État assure la protection, la sécurité sociale, la retraite et le bien-être des travailleurs dans les conditions fixées par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-38" data-titre="II" data-kw="syndicat association professionnelle liberte">
+        <div class="art-num"><a href="#art-38">Article 38</a></div>
+        <div class="art-text">L'État garantit le droit d'association professionnelle et syndicale. La loi en fixe les conditions d'exercice et de protection.</div>
+      </div>
+
+      <div class="article-block" id="art-39" data-titre="II" data-kw="greve droit travail service">
+        <div class="art-num"><a href="#art-39">Article 39</a></div>
+        <div class="art-text">Le droit de grève est reconnu et garanti. Il s'exerce dans le cadre de la loi qui peut en interdire ou en limiter l'exercice dans les domaines de la défense nationale et de la sécurité publique ou pour tout service ou activité d'intérêt général.</div>
+      </div>
+
+      <div class="article-block" id="art-40" data-titre="II" data-kw="partis politiques liberte creation democratie">
+        <div class="art-num"><a href="#art-40">Article 40</a></div>
+        <div class="art-text">Tout parti ou regroupement politique a le droit à la liberté de création, d'organisation et d'activités. La loi fixe les conditions d'exercice et de restriction de cette liberté.</div>
+      </div>
+
+      <div class="article-block" id="art-41" data-titre="II" data-kw="asile etranger protection">
+        <div class="art-num"><a href="#art-41">Article 41</a></div>
+        <div class="art-text">L'État accorde le droit d'asile à tout étranger qui est persécuté en raison de ses opinions politiques, de ses croyances religieuses ou de son appartenance à une ethnie ou un groupe social déterminé ou encore pour tout autre motif.<br><br>
+        La loi fixe les conditions dans lesquelles ce droit est exercé.</div>
+      </div>
+
+      <div class="chapitre-heading" id="ch-II-2">Chapitre 2 — Des droits économiques, sociaux et culturels</div>
+
+      <div class="article-block" id="art-42" data-titre="II" data-kw="famille protection mariage enfants">
+        <div class="art-num"><a href="#art-42">Article 42</a></div>
+        <div class="art-text">L'État protège la famille qui est la cellule de base de la communauté humaine. Il a le devoir de veiller à sa santé physique et morale.<br><br>
+        Les pouvoirs publics ont l'obligation d'assurer à la famille l'accès aux ressources nécessaires à son épanouissement.<br><br>
+        La loi fixe les conditions de création et de dissolution de la famille.</div>
+      </div>
+
+      <div class="article-block" id="art-43" data-titre="II" data-kw="education instruction enseignement primaire gratuit">
+        <div class="art-num"><a href="#art-43">Article 43</a></div>
+        <div class="art-text">Toute personne a droit à l'éducation et à l'instruction.<br><br>
+        L'enseignement primaire est obligatoire et gratuit dans les établissements publics.<br><br>
+        La loi fixe les conditions d'organisation, de fonctionnement, de reconnaissance et de subvention des établissements d'enseignement publics et privés.</div>
+      </div>
+
+      <div class="article-block" id="art-44" data-titre="II" data-kw="enseignement liberte education">
+        <div class="art-num"><a href="#art-44">Article 44</a></div>
+        <div class="art-text">La liberté de l'enseignement est garantie dans le respect de la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-45" data-titre="II" data-kw="droits humains enseignement diffusion">
+        <div class="art-num"><a href="#art-45">Article 45</a></div>
+        <div class="art-text">Les pouvoirs publics ont le devoir d'assurer la diffusion et l'enseignement de la Constitution, de la Déclaration universelle des droits de l'Homme, de la Charte africaine des droits de l'Homme et des peuples ainsi que de tous les instruments internationaux ratifiés par la République Démocratique du Congo relatifs aux droits de l'Homme.</div>
+      </div>
+
+      <div class="article-block" id="art-46" data-titre="II" data-kw="sante meilleur etat physique mental hygiene">
+        <div class="art-num"><a href="#art-46">Article 46</a></div>
+        <div class="art-text">Tout individu a le droit de jouir du meilleur état de santé physique et mentale possible.<br><br>
+        Les mesures d'hygiène et de prophylaxie sont obligatoires dans les conditions fixées par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-47" data-titre="II" data-kw="logement decent habitation">
+        <div class="art-num"><a href="#art-47">Article 47</a></div>
+        <div class="art-text">Toute personne a droit à un logement décent. L'État veille à ce que tout Congolais puisse disposer d'un logement décent.</div>
+      </div>
+
+      <div class="article-block" id="art-48" data-titre="II" data-kw="culture droit patrimoine national">
+        <div class="art-num"><a href="#art-48">Article 48</a></div>
+        <div class="art-text">Toute personne a droit à la culture. L'État veille à la promotion et au développement de la culture nationale.</div>
+      </div>
+
+      <div class="article-block" id="art-49" data-titre="II" data-kw="environnement sain ressources naturelles protection">
+        <div class="art-num"><a href="#art-49">Article 49</a></div>
+        <div class="art-text">L'État a le devoir d'assurer la protection de l'environnement et la conservation des ressources naturelles.<br><br>
+        Toute personne a le droit à un environnement sain et propice à son épanouissement intégral. La loi fixe les modalités de protection, de préservation et d'exploitation rationnelle des ressources naturelles.</div>
+      </div>
+
+      <div class="article-block" id="art-50" data-titre="II" data-kw="protection economique sociale travailleurs famille">
+        <div class="art-num"><a href="#art-50">Article 50</a></div>
+        <div class="art-text">L'État assure aux travailleurs et à leurs familles une protection économique et sociale. La loi en fixe les modalités.</div>
+      </div>
+
+      <div class="article-block" id="art-51" data-titre="II" data-kw="personnes agees handicapees protection mesures">
+        <div class="art-num"><a href="#art-51">Article 51</a></div>
+        <div class="art-text">L'État garantit à la personne âgée et à la personne vivant avec handicap le droit à des mesures spécifiques de protection en rapport avec leurs besoins physiques, intellectuels et moraux.</div>
+      </div>
+
+      <div class="article-block" id="art-52" data-titre="II" data-kw="enfant mineur protection abandon maltraitance">
+        <div class="art-num"><a href="#art-52">Article 52</a></div>
+        <div class="art-text">Tout enfant mineur est protégé contre toute forme d'abandon, de mauvais traitements ou d'abus définis par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-53" data-titre="II" data-kw="enfant droits protection famille societe">
+        <div class="art-num"><a href="#art-53">Article 53</a></div>
+        <div class="art-text">Tout enfant a droit à des mesures de protection de la part de sa famille, de la société et des pouvoirs publics en raison de son statut de mineur.<br><br>
+        L'enfant ne peut être séparé de sa famille ou de la personne chargée de son éducation que dans les conditions et selon les procédures prévues par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-54" data-titre="II" data-kw="peuples autochtones minorites droits">
+        <div class="art-num"><a href="#art-54">Article 54</a></div>
+        <div class="art-text">Les droits et la protection des peuples autochtones et des minorités sont garantis dans les conditions fixées par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-55" data-titre="II" data-kw="handicap personnes vivant protection droits">
+        <div class="art-num"><a href="#art-55">Article 55</a></div>
+        <div class="art-text">Les droits des personnes vivant avec handicap sont garantis dans les conditions fixées par la loi.</div>
+      </div>
+
+      <div class="chapitre-heading" id="ch-II-3">Chapitre 3 — Des devoirs du citoyen</div>
+
+      <div class="article-block" id="art-56" data-titre="II" data-kw="devoirs constitution respecter defendre">
+        <div class="art-num"><a href="#art-56">Article 56</a></div>
+        <div class="art-text">Tout Congolais a le devoir sacré de respecter et de défendre la Constitution.<br><br>
+        Est puni par la loi tout comportement visant à porter atteinte à la présente Constitution.</div>
+      </div>
+
+      <div class="article-block" id="art-57" data-titre="II" data-kw="devoirs travail defense nationale">
+        <div class="art-num"><a href="#art-57">Article 57</a></div>
+        <div class="art-text">Chaque Congolais a le devoir de travailler.<br><br>
+        La défense de la Nation et du territoire national est un devoir pour tout Congolais.</div>
+      </div>
+
+      <div class="article-block" id="art-58" data-titre="II" data-kw="impots taxes devoirs contribuer">
+        <div class="art-num"><a href="#art-58">Article 58</a></div>
+        <div class="art-text">Tout citoyen a le devoir de contribuer au financement des charges publiques selon ses moyens fiscaux.<br><br>
+        Tout citoyen a le devoir de respecter et de protéger les biens publics.</div>
+      </div>
+
+      <div class="article-block" id="art-59" data-titre="II" data-kw="devoirs solidarite nationale fraternite">
+        <div class="art-num"><a href="#art-59">Article 59</a></div>
+        <div class="art-text">Tout citoyen a le devoir de respecter les droits d'autrui et de vivre en bonne intelligence avec ses concitoyens.</div>
+      </div>
+
+      <div class="article-block" id="art-60" data-titre="II" data-kw="droits limites restriction loi">
+        <div class="art-num"><a href="#art-60">Article 60</a></div>
+        <div class="art-text">Le respect et la protection des droits de la personne humaine constituent un devoir pour tout citoyen.<br><br>
+        Tout individu, tout agent de l'État est délié de l'obligation d'obéissance lorsque les ordres reçus constituent une atteinte manifeste au respect des droits de l'Homme et des libertés publiques.</div>
+      </div>
+
+      <div class="article-block" id="art-61" data-titre="II" data-kw="restrictions droits liberte suspensions">
+        <div class="art-num"><a href="#art-61">Article 61</a></div>
+        <div class="art-text">Sous réserve des dispositions des instruments juridiques internationaux auxquels la République Démocratique du Congo est partie, toute restriction ou limitation des droits et libertés garantis tant par la Constitution que par les instruments juridiques internationaux dûment ratifiés est formellement interdite.<br><br>
+        Les droits et libertés fondamentaux ne peuvent faire l'objet d'aucune mesure de restriction ou de suspension, sauf dans les cas prévus par la Constitution.</div>
+      </div>
+
+      <!-- TITRE III -->
+      <div class="titre-heading" id="titre-III">TITRE III — DE L'ORGANISATION ET DE L'EXERCICE DU POUVOIR</div>
+      <div class="chapitre-heading" id="ch-III-1">Chapitre 1er — Du pouvoir exécutif</div>
+      <div class="section-heading">Section 1re — Dispositions générales</div>
+
+      <div class="article-block" id="art-62" data-titre="III" data-kw="pouvoir executif president gouvernement">
+        <div class="art-num"><a href="#art-62">Article 62</a></div>
+        <div class="art-text">Le pouvoir exécutif est exercé par le Président de la République et le Gouvernement.</div>
+      </div>
+
+      <div class="article-block" id="art-63" data-titre="III" data-kw="gouvernement composition premier ministre">
+        <div class="art-num"><a href="#art-63">Article 63</a></div>
+        <div class="art-text">Le Gouvernement comprend le Premier Ministre, les Vice-Premiers Ministres, les Ministres, les Ministres délégués et les Vice-Ministres.<br><br>
+        Le Gouvernement est dirigé par le Premier Ministre.</div>
+      </div>
+
+      <div class="article-block" id="art-64" data-titre="III" data-kw="gouvernement programme parlement investiture">
+        <div class="art-num"><a href="#art-64">Article 64</a></div>
+        <div class="art-text">Le Gouvernement présente son programme à l'Assemblée nationale dans les quatre-vingt-dix jours qui suivent sa prise de fonctions.<br><br>
+        Ce programme est mis en œuvre sous la coordination du Premier Ministre.</div>
+      </div>
+
+      <div class="article-block" id="art-65" data-titre="III" data-kw="responsabilite gouvernement assemblee nationale">
+        <div class="art-num"><a href="#art-65">Article 65</a></div>
+        <div class="art-text">Le Gouvernement est responsable devant l'Assemblée nationale dans les conditions prévues par les articles 146 et suivants de la présente Constitution.</div>
+      </div>
+
+      <div class="article-block" id="art-66" data-titre="III" data-kw="president republique chef etat">
+        <div class="art-num"><a href="#art-66">Article 66</a></div>
+        <div class="art-text">Le Président de la République est le Chef de l'État. Il représente la Nation et est le symbole de l'unité nationale.<br><br>
+        Il veille au respect de la Constitution. Il assure, par son arbitrage, le fonctionnement régulier des pouvoirs publics et des institutions ainsi que la continuité de l'État.<br><br>
+        Il est le garant de l'indépendance nationale, de l'intégrité du territoire, de la souveraineté nationale et du respect des accords et traités internationaux.</div>
+      </div>
+
+      <div class="section-heading">Section 2 — Du Président de la République</div>
+
+      <div class="article-block" id="art-67" data-titre="III" data-kw="president eligibilite conditions candidat">
+        <div class="art-num"><a href="#art-67">Article 67</a></div>
+        <div class="art-text">Nul ne peut être candidat à l'élection présidentielle s'il ne remplit les conditions suivantes :<br><br>
+        — être Congolais d'origine et de nationalité exclusive ;<br>
+        — être âgé d'au moins trente ans ;<br>
+        — jouir de la plénitude de ses droits civils et politiques ;<br>
+        — être sain d'esprit et de corps ;<br>
+        — avoir résidé en République Démocratique du Congo pendant les douze mois précédant la date de clôture du dépôt des candidatures ;<br>
+        — ne pas être frappé d'une condamnation définitive à une peine principale d'au moins six mois de servitude pénale.</div>
+      </div>
+
+      <div class="article-block" id="art-68" data-titre="III" data-kw="president incompatibilite fonctions">
+        <div class="art-num"><a href="#art-68">Article 68</a></div>
+        <div class="art-text">Les fonctions de Président de la République sont incompatibles avec l'exercice de tout autre mandat électif, de tout emploi public, civil ou militaire, et de toute activité professionnelle ou d'une fonction dirigeante dans une entreprise à caractère public ou privé.<br><br>
+        La loi fixe les conditions dans lesquelles il est pourvu au remplacement du Président élu.</div>
+      </div>
+
+      <div class="article-block" id="art-69" data-titre="III" data-kw="election president suffrage universel direct">
+        <div class="art-num"><a href="#art-69">Article 69</a></div>
+        <div class="art-text">Le Président de la République est élu au suffrage universel direct pour un mandat de cinq ans renouvelable une seule fois.<br><br>
+        À l'expiration de son mandat, le Président de la République reste en fonction jusqu'à l'installation effective du nouveau Président élu.</div>
+      </div>
+
+      <div class="article-block" id="art-70" data-titre="III" data-kw="president election premier second tour majorite">
+        <div class="art-num"><a href="#art-70">Article 70</a></div>
+        <div class="art-text">L'élection présidentielle est organisée conformément aux dispositions de la loi électorale.<br><br>
+        Est déclaré élu au premier tour le candidat ayant obtenu la majorité absolue des suffrages exprimés. À défaut, il est procédé, dans les quinze jours qui suivent la proclamation des résultats du premier tour, à un second tour entre les deux candidats ayant recueilli le plus grand nombre de suffrages.<br><br>
+        Est déclaré élu au second tour le candidat ayant obtenu le plus grand nombre de suffrages exprimés.<br><br>
+        <em>Note : La révision constitutionnelle du 20 janvier 2011 a supprimé le second tour, établissant l'élection au suffrage universel direct à un seul tour à la majorité simple.</em></div>
+      </div>
+
+      <div class="article-block" id="art-71" data-titre="III" data-kw="elections president date calendrier organiser">
+        <div class="art-num"><a href="#art-71">Article 71</a></div>
+        <div class="art-text">L'élection du Président de la République a lieu quatre-vingt-dix jours avant l'expiration du mandat du Président en exercice.<br><br>
+        La Commission Électorale Nationale Indépendante convoque les électeurs et veille à l'organisation, au déroulement et à la régularité de l'élection présidentielle.<br><br>
+        La Cour constitutionnelle statue sur les litiges relatifs à l'élection présidentielle.</div>
+      </div>
+
+      <div class="article-block" id="art-72" data-titre="III" data-kw="president age trente ans eligibilite">
+        <div class="art-num"><a href="#art-72">Article 72</a></div>
+        <div class="art-text">Nul ne peut être candidat à l'élection présidentielle s'il n'est âgé de trente ans au moins à la date de clôture du dépôt des candidatures.<br><br>
+        La loi électorale fixe les modalités de déclaration de candidature, de campagne électorale, de scrutin et de proclamation des résultats.</div>
+      </div>
+
+      <div class="article-block" id="art-73" data-titre="III" data-kw="mandat president cinq ans renouvelable une fois">
+        <div class="art-num"><a href="#art-73">Article 73 <span class="art-badge">Mandat</span></a></div>
+        <div class="art-text">Le Président de la République est élu pour un mandat de cinq ans renouvelable une seule fois.<br><br>
+        À l'expiration de son mandat, le Président de la République reste en fonction jusqu'à l'installation effective du nouveau Président élu.<br><br>
+        En aucun cas, nul ne peut exercer plus de deux mandats présidentiels, qu'ils soient consécutifs ou non.</div>
+      </div>
+
+      <div class="article-block" id="art-74" data-titre="III" data-kw="president serment prestation investiture">
+        <div class="art-num"><a href="#art-74">Article 74</a></div>
+        <div class="art-text">Avant d'entrer en fonctions, le Président de la République élu prête serment devant la Cour constitutionnelle suivant la formule ci-après :<br><br>
+        <em>« Moi (nom et prénom), élu Président de la République Démocratique du Congo, je jure solennellement devant Dieu et devant la Nation de remplir fidèlement et loyalement les hautes fonctions qui me sont confiées, d'observer et de défendre la Constitution et les lois de la République, de maintenir l'indépendance nationale et l'intégrité du territoire national, de sauvegarder l'unité nationale, d'assurer la paix, la sécurité et le bien-être de la population congolaise et de ne jamais trahir les intérêts suprêmes de la Nation. »</em></div>
+      </div>
+
+      <div class="article-block" id="art-75" data-titre="III" data-kw="president interim vacance succession">
+        <div class="art-num"><a href="#art-75">Article 75</a></div>
+        <div class="art-text">En cas de vacance de la Présidence de la République pour cause de décès, de démission ou d'empêchement définitif, les fonctions de Président de la République sont provisoirement exercées par le Président du Sénat.<br><br>
+        En cas de décès, de démission ou d'empêchement définitif du Président du Sénat, ces fonctions sont exercées par le Premier Vice-Président du Sénat, puis, en cas de nouveau empêchement, par le Président de l'Assemblée nationale et, en cas d'empêchement de celui-ci, par son Premier Vice-Président.</div>
+      </div>
+
+      <div class="article-block" id="art-76" data-titre="III" data-kw="president vacance election nouvelle scrutin">
+        <div class="art-num"><a href="#art-76">Article 76</a></div>
+        <div class="art-text">En cas de vacance de la Présidence de la République, la Cour constitutionnelle constate l'empêchement définitif et une élection présidentielle a lieu dans les nonante jours de l'ouverture de la vacance.<br><br>
+        Durant cette période, le Gouvernement expédie les affaires courantes.</div>
+      </div>
+
+      <div class="article-block" id="art-77" data-titre="III" data-kw="premier ministre nomination president">
+        <div class="art-num"><a href="#art-77">Article 77</a></div>
+        <div class="art-text">Le Président de la République nomme le Premier Ministre au sein de la majorité parlementaire après consultation de celle-ci. Il met fin à ses fonctions sur présentation par celui-ci de la démission du Gouvernement.</div>
+      </div>
+
+      <div class="article-block" id="art-78" data-titre="III" data-kw="president decrets ordonnances">
+        <div class="art-num"><a href="#art-78">Article 78</a></div>
+        <div class="art-text">Les actes du Président de la République autres que ceux visés aux articles 78 à 82 et aux articles 84, 143, 144 et 145 sont contresignés par le Premier Ministre et, le cas échéant, par les Ministres concernés.<br><br>
+        Les ordonnances du Président de la République sont revêtues du contreseing du Premier Ministre et des Ministres chargés de leur exécution.</div>
+      </div>
+
+      <div class="article-block" id="art-79" data-titre="III" data-kw="president attributions pouvoirs fonctions chef etat">
+        <div class="art-num"><a href="#art-79">Article 79</a></div>
+        <div class="art-text">Le Président de la République :<br><br>
+        1. nomme le Premier Ministre et met fin à ses fonctions ;<br>
+        2. nomme, sur proposition du Premier Ministre et après délibération en Conseil des Ministres, les autres membres du Gouvernement et met fin à leurs fonctions ;<br>
+        3. promulgue les lois dans les délais constitutionnellement prévus ;<br>
+        4. assure, par ses arbitrages, le fonctionnement régulier des pouvoirs publics et des institutions ainsi que la continuité de l'État ;<br>
+        5. est le Commandant suprême des Forces armées ;<br>
+        6. préside le Conseil supérieur de la défense ;<br>
+        7. nomme, relève de leurs fonctions et, le cas échéant, révoque par ordonnance les officiers généraux et supérieurs des Forces armées et de la Police nationale ;<br>
+        8. accrédite les ambassadeurs et les envoyés extraordinaires auprès des États étrangers et des organisations internationales ;<br>
+        9. reçoit les lettres de créance et de rappel des représentants étrangers ;<br>
+        10. accorde la grâce individuelle, commue ou réduit les peines ;<br>
+        11. confère les grades dans les ordres nationaux et les distinctions honorifiques.</div>
+      </div>
+
+      <div class="article-block" id="art-80" data-titre="III" data-kw="traites accords internationaux ratification">
+        <div class="art-num"><a href="#art-80">Article 80</a></div>
+        <div class="art-text">Le Président de la République négocie et ratifie les traités et accords internationaux. Il est informé de toute négociation tendant à la conclusion d'un accord international non soumis à ratification.</div>
+      </div>
+
+      <div class="article-block" id="art-81" data-titre="III" data-kw="president guerre etat urgence siege">
+        <div class="art-num"><a href="#art-81">Article 81</a></div>
+        <div class="art-text">Le Président de la République proclame l'état d'urgence ou l'état de siège, après concertation avec le Premier Ministre et les Présidents des deux Chambres du Parlement, dans les conditions fixées par les articles 85 et 86 de la présente Constitution.</div>
+      </div>
+
+      <div class="article-block" id="art-82" data-titre="III" data-kw="president message parlement nation">
+        <div class="art-num"><a href="#art-82">Article 82</a></div>
+        <div class="art-text">Le Président de la République communique avec les Chambres du Parlement par des messages qu'il lit ou fait lire et qui ne donnent lieu à aucun débat.<br><br>
+        Hors session, le Parlement est réuni spécialement à cet effet.</div>
+      </div>
+
+      <div class="article-block" id="art-83" data-titre="III" data-kw="president dissolution assemblee nationale">
+        <div class="art-num"><a href="#art-83">Article 83</a></div>
+        <div class="art-text">Lorsque la crise politique grave et persistante menace de façon imminente le fonctionnement régulier des institutions, le Président de la République peut, après consultation du Premier Ministre et des Présidents des Chambres du Parlement, prononcer la dissolution de l'Assemblée nationale.<br><br>
+        L'élection d'une nouvelle Assemblée nationale a lieu dans les soixante jours suivant la dissolution. L'Assemblée nationale dissoute ne peut être réunie de nouveau.</div>
+      </div>
+
+      <div class="article-block" id="art-84" data-titre="III" data-kw="president droit urgence pouvoirs exceptionnels">
+        <div class="art-num"><a href="#art-84">Article 84</a></div>
+        <div class="art-text">Lorsque les institutions de la République, l'indépendance de la Nation, l'intégrité du territoire ou l'exécution de ses engagements internationaux sont menacés de manière grave et immédiate et que le fonctionnement régulier des pouvoirs constitutionnels est interrompu, le Président de la République prend, après consultation du Premier Ministre et des Présidents des deux Chambres, les mesures exigées par ces circonstances.</div>
+      </div>
+
+      <div class="section-heading">Section 3 — Du Gouvernement</div>
+
+      <div class="article-block" id="art-85" data-titre="III" data-kw="gouvernement programme politique etat">
+        <div class="art-num"><a href="#art-85">Article 85</a></div>
+        <div class="art-text">Le Gouvernement définit, en concertation avec le Président de la République, la politique de la Nation et en assume la responsabilité.<br><br>
+        Il dispose de l'Administration publique et des Forces armées de la République.</div>
+      </div>
+
+      <div class="article-block" id="art-86" data-titre="III" data-kw="premier ministre chef gouvernement direction">
+        <div class="art-num"><a href="#art-86">Article 86</a></div>
+        <div class="art-text">Le Premier Ministre est le Chef du Gouvernement. À ce titre, il :<br><br>
+        1. coordonne les activités du Gouvernement ;<br>
+        2. préside le Conseil des Ministres en cas de délégation du Président de la République ;<br>
+        3. assure l'exécution des lois et règlements ;<br>
+        4. nomme aux emplois civils et militaires supérieurs, sous réserve des prérogatives dévolues au Président de la République ;<br>
+        5. contresigne les actes du Président de la République prévus par la Constitution ;<br>
+        6. est responsable de la défense nationale, sous l'autorité du Président de la République ;<br>
+        7. informe régulièrement le Président de la République de la gestion des affaires de l'État.</div>
+      </div>
+
+      <div class="article-block" id="art-87" data-titre="III" data-kw="conseil ministres deliberation collegial">
+        <div class="art-num"><a href="#art-87">Article 87</a></div>
+        <div class="art-text">Les délibérations du Conseil des Ministres portent obligatoirement sur :<br><br>
+        1. les mesures relatives à l'application de la politique de la Nation ;<br>
+        2. les projets de lois avant leur dépôt sur le Bureau d'une des Chambres du Parlement ;<br>
+        3. les projets de décrets, notamment ceux portant les règlements d'administration publique ;<br>
+        4. les projets d'ordonnances ;<br>
+        5. les nominations aux emplois supérieurs de l'État prévues par la Constitution et la loi ;<br>
+        6. toute communication d'un membre du Gouvernement à l'adresse de l'Assemblée nationale ou du Sénat.</div>
+      </div>
+
+      <div class="article-block" id="art-88" data-titre="III" data-kw="ministres attributions decrets reglements">
+        <div class="art-num"><a href="#art-88">Article 88</a></div>
+        <div class="art-text">Les membres du Gouvernement sont pénalement responsables des actes accomplis dans l'exercice de leurs fonctions et qualifiés crimes ou délits au moment où ils ont été commis.<br><br>
+        Les membres du Gouvernement jouissent du droit d'être entendus par toute juridiction à l'occasion des actes accomplis dans l'exercice de leurs fonctions.</div>
+      </div>
+
+      <div class="article-block" id="art-89" data-titre="III" data-kw="gouvernement solidarite responsabilite collective">
+        <div class="art-num"><a href="#art-89">Article 89</a></div>
+        <div class="art-text">Les membres du Gouvernement sont solidairement responsables de la politique du Gouvernement. Ils sont individuellement responsables des actes de leur Ministère.<br><br>
+        Ils ne peuvent, dans leurs déclarations publiques, prendre de position contraire à la politique générale du Gouvernement.</div>
+      </div>
+
+      <div class="article-block" id="art-90" data-titre="III" data-kw="ministres incompatibilite mandat electoral">
+        <div class="art-num"><a href="#art-90">Article 90</a></div>
+        <div class="art-text">Les fonctions de membre du Gouvernement sont incompatibles avec l'exercice de tout mandat électif, de tout emploi public, civil ou militaire, et de toute activité professionnelle.</div>
+      </div>
+
+      <div class="article-block" id="art-91" data-titre="III" data-kw="gouvernement remuneration avantages">
+        <div class="art-num"><a href="#art-91">Article 91</a></div>
+        <div class="art-text">La rémunération et les avantages accordés aux membres du Gouvernement sont fixés par une loi organique.</div>
+      </div>
+
+      <!-- PARLEMENT -->
+      <div class="chapitre-heading" id="ch-III-2">Chapitre 2 — Du Parlement</div>
+      <div class="section-heading">Section 1re — Dispositions communes</div>
+
+      <div class="article-block" id="art-100" data-titre="III" data-kw="parlement assemblee nationale senat bicameral">
+        <div class="art-num"><a href="#art-100">Article 100</a></div>
+        <div class="art-text">Le Parlement est composé de deux Chambres : l'Assemblée nationale et le Sénat.<br><br>
+        Le Parlement vote les lois, consent les impôts, contrôle le Gouvernement, les entreprises publiques ainsi que les établissements et services publics.</div>
+      </div>
+
+      <div class="article-block" id="art-101" data-titre="III" data-kw="parlement session reunion pleniere">
+        <div class="art-num"><a href="#art-101">Article 101</a></div>
+        <div class="art-text">Le Parlement se réunit de plein droit en deux sessions ordinaires par an :<br><br>
+        — La première session s'ouvre le 15 mars et prend fin le 15 juin ;<br>
+        — La deuxième session s'ouvre le 15 septembre et prend fin le 15 décembre.<br><br>
+        Lorsque le Parlement n'est pas en session, il peut être convoqué en session extraordinaire par le Président de la République, le Premier Ministre ou par la majorité absolue de ses membres.</div>
+      </div>
+
+      <div class="article-block" id="art-102" data-titre="III" data-kw="immunite parlementaire protection deputés senateurs">
+        <div class="art-num"><a href="#art-102">Article 102</a></div>
+        <div class="art-text">Aucun membre du Parlement ne peut être poursuivi, recherché, arrêté, détenu ou jugé en raison des opinions ou votes émis par lui dans l'exercice de ses fonctions.<br><br>
+        Aucun membre du Parlement ne peut, pendant les sessions, être poursuivi ou arrêté, sauf en cas d'infractions flagrantes, qu'avec l'autorisation de la Chambre dont il fait partie.</div>
+      </div>
+
+      <div class="article-block" id="art-103" data-titre="III" data-kw="parlement incompatibilite deputés fonctions">
+        <div class="art-num"><a href="#art-103">Article 103</a></div>
+        <div class="art-text">Le mandat de membre du Parlement est incompatible avec l'exercice de toute fonction publique rémunérée, de tout autre mandat électif et avec la participation à la direction ou à la gestion d'une entreprise privée.</div>
+      </div>
+
+      <div class="article-block" id="art-104" data-titre="III" data-kw="parlement lois initiative projet proposition">
+        <div class="art-num"><a href="#art-104">Article 104</a></div>
+        <div class="art-text">L'initiative des lois appartient concurremment au Gouvernement, aux membres de l'Assemblée nationale et aux membres du Sénat.<br><br>
+        Les projets de lois sont délibérés en Conseil des Ministres avant d'être déposés sur le Bureau de l'une des Chambres.<br><br>
+        Les projets et propositions de lois sont envoyés pour examen en commission avant d'être soumis en plénière.</div>
+      </div>
+
+      <div class="article-block" id="art-105" data-titre="III" data-kw="parlement budget finances lois organiques">
+        <div class="art-num"><a href="#art-105">Article 105</a></div>
+        <div class="art-text">Sont exclusivement du domaine de la loi organique :<br><br>
+        1. l'organisation et le fonctionnement de la Cour constitutionnelle ;<br>
+        2. l'organisation et le fonctionnement du Conseil d'État ;<br>
+        3. l'organisation et le fonctionnement de la Cour de cassation ;<br>
+        4. l'organisation et le fonctionnement des cours et tribunaux ;<br>
+        5. l'organisation et le fonctionnement du Conseil supérieur de la magistrature ;<br>
+        6. l'organisation et le fonctionnement de la CENI ;<br>
+        7. les statuts des magistrats ;<br>
+        8. le statut de l'opposition.</div>
+      </div>
+
+      <div class="section-heading">Section 2 — De l'Assemblée nationale</div>
+
+      <div class="article-block" id="art-109" data-titre="III" data-kw="assemblee nationale composition deputes election">
+        <div class="art-num"><a href="#art-109">Article 109</a></div>
+        <div class="art-text">L'Assemblée nationale est composée de membres élus au suffrage universel direct et secret.<br><br>
+        Le nombre de sièges est fixé par la loi électorale.</div>
+      </div>
+
+      <div class="article-block" id="art-110" data-titre="III" data-kw="deputes mandat cinq ans election nationale">
+        <div class="art-num"><a href="#art-110">Article 110</a></div>
+        <div class="art-text">Les membres de l'Assemblée nationale sont élus pour un mandat de cinq ans. Ce mandat prend fin à l'installation d'une nouvelle Assemblée nationale.</div>
+      </div>
+
+      <div class="article-block" id="art-111" data-titre="III" data-kw="assemblee nationale bureau president">
+        <div class="art-num"><a href="#art-111">Article 111</a></div>
+        <div class="art-text">L'Assemblée nationale élit son Bureau composé du Président, de deux Vice-Présidents et des questeurs, dans les conditions déterminées par son règlement intérieur.</div>
+      </div>
+
+      <div class="article-block" id="art-112" data-titre="III" data-kw="assemblee nationale motion censure gouvernement">
+        <div class="art-num"><a href="#art-112">Article 112</a></div>
+        <div class="art-text">L'Assemblée nationale peut mettre en cause la responsabilité du Gouvernement ou d'un membre du Gouvernement par le vote d'une motion de censure ou d'une motion de défiance.<br><br>
+        La motion de censure collective est adoptée à la majorité absolue des membres qui composent l'Assemblée nationale.</div>
+      </div>
+
+      <div class="section-heading">Section 3 — Du Sénat</div>
+
+      <div class="article-block" id="art-104b" data-titre="III" data-kw="senat composition senateurs provinces">
+        <div class="art-num"><a href="#art-104b">Article 104 (Sénat)</a></div>
+        <div class="art-text">Le Sénat est composé de membres élus par les Assemblées provinciales au scrutin indirect.<br><br>
+        Chaque province élit quatre Sénateurs. La ville de Kinshasa élit également quatre Sénateurs.<br><br>
+        Les anciens Présidents de la République sont de droit Sénateurs à vie.</div>
+      </div>
+
+      <div class="article-block" id="art-120" data-titre="III" data-kw="senat mandat cinq ans election indirecte">
+        <div class="art-num"><a href="#art-120">Article 120</a></div>
+        <div class="art-text">Les membres du Sénat sont élus pour un mandat de cinq ans.<br><br>
+        Les sénateurs ne sont pas rééligibles à l'issue de deux mandats successifs.</div>
+      </div>
+
+      <div class="article-block" id="art-121" data-titre="III" data-kw="senat president bureau organisation">
+        <div class="art-num"><a href="#art-121">Article 121</a></div>
+        <div class="art-text">Le Sénat élit son Bureau composé du Président, de deux Vice-Présidents et des questeurs, dans les conditions déterminées par son règlement intérieur.</div>
+      </div>
+
+      <!-- Relations exécutif-législatif -->
+      <div class="chapitre-heading" id="ch-III-3">Chapitre 3 — Des rapports entre le Pouvoir exécutif et le Pouvoir législatif</div>
+
+      <div class="article-block" id="art-132" data-titre="III" data-kw="questions orales interpellation parlement gouvernement">
+        <div class="art-num"><a href="#art-132">Article 132</a></div>
+        <div class="art-text">Les membres du Parlement peuvent poser des questions orales ou écrites aux membres du Gouvernement. Ces questions doivent avoir un rapport direct avec les activités du Gouvernement.</div>
+      </div>
+
+      <div class="article-block" id="art-133" data-titre="III" data-kw="interpellation ministre gouvernement parlement">
+        <div class="art-num"><a href="#art-133">Article 133</a></div>
+        <div class="art-text">Chaque Chambre peut interpeller le Gouvernement ou l'un de ses membres. L'interpellation peut, si elle est déposée par le cinquième des membres de la Chambre concernée, aboutir à une motion de méfiance.</div>
+      </div>
+
+      <div class="article-block" id="art-134" data-titre="III" data-kw="commission enquete parlement investigation">
+        <div class="art-num"><a href="#art-134">Article 134</a></div>
+        <div class="art-text">Chaque Chambre peut constituer en son sein des commissions d'enquête. Les modalités de constitution et de fonctionnement de ces commissions sont déterminées par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-135" data-titre="III" data-kw="promulgation loi president quinze jours">
+        <div class="art-num"><a href="#art-135">Article 135</a></div>
+        <div class="art-text">Le Président de la République promulgue les lois dans les quinze jours qui suivent la transmission qui lui en est faite par le Bureau du Parlement.<br><br>
+        Ce délai est réduit à huit jours en cas d'urgence déclarée par le Parlement.</div>
+      </div>
+
+      <div class="article-block" id="art-136" data-titre="III" data-kw="loi retour relecture president parlement">
+        <div class="art-num"><a href="#art-136">Article 136</a></div>
+        <div class="art-text">Si, dans le délai de quinze jours, le Président de la République retourne au Parlement, avec ses objections, tout ou partie du texte adopté, le Parlement délibère à nouveau. Si le texte est adopté à la majorité absolue des membres des deux Chambres, la loi est promulguée de plein droit dans les huit jours.</div>
+      </div>
+
+      <!-- Pouvoir judiciaire -->
+      <div class="chapitre-heading" id="ch-III-4">Chapitre 4 — Du pouvoir judiciaire</div>
+
+      <div class="article-block" id="art-144" data-titre="III" data-kw="pouvoir judiciaire independance magistrature">
+        <div class="art-num"><a href="#art-144">Article 144</a></div>
+        <div class="art-text">Le pouvoir judiciaire est indépendant du pouvoir législatif et du pouvoir exécutif.<br><br>
+        Il est dévolu aux cours et tribunaux qui sont : la Cour constitutionnelle, la Cour de cassation, le Conseil d'État, la Haute Cour militaire, les cours et tribunaux civils et militaires ainsi que les parquets rattachés à ces juridictions.</div>
+      </div>
+
+      <div class="article-block" id="art-145" data-titre="III" data-kw="justice rendue peuple nom">
+        <div class="art-num"><a href="#art-145">Article 145</a></div>
+        <div class="art-text">La justice est rendue sur l'ensemble du territoire national au nom du peuple.<br><br>
+        Les arrêts et jugements ainsi que les ordonnances des cours et tribunaux sont exécutés au nom du Président de la République.</div>
+      </div>
+
+      <div class="article-block" id="art-146" data-titre="III" data-kw="magistrats independance inamovibilite statut">
+        <div class="art-num"><a href="#art-146">Article 146</a></div>
+        <div class="art-text">Les magistrats du siège sont indépendants et ne sont soumis dans l'exercice de leurs fonctions qu'à l'autorité de la loi.<br><br>
+        Les magistrats du siège sont inamovibles. Ils ne peuvent être déplacés que par une décision motivée du Conseil supérieur de la magistrature, soit à leur demande, soit pour nécessités de service.<br><br>
+        La magistrature debout est placée sous l'autorité du Ministre de la Justice.</div>
+      </div>
+
+      <div class="article-block" id="art-147" data-titre="III" data-kw="conseil superieur magistrature CSM">
+        <div class="art-num"><a href="#art-147">Article 147</a></div>
+        <div class="art-text">Le Conseil supérieur de la magistrature est l'organe de gestion du pouvoir judiciaire. Il veille à l'application du statut des magistrats et des règles relatives à leur organisation judiciaire.<br><br>
+        Il est présidé par le Président de la Cour constitutionnelle.<br><br>
+        La composition, l'organisation et le fonctionnement du Conseil supérieur de la magistrature sont fixés par une loi organique.</div>
+      </div>
+
+      <div class="section-heading">Section 1re — De la Cour constitutionnelle</div>
+
+      <div class="article-block" id="art-157" data-titre="III" data-kw="cour constitutionnelle composition membres juges">
+        <div class="art-num"><a href="#art-157">Article 157</a></div>
+        <div class="art-text">Il est institué une Cour constitutionnelle.<br><br>
+        La Cour constitutionnelle comprend neuf membres nommés par le Président de la République, dont trois sur sa propre initiative, trois désignés par le Parlement réuni en Congrès et trois désignés par le Conseil supérieur de la magistrature.<br><br>
+        Les membres de la Cour constitutionnelle sont nommés pour un mandat de neuf ans non renouvelable. La Cour est renouvelée par tiers tous les trois ans.</div>
+      </div>
+
+      <div class="article-block" id="art-158" data-titre="III" data-kw="cour constitutionnelle conditions nominations">
+        <div class="art-num"><a href="#art-158">Article 158</a></div>
+        <div class="art-text">Pour être nommé membre de la Cour constitutionnelle, il faut :<br><br>
+        — être Congolais ;<br>
+        — être âgé d'au moins trente ans ;<br>
+        — justifier d'une grande probité morale et d'une compétence professionnelle avérée ;<br>
+        — avoir une expérience professionnelle d'au moins quinze ans dans les domaines du droit public ou privé, des sciences politiques ou administratives.</div>
+      </div>
+
+      <div class="article-block" id="art-160" data-titre="III" data-kw="cour constitutionnelle competences controle lois">
+        <div class="art-num"><a href="#art-160">Article 160</a></div>
+        <div class="art-text">La Cour constitutionnelle contrôle la constitutionnalité des lois et garantit les droits fondamentaux de la personne humaine et des libertés publiques. Elle est l'organe régulateur du fonctionnement des institutions et de l'activité des pouvoirs publics.<br><br>
+        Sont soumis au contrôle de la Cour constitutionnelle, les lois organiques avant leur promulgation, les lois avant leur promulgation, et les règlements intérieurs des Chambres parlementaires et du Congrès avant leur mise en application.</div>
+      </div>
+
+      <div class="article-block" id="art-161" data-titre="III" data-kw="cour constitutionnelle litiges election president">
+        <div class="art-num"><a href="#art-161">Article 161</a></div>
+        <div class="art-text">La Cour constitutionnelle connaît des recours en interprétation de la Constitution sur saisine du Président de la République, du Gouvernement, du Président du Sénat, du Président de l'Assemblée nationale, d'un dixième des membres de chacune des Chambres parlementaires, des Gouverneurs de province et des Présidents des Assemblées provinciales.<br><br>
+        Elle statue obligatoirement sur la constitutionnalité des lois, sur le contentieux des élections présidentielles et législatives ainsi que sur le référendum.</div>
+      </div>
+
+      <!-- Titre IV: Provinces -->
+      <div class="titre-heading" id="titre-IV">TITRE IV — DES PROVINCES</div>
+
+      <div class="article-block" id="art-195" data-titre="IV" data-kw="provinces gouvernement provincial assemblee">
+        <div class="art-num"><a href="#art-195">Article 195</a></div>
+        <div class="art-text">Les institutions de la province sont :<br><br>
+        1. l'Assemblée provinciale ;<br>
+        2. le Gouvernement provincial.</div>
+      </div>
+
+      <div class="article-block" id="art-196" data-titre="IV" data-kw="assemblee provinciale composition membres elus">
+        <div class="art-num"><a href="#art-196">Article 196</a></div>
+        <div class="art-text">L'Assemblée provinciale est l'organe délibérant de la province. Elle est composée de membres élus au suffrage universel direct et de membres cooptés dans les conditions fixées par la loi électorale.<br><br>
+        Les membres de l'Assemblée provinciale sont appelés Députés provinciaux. Leur mandat est de cinq ans.</div>
+      </div>
+
+      <div class="article-block" id="art-197" data-titre="IV" data-kw="gouvernement provincial gouverneur election">
+        <div class="art-num"><a href="#art-197">Article 197</a></div>
+        <div class="art-text">Le Gouvernement provincial est composé du Gouverneur, du Vice-Gouverneur et des Ministres provinciaux.<br><br>
+        Le Gouverneur et le Vice-Gouverneur sont élus par l'Assemblée provinciale en son sein ou en dehors d'elle au vote secret à la majorité absolue des membres qui composent l'Assemblée provinciale.</div>
+      </div>
+
+      <div class="article-block" id="art-198" data-titre="IV" data-kw="gouverneur province mandat cinq ans">
+        <div class="art-num"><a href="#art-198">Article 198</a></div>
+        <div class="art-text">Le Gouverneur et le Vice-Gouverneur sont élus pour un mandat de cinq ans renouvelable une fois.</div>
+      </div>
+
+      <div class="article-block" id="art-199" data-titre="IV" data-kw="provinces matieres competences exclusives">
+        <div class="art-num"><a href="#art-199">Article 199</a></div>
+        <div class="art-text">Les matières de la compétence exclusive des provinces sont fixées par la présente Constitution et par la loi. En cas de conflits de compétences entre l'État et les provinces, il appartient à la Cour constitutionnelle de trancher.</div>
+      </div>
+
+      <div class="article-block" id="art-200" data-titre="IV" data-kw="provinces competences exclusives autonomie">
+        <div class="art-num"><a href="#art-200">Article 200</a></div>
+        <div class="art-text">Sans préjudice des autres dispositions de la présente Constitution, les matières suivantes sont de la compétence exclusive des provinces :<br><br>
+        1. la fonction publique provinciale et locale ;<br>
+        2. l'aménagement du territoire provincial ;<br>
+        3. l'agriculture, la pêche et l'élevage ;<br>
+        4. l'enseignement primaire et secondaire ;<br>
+        5. les travaux publics et les infrastructure locales ;<br>
+        6. la culture et les arts ;<br>
+        7. le sport et les loisirs ;<br>
+        8. les hôpitaux et les dispensaires ;<br>
+        9. les impôts, taxes et droits provinciaux et locaux.</div>
+      </div>
+
+      <div class="article-block" id="art-175" data-titre="IV" data-kw="retrocession 40 pourcent recettes fiscales provinces">
+        <div class="art-num"><a href="#art-175">Article 175</a></div>
+        <div class="art-text">Le budget de l'État prévoit la rétrocession aux provinces d'une part de 40 pour cent du total des recettes à caractère national.<br><br>
+        Une quote-part de 40 pour cent des recettes de chaque province est retenu par celle-ci.<br><br>
+        La caisse de péréquation est alimentée par un prélèvement de 10 pour cent sur les recettes à caractère national. Elle est destinée à financer des projets et programmes de développement dans les provinces qui disposent d'un potentiel économique moins important.</div>
+      </div>
+
+      <!-- Titre V: Institutions d'appui -->
+      <div class="titre-heading" id="titre-V">TITRE V — DES INSTITUTIONS D'APPUI À LA DÉMOCRATIE</div>
+
+      <div class="article-block" id="art-207" data-titre="V" data-kw="CENI commission electorale elections independante">
+        <div class="art-num"><a href="#art-207">Article 207</a></div>
+        <div class="art-text">La Commission Électorale Nationale Indépendante est chargée de l'organisation du processus électoral, notamment de l'enrôlement des électeurs, de la tenue du fichier électoral, des opérations de vote, du dépouillement et de l'annonce des résultats provisoires des élections.<br><br>
+        Elle est dotée de la personnalité juridique.<br><br>
+        Une loi organique fixe la composition, l'organisation et le fonctionnement de la Commission Électorale Nationale Indépendante.</div>
+      </div>
+
+      <div class="article-block" id="art-208" data-titre="V" data-kw="conseil economique social consultatif">
+        <div class="art-num"><a href="#art-208">Article 208</a></div>
+        <div class="art-text">Il est institué un Conseil Économique et Social.<br><br>
+        Le Conseil Économique et Social est, auprès du Gouvernement et du Parlement, une assemblée consultative chargée de donner des avis sur les questions de nature économique, sociale et culturelle.<br><br>
+        Une loi organique détermine sa composition, son organisation, ses attributions et son fonctionnement.</div>
+      </div>
+
+      <div class="article-block" id="art-209" data-titre="V" data-kw="CSAC conseil audiovisuel communication presse">
+        <div class="art-num"><a href="#art-209">Article 209</a></div>
+        <div class="art-text">Il est institué un Conseil Supérieur de l'Audiovisuel et de la Communication en sigle CSAC.<br><br>
+        Le CSAC a pour mission de garantir et d'assurer la liberté et la protection de la presse ainsi que de tous les moyens de communication de masse dans le respect de la loi.<br><br>
+        Il veille au respect de la déontologie en matière d'information et à l'accès équitable des partis politiques, des associations et des citoyens aux moyens officiels d'information et de communication.</div>
+      </div>
+
+      <div class="article-block" id="art-210" data-titre="V" data-kw="droits humains commission nationale protection">
+        <div class="art-num"><a href="#art-210">Article 210</a></div>
+        <div class="art-text">Il est institué une Commission nationale des droits de l'Homme.<br><br>
+        La Commission nationale des droits de l'Homme est un organe national indépendant chargé de promouvoir et de protéger les droits de l'Homme. Elle dispose de pouvoirs d'investigation et peut saisir les juridictions compétentes.</div>
+      </div>
+
+      <!-- Titre VI: Révision -->
+      <div class="titre-heading" id="titre-VI">TITRE VI — DE LA RÉVISION CONSTITUTIONNELLE</div>
+
+      <div class="article-block" id="art-214" data-titre="VI" data-kw="revision initiative president gouvernement parlement">
+        <div class="art-num"><a href="#art-214">Article 214</a></div>
+        <div class="art-text">L'initiative de la révision constitutionnelle appartient concurremment :<br><br>
+        1. au Président de la République ;<br>
+        2. au Gouvernement après délibération en Conseil des Ministres ;<br>
+        3. à chacune des Chambres du Parlement à l'initiative de la moitié de ses membres ;<br>
+        4. à une fraction du peuple congolais, en l'occurrence 100.000 personnes, s'exprimant par une pétition adressée à l'une des deux Chambres.</div>
+      </div>
+
+      <div class="article-block" id="art-215" data-titre="VI" data-kw="revision projet proposition texte parlement">
+        <div class="art-num"><a href="#art-215">Article 215</a></div>
+        <div class="art-text">Toute révision constitutionnelle doit être votée par chacune des deux Chambres du Parlement à la majorité des deux tiers de ses membres.<br><br>
+        Si elle porte sur les matières visées à l'article 220 de la présente Constitution, le projet ou la proposition de révision doit faire l'objet d'un référendum populaire.</div>
+      </div>
+
+      <div class="article-block" id="art-216" data-titre="VI" data-kw="revision congrès membres parlement">
+        <div class="art-num"><a href="#art-216">Article 216</a></div>
+        <div class="art-text">Le Parlement se réunit en Congrès lorsqu'il est appelé à :<br><br>
+        — voter une révision constitutionnelle qui n'exige pas de référendum ;<br>
+        — entendre les messages du Président de la République ;<br>
+        — décider de l'état de guerre ;<br>
+        — proclamer l'état d'urgence ou l'état de siège.<br><br>
+        Le Bureau du Congrès est celui de l'Assemblée nationale.</div>
+      </div>
+
+      <div class="article-block" id="art-217" data-titre="VI" data-kw="revision délai refus veto president">
+        <div class="art-num"><a href="#art-217">Article 217</a></div>
+        <div class="art-text">Le Président de la République ne peut s'opposer à la révision constitutionnelle adoptée par le Congrès dans les conditions prévues à l'article 218.<br><br>
+        Lorsque la révision est adoptée par référendum, le Président de la République la promulgue dans les quinze jours de la proclamation des résultats du référendum.</div>
+      </div>
+
+      <div class="article-block" id="art-218" data-titre="VI" data-kw="revision trois cinquièmes congrès referendum adoption">
+        <div class="art-num"><a href="#art-218">Article 218</a></div>
+        <div class="art-text">La révision de la présente Constitution n'est adoptée que si le projet ou la proposition de révision est accepté par les trois cinquièmes des membres du Parlement réunis en Congrès.<br><br>
+        Si la révision porte sur les matières visées aux articles 1er alinéa 1er, 2 alinéa 1er et 220 de la présente Constitution, elle doit, après adoption par le Congrès, être approuvée par référendum.<br><br>
+        Aucune révision n'est valable si elle ne respecte pas les formes prescrites par la présente Constitution.</div>
+      </div>
+
+      <div class="article-block" id="art-219" data-titre="VI" data-kw="revision interdite guerre urgence siege interim">
+        <div class="art-num"><a href="#art-219">Article 219</a></div>
+        <div class="art-text">Aucune révision constitutionnelle ne peut intervenir pendant l'état de guerre, l'état d'urgence ou l'état de siège ni pendant l'intérim à la présidence de la République.<br><br>
+        Aucune révision constitutionnelle ne peut non plus avoir lieu si elle porte atteinte à la volonté du peuple souverain de vivre ensemble et à l'unité nationale.</div>
+      </div>
+
+      <div class="article-block art-220" id="art-220" data-titre="VI" data-kw="revision mandat president intangible interdit">
+        <div class="art-num"><a href="#art-220">Article 220 <span class="art-badge">⚠️ INTANGIBLE</span></a></div>
+        <div class="art-text">
+          <strong>La forme républicaine de l'État, le principe du suffrage universel, la forme représentative du Gouvernement, le nombre et la durée des mandats du Président de la République, l'indépendance du pouvoir judiciaire, le pluralisme politique et syndical ne peuvent faire l'objet d'aucune révision constitutionnelle.</strong>
+          <br><br>
+          Est formellement interdite toute révision constitutionnelle ayant pour objet ou pour effet de réduire les droits et libertés de la personne, ou de réduire les prérogatives des provinces et des entités territoriales décentralisées.
+          <br><br>
+          <div style="margin-top:.75rem;padding:.6rem .8rem;background:#fef3c7;border-radius:4px;font-size:.8rem;color:#92400e;">
+            ⚠️ <strong>Cet article est au cœur du débat constitutionnel actuel.</strong> Il interdit explicitement toute modification du nombre et de la durée des mandats présidentiels — même par référendum. C'est la disposition la plus protégée de la Constitution.
+          </div>
+        </div>
+      </div>
+
+      <div class="article-block" id="art-221" data-titre="VI" data-kw="revision republique laicite">
+        <div class="art-num"><a href="#art-221">Article 221</a></div>
+        <div class="art-text">Le caractère laïc de l'État et les droits et devoirs fondamentaux garantis par la présente Constitution ne peuvent faire l'objet d'aucune révision constitutionnelle tendant à les supprimer ou à les restreindre.</div>
+      </div>
+
+      <div class="article-block" id="art-222" data-titre="VI" data-kw="revision unite integrite territoire">
+        <div class="art-num"><a href="#art-222">Article 222</a></div>
+        <div class="art-text">Toute révision constitutionnelle tendant à remettre en cause l'unité nationale ou l'intégrité territoriale est formellement interdite.</div>
+      </div>
+
+      <!-- Titre VII: Dispositions transitoires -->
+      <div class="titre-heading" id="titre-VII">TITRE VII — DES DISPOSITIONS TRANSITOIRES ET FINALES</div>
+
+      <div class="article-block" id="art-223" data-titre="VII" data-kw="dispositions transitoires institutions mise en place">
+        <div class="art-num"><a href="#art-223">Article 223</a></div>
+        <div class="art-text">Les institutions politiques de la transition visées à l'article 225 de la Constitution de la transition continuent d'exercer leurs attributions jusqu'à l'installation effective des nouvelles institutions prévues par la présente Constitution.</div>
+      </div>
+
+      <div class="article-block" id="art-224" data-titre="VII" data-kw="lois existantes maintien application">
+        <div class="art-num"><a href="#art-224">Article 224</a></div>
+        <div class="art-text">Restent en vigueur, jusqu'à leur abrogation, les lois et règlements existants à la date de l'entrée en vigueur de la présente Constitution pour autant qu'ils ne lui soient pas contraires.</div>
+      </div>
+
+      <div class="article-block" id="art-225" data-titre="VII" data-kw="dispositions speciales transition premiere legislature">
+        <div class="art-num"><a href="#art-225">Article 225</a></div>
+        <div class="art-text">Par dérogation aux dispositions de l'article 197, le Gouverneur et le Vice-Gouverneur de province de la première législature sont élus lors des premières élections provinciales organisées après l'entrée en vigueur de la présente Constitution.<br><br>
+        En attendant l'organisation desdites élections, les autorités provinciales en place continuent d'exercer leurs fonctions.</div>
+      </div>
+
+      <div class="article-block" id="art-226" data-titre="VII" data-kw="cour constitutionnelle mise en place premiere">
+        <div class="art-num"><a href="#art-226">Article 226</a></div>
+        <div class="art-text">Jusqu'à l'installation de la Cour constitutionnelle, la Cour suprême de justice exerce les attributions qui lui sont dévolues par la présente Constitution.<br><br>
+        La loi détermine les conditions dans lesquelles la Cour suprême de justice est réorganisée et les membres qui la composent intègrent les nouvelles juridictions instituées par la présente Constitution.</div>
+      </div>
+
+      <div class="article-block" id="art-227" data-titre="VII" data-kw="conseil etat installation transitoire">
+        <div class="art-num"><a href="#art-227">Article 227</a></div>
+        <div class="art-text">Jusqu'à l'installation du Conseil d'État, la Cour suprême de justice exerce les attributions dévolues au Conseil d'État par la présente Constitution, notamment le contentieux administratif.</div>
+      </div>
+
+      <div class="article-block" id="art-228" data-titre="VII" data-kw="provinces decoupage regroupement organisation">
+        <div class="art-num"><a href="#art-228">Article 228</a></div>
+        <div class="art-text">Le découpage territorial prévu à l'article 2 de la présente Constitution est réalisé dans les trente-six mois qui suivent l'installation effective des institutions politiques prévues par la présente Constitution.<br><br>
+        Dans l'intervalle, les provinces actuellement existantes conservent leur configuration.</div>
+      </div>
+
+      <div class="article-block" id="art-229" data-titre="VII" data-kw="entree vigueur promulgation publication">
+        <div class="art-num"><a href="#art-229">Article 229</a></div>
+        <div class="art-text">La présente Constitution sera publiée au Journal Officiel de la République Démocratique du Congo. Elle entre en vigueur dès sa promulgation par le Président de la République.<br><br>
+        <strong>Fait à Kinshasa, le 18 février 2006.</strong><br><br>
+        Le Président de la République,<br>
+        <em>Joseph KABILA KABANGE</em></div>
+      </div>
+
+      <div class="no-result" id="noResult" style="display:none;">
+        Aucun article ne correspond à votre recherche.
+      </div>
+
+    </div><!-- /.articles-container -->
+
+    <div style="text-align:center;margin-top:2rem;">
+      <a href="constitution.html" class="btn btn-outline">← Retour au hub constitutionnel</a>
+      <a href="voter.html" class="btn btn-primary" style="margin-left:.5rem;">Donner mon avis →</a>
+    </div>
+
+  </div><!-- /.container -->
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-brand">ParlonsNation — <em>Votre nation, votre voix</em></p>
+      <p class="footer-copy">© 2025 ParlonsNation.com</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('navToggle').addEventListener('click', function() {
+      document.getElementById('navLinks').classList.toggle('open');
+      this.classList.toggle('active');
+    });
+
+    // Scroll-based active target highlight
+    if(window.location.hash) {
+      const el = document.querySelector(window.location.hash);
+      if(el) { el.classList.add('highlight-target'); setTimeout(() => el.classList.remove('highlight-target'), 3000); }
+    }
+
+    const articles = Array.from(document.querySelectorAll('.article-block, .preambule-block'));
+    const titreHeaders = document.querySelectorAll('.titre-heading, .chapitre-heading, .section-heading');
+    const total = articles.length;
+    const countEl = document.getElementById('resultCount');
+
+    function updateSectionVisibility() {
+      titreHeaders.forEach(h => {
+        let next = h.nextElementSibling;
+        let hasVisible = false;
+        while(next && !next.classList.contains('titre-heading')) {
+          if(next.classList.contains('article-block') || next.classList.contains('preambule-block')) {
+            if(next.style.display !== 'none') { hasVisible = true; break; }
+          }
+          next = next.nextElementSibling;
+        }
+        h.style.display = hasVisible ? '' : 'none';
+      });
+    }
+
+    function doFilter() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      const titre = document.getElementById('filtreSection').value;
+      const mot = document.getElementById('filtreMot').value.toLowerCase();
+      let visible = 0;
+
+      articles.forEach(art => {
+        const text = art.textContent.toLowerCase();
+        const artTitre = art.dataset.titre || '';
+        const artKw = art.dataset.kw || '';
+
+        const matchQ = !q || text.includes(q);
+        const matchTitre = !titre || artTitre === titre;
+        const matchMot = !mot || artKw.includes(mot) || text.includes(mot);
+
+        const show = matchQ && matchTitre && matchMot;
+        art.style.display = show ? '' : 'none';
+        if(show) visible++;
+      });
+
+      countEl.textContent = q || titre || mot ? `${visible} article(s) affiché(s) sur ${total}` : `${total} articles`;
+      document.getElementById('noResult').style.display = (visible === 0) ? '' : 'none';
+      updateSectionVisibility();
+    }
+
+    document.getElementById('searchInput').addEventListener('input', doFilter);
+    document.getElementById('filtreSection').addEventListener('change', doFilter);
+    document.getElementById('filtreMot').addEventListener('change', doFilter);
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('filtreSection').value = '';
+      document.getElementById('filtreMot').value = '';
+      doFilter();
+    });
+  </script>
+</body>
+</html>

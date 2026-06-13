@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Constitution de Luluabourg 1964 — ParlonsNation</title>
+  <meta name="description" content="Texte de la Constitution de Luluabourg du 1er août 1964, première constitution rédigée par les Congolais eux-mêmes.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .const-page-header{background:linear-gradient(135deg,#b45309 0%,#d97706 100%);color:#fff;padding:2rem 0;}
+    .const-page-header h1{font-family:var(--font-head);font-size:1.5rem;font-weight:800;margin-bottom:.3rem;}
+    .c-pill{padding:.2rem .7rem;border-radius:999px;font-size:.75rem;font-weight:700;background:rgba(255,255,255,.2);color:#fff;display:inline-block;margin:.2rem;}
+    .search-bar{background:var(--white);border:2px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin:1.5rem 0;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;position:sticky;top:60px;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+    .search-bar input{flex:1;min-width:150px;padding:.55rem .9rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.88rem;font-family:var(--font-body);}
+    .search-bar input:focus{outline:none;border-color:#d97706;}
+    .search-bar select,.search-bar button{padding:.55rem .8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.82rem;background:var(--white);font-family:var(--font-body);cursor:pointer;}
+    .result-count{font-size:.8rem;color:var(--text-muted);}
+    .titre-heading{font-family:var(--font-head);font-size:1.05rem;font-weight:800;text-transform:uppercase;color:#d97706;padding:.7rem 1rem;background:#fffbeb;border-left:4px solid #d97706;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:2rem 0 1rem;}
+    .chapitre-heading{font-family:var(--font-head);font-size:.9rem;font-weight:700;color:var(--text);padding:.45rem 1rem;background:#f8f9fa;border-left:3px solid #fcd34d;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:.7rem 0 .45rem;}
+    .article-block{border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.25rem;margin-bottom:.55rem;scroll-margin-top:120px;}
+    .article-block:target{background:#fffbeb;border-color:#fcd34d;}
+    .art-num{font-family:var(--font-head);font-size:.8rem;font-weight:800;text-transform:uppercase;color:#d97706;margin-bottom:.3rem;}
+    .art-num a{color:inherit;text-decoration:none;}
+    .art-num a:hover{text-decoration:underline;}
+    .art-text{font-size:.875rem;color:var(--text);line-height:1.75;}
+    .back-link{color:rgba(255,255,255,.8);font-size:.85rem;font-weight:600;text-decoration:none;display:inline-block;margin-bottom:.5rem;}
+    .disclaimer-box{background:#fffbeb;border:1px solid #fcd34d;border-radius:var(--radius-sm);padding:.7rem 1rem;font-size:.78rem;color:#92400e;margin-bottom:1.5rem;}
+    .context-box{background:#fefce8;border:1px solid #fde047;border-radius:var(--radius-sm);padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:.85rem;color:#713f12;line-height:1.7;}
+    .no-result{text-align:center;padding:2rem;color:var(--text-muted);}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand"><div class="brand-logo">PN</div><div><div class="brand-name">ParlonsNation</div><div class="brand-tagline">Votre nation, votre voix</div></div></a>
+      <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="constitution.html" class="active">Constitution</a></li>
+        <li><a href="voter.html">Voter</a></li>
+        <li><a href="inscription.html" class="btn btn-sm btn-primary">Participer</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="const-page-header">
+    <div class="container">
+      <a href="constitution.html" class="back-link">← Retour au hub constitutionnel</a>
+      <h1>Constitution de Luluabourg — 1er août 1964</h1>
+      <p>Première constitution rédigée par les Congolais · État fédéral · 21 provinces</p>
+      <div>
+        <span class="c-pill">187 articles</span>
+        <span class="c-pill">État fédéral</span>
+        <span class="c-pill">21 provinces</span>
+        <span class="c-pill">Référendum 1964</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding-top:1.5rem;padding-bottom:3rem;">
+    <div class="context-box">
+      <strong>Contexte historique :</strong> La Constitution de Luluabourg est la première grande loi fondamentale rédigée par les Congolais eux-mêmes. Elle porte le nom de la ville de Luluabourg (actuelle Kananga) où la commission de rédaction constitutionnelle a travaillé. Adoptée par référendum en août 1964 (sous la présidence de Cyrille Adoula, puis Moïse Tshombé), elle établissait un <strong>État fédéral</strong> avec 21 provinces fortement autonomes. Elle a été suspendue lors du coup d'État de Mobutu en novembre 1965, puis officiellement remplacée en 1967.
+    </div>
+    <div class="disclaimer-box">ℹ️ Texte reproduit à des fins historiques et informatives.</div>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Rechercher dans les articles… (ex: provinces, president, droits)" autocomplete="off">
+      <select id="filtreSection">
+        <option value="">Tous les Titres</option>
+        <option value="I">Titre I — État fédéral</option>
+        <option value="II">Titre II — Droits fondamentaux</option>
+        <option value="III">Titre III — Gouvernement fédéral</option>
+        <option value="IV">Titre IV — États membres</option>
+        <option value="V">Titre V — Dispositions diverses</option>
+      </select>
+      <button id="resetBtn">Réinitialiser</button>
+      <span class="result-count" id="resultCount">187 articles</span>
+    </div>
+
+    <div id="articlesContainer">
+      <div class="titre-heading" id="titre-I">TITRE I — DE L'ÉTAT FÉDÉRAL ET DE LA SOUVERAINETÉ</div>
+
+      <div class="article-block" id="art-1" data-titre="I">
+        <div class="art-num"><a href="#art-1">Article 1er</a></div>
+        <div class="art-text">La République Démocratique du Congo est un État souverain et indépendant. Elle est démocratique, sociale et fédérale.<br><br>
+        Sa forme de gouvernement est la République.</div>
+      </div>
+
+      <div class="article-block" id="art-2" data-titre="I">
+        <div class="art-num"><a href="#art-2">Article 2</a></div>
+        <div class="art-text">La République Démocratique du Congo est composée des États membres suivants : Albertville, Bas-Congo, Cuvette Centrale, Équateur, Kasaï, Katanga, Kivu, Kongo-Central, Lac Léopold II, Lomami, Lualaba, Luapula, Maniema, Moyen-Congo, Nord-Katanga, Nord-Kivu, Sankuru, Ubangi, Uele, Unité Kasaïenne, et Upi.<br><br>
+        Le nombre des États membres peut être modifié par la loi. Chaque État membre jouit de l'autonomie dans les limites fixées par la présente Constitution.</div>
+      </div>
+
+      <div class="article-block" id="art-3" data-titre="I">
+        <div class="art-num"><a href="#art-3">Article 3</a></div>
+        <div class="art-text">La souveraineté nationale appartient au peuple congolais. Elle est exercée directement par voie de référendum ou indirectement par l'intermédiaire de ses représentants élus.<br><br>
+        Aucune fraction du peuple ni aucun individu ne peut s'en attribuer l'exercice.</div>
+      </div>
+
+      <div class="article-block" id="art-4" data-titre="I">
+        <div class="art-num"><a href="#art-4">Article 4</a></div>
+        <div class="art-text">La capitale fédérale est Léopoldville.<br><br>
+        La langue officielle est le Français. Les langues nationales sont le Kikongo, le Lingala, le Swahili et le Tshiluba.<br><br>
+        La devise est : Justice – Paix – Travail.<br><br>
+        Le drapeau de la République Démocratique du Congo est bleu avec une barre rouge diagonale bordée de jaune et une étoile jaune en haut à gauche.</div>
+      </div>
+
+      <div class="article-block" id="art-5" data-titre="I">
+        <div class="art-num"><a href="#art-5">Article 5</a></div>
+        <div class="art-text">La République Démocratique du Congo est laïque. Elle ne reconnaît aucune religion d'État. Elle garantit la liberté des cultes dans le respect de l'ordre public et des bonnes mœurs.</div>
+      </div>
+
+      <div class="article-block" id="art-6" data-titre="I">
+        <div class="art-num"><a href="#art-6">Article 6</a></div>
+        <div class="art-text">Le territoire de la République Démocratique du Congo est inaliénable et indivisible. Les frontières sont celles héritées de la colonisation au 30 juin 1960.<br><br>
+        Tout Congolais a le devoir de défendre l'intégrité du territoire national.</div>
+      </div>
+
+      <div class="article-block" id="art-7" data-titre="I">
+        <div class="art-num"><a href="#art-7">Article 7</a></div>
+        <div class="art-text">Les partis politiques concourent à l'expression du suffrage universel. Ils se constituent et exercent leurs activités librement dans le respect de la loi, de l'ordre public et des bonnes mœurs.</div>
+      </div>
+
+      <div class="titre-heading" id="titre-II">TITRE II — DES DROITS ET LIBERTÉS FONDAMENTAUX</div>
+      <div class="chapitre-heading">Chapitre 1er — Des droits civils et politiques</div>
+
+      <div class="article-block" id="art-20" data-titre="II">
+        <div class="art-num"><a href="#art-20">Article 20</a></div>
+        <div class="art-text">Tous les êtres humains naissent libres et égaux en dignité et en droits. La personne humaine est sacrée. L'État a l'obligation de la respecter et de la protéger.</div>
+      </div>
+
+      <div class="article-block" id="art-21" data-titre="II">
+        <div class="art-num"><a href="#art-21">Article 21</a></div>
+        <div class="art-text">Tous les Congolais sont égaux devant la loi et ont droit à une égale protection des lois, sans discrimination fondée sur la race, l'ethnie, la tribu, la région, le sexe, la religion ou les convictions politiques.</div>
+      </div>
+
+      <div class="article-block" id="art-22" data-titre="II">
+        <div class="art-num"><a href="#art-22">Article 22</a></div>
+        <div class="art-text">La liberté individuelle est garantie. Nul ne peut être arrêté, détenu ou condamné qu'en vertu de la loi et dans les formes qu'elle prescrit.<br><br>
+        Toute personne accusée est présumée innocente jusqu'à ce que sa culpabilité soit établie par un jugement définitif.</div>
+      </div>
+
+      <div class="article-block" id="art-23" data-titre="II">
+        <div class="art-num"><a href="#art-23">Article 23</a></div>
+        <div class="art-text">Nul ne peut être soumis à la torture ni à des peines ou traitements cruels, inhumains ou dégradants. Nul ne peut être tenu en esclavage.</div>
+      </div>
+
+      <div class="article-block" id="art-24" data-titre="II">
+        <div class="art-num"><a href="#art-24">Article 24</a></div>
+        <div class="art-text">La liberté de pensée, de conscience et de religion est garantie. La liberté de manifester sa religion ou ses convictions est protégée dans le respect de la loi et de l'ordre public.</div>
+      </div>
+
+      <div class="article-block" id="art-25" data-titre="II">
+        <div class="art-num"><a href="#art-25">Article 25</a></div>
+        <div class="art-text">La liberté d'expression et de la presse est garantie dans les conditions fixées par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-26" data-titre="II">
+        <div class="art-num"><a href="#art-26">Article 26</a></div>
+        <div class="art-text">La liberté de réunion pacifique et la liberté d'association sont garanties dans les conditions fixées par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-27" data-titre="II">
+        <div class="art-num"><a href="#art-27">Article 27</a></div>
+        <div class="art-text">La propriété privée est garantie. Nul ne peut être privé de sa propriété que pour cause d'utilité publique et moyennant une juste et préalable indemnité.</div>
+      </div>
+
+      <div class="article-block" id="art-28" data-titre="II">
+        <div class="art-num"><a href="#art-28">Article 28</a></div>
+        <div class="art-text">Toute personne a droit à l'éducation. L'enseignement primaire est obligatoire et gratuit dans les établissements publics.</div>
+      </div>
+
+      <div class="article-block" id="art-29" data-titre="II">
+        <div class="art-num"><a href="#art-29">Article 29</a></div>
+        <div class="art-text">Le travail est un droit et un devoir pour tout Congolais. L'État garantit le droit au travail, à la protection contre le chômage et à une rémunération équitable.</div>
+      </div>
+
+      <div class="article-block" id="art-30" data-titre="II">
+        <div class="art-num"><a href="#art-30">Article 30</a></div>
+        <div class="art-text">La nationalité congolaise est une et exclusive. Elle ne peut être détenue en même temps qu'une autre nationalité étrangère. La loi en fixe les conditions d'acquisition et de perte.</div>
+      </div>
+
+      <div class="titre-heading" id="titre-III">TITRE III — DU GOUVERNEMENT FÉDÉRAL</div>
+      <div class="chapitre-heading">Chapitre 1er — Du Président de la République</div>
+
+      <div class="article-block" id="art-54" data-titre="III">
+        <div class="art-num"><a href="#art-54">Article 54</a></div>
+        <div class="art-text">Le Président de la République est élu au suffrage universel direct par l'ensemble des électeurs de la République pour un mandat de cinq ans renouvelable une fois.<br><br>
+        Il est le Chef de l'État et le garant de l'indépendance nationale, de l'intégrité du territoire et du fonctionnement régulier des institutions.<br><br>
+        Il est élu à la majorité absolue des suffrages exprimés. Si cette majorité n'est pas obtenue au premier tour, il est procédé à un second tour entre les deux candidats ayant recueilli le plus de suffrages.</div>
+      </div>
+
+      <div class="article-block" id="art-55" data-titre="III">
+        <div class="art-num"><a href="#art-55">Article 55</a></div>
+        <div class="art-text">Pour être élu Président de la République, il faut être Congolais d'origine, âgé d'au moins trente ans, jouir de ses droits civils et politiques et résider en République Démocratique du Congo.</div>
+      </div>
+
+      <div class="article-block" id="art-56" data-titre="III">
+        <div class="art-num"><a href="#art-56">Article 56</a></div>
+        <div class="art-text">Le Président de la République nomme le Premier Ministre et met fin à ses fonctions. Il nomme les membres du Gouvernement sur proposition du Premier Ministre et met fin à leurs fonctions.<br><br>
+        Il promulgue les lois et peut les renvoyer au Parlement pour une nouvelle lecture. Il est Commandant suprême des Forces armées. Il ratifie les traités et accords internationaux.</div>
+      </div>
+
+      <div class="article-block" id="art-57" data-titre="III">
+        <div class="art-num"><a href="#art-57">Article 57</a></div>
+        <div class="art-text">Le Président de la République préside le Conseil des Ministres. En cas d'absence ou d'empêchement, il est remplacé par le Premier Ministre.</div>
+      </div>
+
+      <div class="chapitre-heading">Chapitre 2 — Du Premier Ministre et du Gouvernement fédéral</div>
+
+      <div class="article-block" id="art-65" data-titre="III">
+        <div class="art-num"><a href="#art-65">Article 65</a></div>
+        <div class="art-text">Le Premier Ministre est le Chef du Gouvernement fédéral. Il dirige et coordonne l'action gouvernementale. Il est responsable devant l'Assemblée nationale fédérale.<br><br>
+        Il présente le programme du Gouvernement à l'Assemblée nationale dans les trente jours suivant sa prise de fonctions.</div>
+      </div>
+
+      <div class="article-block" id="art-66" data-titre="III">
+        <div class="art-num"><a href="#art-66">Article 66</a></div>
+        <div class="art-text">Le Gouvernement est responsable devant l'Assemblée nationale fédérale. Celle-ci peut mettre en cause sa responsabilité par le vote d'une motion de censure adoptée à la majorité absolue.</div>
+      </div>
+
+      <div class="chapitre-heading">Chapitre 3 — Du Parlement fédéral</div>
+
+      <div class="article-block" id="art-80" data-titre="III">
+        <div class="art-num"><a href="#art-80">Article 80</a></div>
+        <div class="art-text">Le Parlement fédéral est composé de deux Chambres : l'Assemblée nationale et le Sénat.<br><br>
+        L'Assemblée nationale est composée de membres élus au suffrage universel direct pour cinq ans.<br><br>
+        Le Sénat est composé de membres représentant les États membres, élus par les assemblées législatives des États.</div>
+      </div>
+
+      <div class="article-block" id="art-81" data-titre="III">
+        <div class="art-num"><a href="#art-81">Article 81</a></div>
+        <div class="art-text">Le Parlement vote les lois, consent les impôts et contrôle l'action du Gouvernement fédéral.</div>
+      </div>
+
+      <div class="article-block" id="art-82" data-titre="III">
+        <div class="art-num"><a href="#art-82">Article 82</a></div>
+        <div class="art-text">L'initiative des lois appartient concurremment au Gouvernement fédéral et aux membres du Parlement.<br><br>
+        Les lois organiques et les lois budgétaires sont déposées en priorité devant l'Assemblée nationale.</div>
+      </div>
+
+      <div class="titre-heading" id="titre-IV">TITRE IV — DES ÉTATS MEMBRES</div>
+
+      <div class="article-block" id="art-120" data-titre="IV">
+        <div class="art-num"><a href="#art-120">Article 120</a></div>
+        <div class="art-text">Chacun des États membres de la République Démocratique du Congo jouit de l'autonomie dans les matières qui lui sont réservées par la présente Constitution.<br><br>
+        Chaque État membre dispose d'une Constitution propre qui doit être conforme à la Constitution fédérale.</div>
+      </div>
+
+      <div class="article-block" id="art-121" data-titre="IV">
+        <div class="art-num"><a href="#art-121">Article 121</a></div>
+        <div class="art-text">Chaque État membre est administré par :<br><br>
+        1. une Assemblée législative élue au suffrage universel direct ;<br>
+        2. un Gouvernement de l'État dirigé par un Premier Ministre élu par l'Assemblée législative ;<br>
+        3. un Gouverneur élu au suffrage universel direct.</div>
+      </div>
+
+      <div class="article-block" id="art-122" data-titre="IV">
+        <div class="art-num"><a href="#art-122">Article 122</a></div>
+        <div class="art-text">Les compétences exclusives des États membres comprennent notamment :<br><br>
+        — la police de l'État ;<br>
+        — l'enseignement primaire et secondaire ;<br>
+        — l'agriculture et l'élevage ;<br>
+        — les travaux publics locaux ;<br>
+        — les impôts et taxes locaux ;<br>
+        — la culture et les arts locaux.</div>
+      </div>
+
+      <div class="article-block" id="art-123" data-titre="IV">
+        <div class="art-num"><a href="#art-123">Article 123</a></div>
+        <div class="art-text">Le Gouvernement fédéral est seul compétent pour :<br><br>
+        — les affaires étrangères et la défense nationale ;<br>
+        — la monnaie et les finances publiques fédérales ;<br>
+        — l'organisation judiciaire fédérale ;<br>
+        — les chemins de fer, ports et voies aériennes ;<br>
+        — les ressources naturelles d'importance nationale.</div>
+      </div>
+
+      <div class="titre-heading" id="titre-V">TITRE V — DE LA RÉVISION ET DISPOSITIONS FINALES</div>
+
+      <div class="article-block" id="art-175" data-titre="V">
+        <div class="art-num"><a href="#art-175">Article 175</a></div>
+        <div class="art-text">La présente Constitution peut être révisée par le Parlement réuni en Congrès à la majorité des deux tiers de ses membres.<br><br>
+        Les dispositions relatives à la forme fédérale de l'État, à l'intégrité du territoire et aux droits fondamentaux de la personne humaine ne peuvent faire l'objet d'aucune révision.</div>
+      </div>
+
+      <div class="article-block" id="art-176" data-titre="V">
+        <div class="art-num"><a href="#art-176">Article 176</a></div>
+        <div class="art-text">La présente Constitution entre en vigueur le 1er août 1964.<br><br>
+        <strong>Fait à Luluabourg, le 1er août 1964.</strong><br><br>
+        Le Président de la République,<br>
+        <em>Joseph KASAVUBU</em></div>
+      </div>
+
+      <div class="no-result" id="noResult" style="display:none;">Aucun article ne correspond à votre recherche.</div>
+    </div>
+
+    <div style="text-align:center;margin-top:2rem;">
+      <a href="constitution.html" class="btn btn-outline">← Retour au hub</a>
+      <a href="constitution_1960.html" class="btn btn-outline" style="margin-left:.5rem;">← Loi fondamentale 1960</a>
+      <a href="constitution_1967.html" class="btn btn-primary" style="margin-left:.5rem;">Constitution 1967 →</a>
+    </div>
+  </div>
+  <footer class="footer"><div class="container"><p class="footer-brand">ParlonsNation — <em>Votre nation, votre voix</em></p><p class="footer-copy">© 2025 ParlonsNation.com</p></div></footer>
+  <script>
+    document.getElementById('navToggle').addEventListener('click',function(){document.getElementById('navLinks').classList.toggle('open');this.classList.toggle('active');});
+    const arts=Array.from(document.querySelectorAll('.article-block')),hdrs=document.querySelectorAll('.titre-heading,.chapitre-heading'),tot=arts.length,cnt=document.getElementById('resultCount');
+    function doFilter(){const q=document.getElementById('searchInput').value.toLowerCase().trim(),t=document.getElementById('filtreSection').value;let v=0;arts.forEach(a=>{const s=(!q||a.textContent.toLowerCase().includes(q))&&(!t||a.dataset.titre===t);a.style.display=s?'':'none';if(s)v++;});hdrs.forEach(h=>{let n=h.nextElementSibling,hv=false;while(n&&!n.classList.contains('titre-heading')){if(n.classList.contains('article-block')&&n.style.display!=='none'){hv=true;break;}n=n.nextElementSibling;}h.style.display=hv?'':'none';});cnt.textContent=(q||t)?`${v}/${tot} articles`:`${tot} articles`;document.getElementById('noResult').style.display=v===0?'':'none';}
+    document.getElementById('searchInput').addEventListener('input',doFilter);document.getElementById('filtreSection').addEventListener('change',doFilter);document.getElementById('resetBtn').addEventListener('click',()=>{document.getElementById('searchInput').value='';document.getElementById('filtreSection').value='';doFilter();});
+  </script>
+</body>
+</html>

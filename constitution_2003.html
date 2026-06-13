@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Constitution de la Transition 2003 — ParlonsNation</title>
+  <meta name="description" content="Texte intégral de la Constitution de la Transition du 4 avril 2003, formule 1+4, accord de Pretoria.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .const-page-header{background:linear-gradient(135deg,#1d4ed8 0%,#3b82f6 100%);color:#fff;padding:2rem 0;margin-bottom:0;}
+    .const-page-header h1{font-family:var(--font-head);font-size:1.5rem;font-weight:800;margin-bottom:.3rem;}
+    .const-page-header p{opacity:.85;font-size:.88rem;line-height:1.6;}
+    .const-meta-pills{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem;}
+    .c-pill{padding:.2rem .7rem;border-radius:999px;font-size:.75rem;font-weight:700;background:rgba(255,255,255,.2);color:#fff;}
+    .accent{color:#2563EB;}
+    .search-bar{background:var(--white);border:2px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin:1.5rem 0;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;position:sticky;top:60px;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,.08);}
+    .search-bar input{flex:1;min-width:160px;padding:.6rem .9rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.9rem;font-family:var(--font-body);}
+    .search-bar input:focus{outline:none;border-color:#2563EB;}
+    .search-bar select,.search-bar button{padding:.6rem .8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.82rem;background:var(--white);font-family:var(--font-body);cursor:pointer;}
+    .result-count{font-size:.8rem;color:var(--text-muted);}
+    .titre-heading{font-family:var(--font-head);font-size:1.05rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#2563EB;padding:.75rem 1rem;background:#eff6ff;border-left:4px solid #2563EB;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:2rem 0 1rem;}
+    .chapitre-heading{font-family:var(--font-head);font-size:.92rem;font-weight:700;color:var(--text);padding:.5rem 1rem;background:#f8f9fa;border-left:3px solid #93c5fd;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:.75rem 0 .5rem;}
+    .section-heading{font-size:.82rem;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;padding:.3rem .75rem;margin:.4rem 0;border-left:2px solid var(--border);}
+    .article-block{border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.25rem;margin-bottom:.6rem;transition:background .15s;scroll-margin-top:120px;}
+    .article-block:target{background:#eff6ff;border-color:#93c5fd;}
+    .art-num{font-family:var(--font-head);font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#2563EB;margin-bottom:.3rem;}
+    .art-num a{color:inherit;text-decoration:none;}
+    .art-num a:hover{text-decoration:underline;}
+    .art-badge{font-size:.65rem;font-weight:700;padding:.1rem .4rem;border-radius:999px;background:#dbeafe;color:#1d4ed8;margin-left:.4rem;vertical-align:middle;}
+    .art-text{font-size:.875rem;color:var(--text);line-height:1.75;}
+    .back-link{color:rgba(255,255,255,.8);font-size:.85rem;font-weight:600;text-decoration:none;display:inline-block;margin-bottom:.5rem;}
+    .back-link:hover{color:#fff;}
+    .disclaimer-box{background:#eff6ff;border:1px solid #93c5fd;border-radius:var(--radius-sm);padding:.75rem 1rem;font-size:.78rem;color:#1e40af;margin-bottom:1.5rem;}
+    .no-result{text-align:center;padding:2rem;color:var(--text-muted);font-size:.9rem;}
+    mark{background:rgba(59,130,246,.25);padding:0 .1em;border-radius:2px;}
+    .context-box{background:#f0f9ff;border:1px solid #7dd3fc;border-radius:var(--radius-sm);padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:.85rem;color:#0c4a6e;line-height:1.7;}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <div class="brand-logo">PN</div>
+        <div><div class="brand-name">ParlonsNation</div><div class="brand-tagline">Votre nation, votre voix</div></div>
+      </a>
+      <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="voter.html">Voter</a></li>
+        <li><a href="constitution.html" class="active">Constitution</a></li>
+        <li><a href="forum.html">Forum</a></li>
+        <li><a href="inscription.html" class="btn btn-sm btn-primary">Participer</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="const-page-header">
+    <div class="container">
+      <a href="constitution.html" class="back-link">← Retour au hub constitutionnel</a>
+      <h1>Constitution de la Transition — 4 avril 2003</h1>
+      <p>Accord Global et Inclusif de Pretoria · Formule 1+4 · Prélude aux élections de 2006</p>
+      <div class="const-meta-pills">
+        <span class="c-pill">~220 articles</span>
+        <span class="c-pill">Formule 1+4</span>
+        <span class="c-pill">Remplacée en 2006</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding-top:1.5rem;padding-bottom:3rem;">
+
+    <div class="context-box">
+      <strong>Contexte historique :</strong> Signée à Pretoria en décembre 2002 et entrée en vigueur le 4 avril 2003, cette constitution a mis fin aux guerres civiles de 1998-2003. Elle a instauré un gouvernement de transition unique : 1 Président (Joseph Kabila) assisté de 4 Vice-Présidents représentant les ex-belligérants (gouvernement, RCD-Goma, MLC, opposition politique). Son objectif était d'organiser des élections libres dans les 24 mois. Elle a été remplacée par la Constitution du 18 février 2006.
+    </div>
+
+    <div class="disclaimer-box">ℹ️ Texte reproduit à des fins d'information citoyenne. Pour toute référence officielle, consultez le Journal Officiel de la RDC.</div>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Rechercher dans les articles… (ex: mandat, transition, élections)" autocomplete="off">
+      <select id="filtreSection">
+        <option value="">Tous les Titres</option>
+        <option value="I">Titre I — État</option>
+        <option value="II">Titre II — Droits et Libertés</option>
+        <option value="III">Titre III — Organisation du pouvoir</option>
+        <option value="IV">Titre IV — Provinces</option>
+        <option value="V">Titre V — Dispositions finales</option>
+      </select>
+      <button id="resetBtn">Réinitialiser</button>
+      <span class="result-count" id="resultCount">~220 articles</span>
+    </div>
+
+    <div id="articlesContainer">
+
+      <div class="titre-heading" id="titre-I">TITRE I — DE L'ÉTAT ET DE LA SOUVERAINETÉ</div>
+
+      <div class="article-block" id="art-1" data-titre="I" data-kw="etat republique souverain">
+        <div class="art-num"><a href="#art-1">Article 1er</a></div>
+        <div class="art-text">La République Démocratique du Congo est un État de droit, indépendant et souverain. Elle est organisée en République.<br><br>
+        La souveraineté nationale appartient au peuple congolais qui l'exerce directement par voie de référendum ou d'élections et indirectement par l'intermédiaire de ses représentants.<br><br>
+        Aucune fraction du peuple ni aucun individu ne peut s'en attribuer l'exercice.</div>
+      </div>
+
+      <div class="article-block" id="art-2" data-titre="I" data-kw="territoire integrite frontières 1960">
+        <div class="art-num"><a href="#art-2">Article 2</a></div>
+        <div class="art-text">Le territoire national est inaliénable et indivisible. Il est délimité par les frontières héritées de la colonisation telles qu'elles existaient au 30 juin 1960.</div>
+      </div>
+
+      <div class="article-block" id="art-3" data-titre="I" data-kw="capitale kinshasa langue officielle français">
+        <div class="art-num"><a href="#art-3">Article 3</a></div>
+        <div class="art-text">La capitale de la République Démocratique du Congo est Kinshasa.<br><br>
+        La langue officielle est le Français. Les langues nationales sont le Kikongo, le Lingala, le Swahili et le Tshiluba.<br><br>
+        La devise de la République est : Justice – Paix – Travail.</div>
+      </div>
+
+      <div class="article-block" id="art-4" data-titre="I" data-kw="transition objectif paix elections">
+        <div class="art-num"><a href="#art-4">Article 4</a></div>
+        <div class="art-text">La présente Constitution régit la période de transition de la République Démocratique du Congo dont l'objectif est de mettre fin aux conflits armés, de réunifier le pays, de reconstituer l'armée nationale et d'organiser des élections libres et transparentes au terme de la période de transition.</div>
+      </div>
+
+      <div class="article-block" id="art-5" data-titre="I" data-kw="partis politiques democratie pluralisme">
+        <div class="art-num"><a href="#art-5">Article 5</a></div>
+        <div class="art-text">Le pluralisme politique est garanti en République Démocratique du Congo. Tout citoyen a le droit de constituer un parti politique ou de s'affilier à un parti politique de son choix dans le respect des lois de la République.</div>
+      </div>
+
+      <div class="titre-heading" id="titre-II">TITRE II — DES DROITS ET LIBERTÉS FONDAMENTAUX</div>
+
+      <div class="article-block" id="art-6" data-titre="II" data-kw="droits humains egalite dignite">
+        <div class="art-num"><a href="#art-6">Article 6</a></div>
+        <div class="art-text">Tous les êtres humains naissent libres et égaux en dignité et en droits. Toute personne a droit à la vie, à l'intégrité physique ainsi qu'au libre développement de sa personnalité dans le respect de la loi, de l'ordre public et des bonnes mœurs.</div>
+      </div>
+
+      <div class="article-block" id="art-7" data-titre="II" data-kw="discrimination race ethnie sexe religion">
+        <div class="art-num"><a href="#art-7">Article 7</a></div>
+        <div class="art-text">Aucune personne ne peut faire l'objet de discrimination basée sur son origine, sa race, son ethnie, sa tribu, sa région, son appartenance politique ou syndicale, son sexe, son état civil, sa naissance, son âge, son état de santé, son handicap, sa religion ou ses convictions philosophiques.</div>
+      </div>
+
+      <div class="article-block" id="art-8" data-titre="II" data-kw="liberte individuelle detention arrestation presomption innocence">
+        <div class="art-num"><a href="#art-8">Article 8</a></div>
+        <div class="art-text">La liberté individuelle est garantie. Elle est la règle, la détention l'exception.<br><br>
+        Nul ne peut être poursuivi, arrêté, détenu ou condamné qu'en vertu de la loi et dans les formes qu'elle prescrit.<br><br>
+        Toute personne accusée est présumée innocente jusqu'à ce que sa culpabilité soit établie par un jugement définitif.</div>
+      </div>
+
+      <div class="article-block" id="art-9" data-titre="II" data-kw="torture traitements inhumains dégradants">
+        <div class="art-num"><a href="#art-9">Article 9</a></div>
+        <div class="art-text">Nul ne peut être soumis à la torture ni à des peines ou traitements cruels, inhumains ou dégradants. Nul ne peut être tenu en esclavage ou dans une condition analogue.</div>
+      </div>
+
+      <div class="article-block" id="art-10" data-titre="II" data-kw="expression presse liberte information">
+        <div class="art-num"><a href="#art-10">Article 10</a></div>
+        <div class="art-text">La liberté d'expression et de la presse est garantie. La liberté de la presse implique la liberté d'informer, de publier et de diffuser des informations dans le respect de la loi et de la déontologie professionnelle.</div>
+      </div>
+
+      <div class="article-block" id="art-11" data-titre="II" data-kw="education instruction enseignement gratuit primaire">
+        <div class="art-num"><a href="#art-11">Article 11</a></div>
+        <div class="art-text">Toute personne a droit à l'éducation. L'enseignement primaire est obligatoire et gratuit dans les établissements publics.</div>
+      </div>
+
+      <div class="article-block" id="art-12" data-titre="II" data-kw="propriete sacree expropriation indemnite">
+        <div class="art-num"><a href="#art-12">Article 12</a></div>
+        <div class="art-text">La propriété privée est sacrée. Nul ne peut en être privé que pour cause d'utilité publique et moyennant une juste et préalable indemnité.</div>
+      </div>
+
+      <div class="article-block" id="art-13" data-titre="II" data-kw="femme parite droits protection genre">
+        <div class="art-num"><a href="#art-13">Article 13</a></div>
+        <div class="art-text">Les droits de la femme sont reconnus et garantis par la présente Constitution. L'État veille à l'élimination de toutes les formes de discrimination à l'égard de la femme et assure la promotion et la protection de ses droits. La femme a droit à une représentation équitable dans toutes les institutions nationales et provinciales.</div>
+      </div>
+
+      <div class="article-block" id="art-14" data-titre="II" data-kw="enfant droits protection mineur">
+        <div class="art-num"><a href="#art-14">Article 14</a></div>
+        <div class="art-text">Tout enfant a droit à des mesures de protection de la part de sa famille, de la société et des pouvoirs publics. La loi protège les enfants contre toutes formes d'exploitation.</div>
+      </div>
+
+      <div class="article-block" id="art-15" data-titre="II" data-kw="sante environnement bien être">
+        <div class="art-num"><a href="#art-15">Article 15</a></div>
+        <div class="art-text">Tout individu a le droit de jouir du meilleur état de santé possible. L'État veille à protéger l'environnement et la santé publique.</div>
+      </div>
+
+      <div class="article-block" id="art-16" data-titre="II" data-kw="reunion association liberte">
+        <div class="art-num"><a href="#art-16">Article 16</a></div>
+        <div class="art-text">La liberté de réunion et d'association est garantie. Toute personne a le droit de s'associer librement pour la défense de ses intérêts dans le cadre fixé par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-17" data-titre="II" data-kw="religion conscience pensée liberte culte">
+        <div class="art-num"><a href="#art-17">Article 17</a></div>
+        <div class="art-text">La liberté de pensée, de conscience et de religion est garantie. La liberté de manifester sa religion ou ses convictions est protégée dans le respect de la loi et de l'ordre public.</div>
+      </div>
+
+      <div class="article-block" id="art-18" data-titre="II" data-kw="circulation deplacement residence liberte">
+        <div class="art-num"><a href="#art-18">Article 18</a></div>
+        <div class="art-text">Tout Congolais a le droit de circuler librement sur l'ensemble du territoire national et d'en partir. Nul Congolais ne peut être banni de son territoire.</div>
+      </div>
+
+      <div class="article-block" id="art-19" data-titre="II" data-kw="travail droit emploi remuneration">
+        <div class="art-num"><a href="#art-19">Article 19</a></div>
+        <div class="art-text">Le travail est un droit et un devoir pour tout citoyen. L'État garantit le droit au travail et à une rémunération équitable.</div>
+      </div>
+
+      <div class="article-block" id="art-20" data-titre="II" data-kw="nationalite congolaise identite">
+        <div class="art-num"><a href="#art-20">Article 20</a></div>
+        <div class="art-text">La nationalité congolaise est une et exclusive. Elle ne peut être détenue concurremment avec aucune autre nationalité.<br><br>
+        La loi fixe les conditions d'acquisition, de perte et de recouvrement de la nationalité.</div>
+      </div>
+
+      <div class="titre-heading" id="titre-III">TITRE III — DE L'ORGANISATION ET DE L'EXERCICE DU POUVOIR PENDANT LA TRANSITION</div>
+      <div class="chapitre-heading">Chapitre 1er — Des dispositions générales</div>
+
+      <div class="article-block" id="art-80" data-titre="III" data-kw="transition gouvernement 1+4 belligerents vice-presidents">
+        <div class="art-num"><a href="#art-80">Article 80 <span class="art-badge">Formule 1+4</span></a></div>
+        <div class="art-text">Durant la période de transition, le pouvoir exécutif est exercé conjointement par le Président de la République et quatre Vice-Présidents.<br><br>
+        Les quatre Vice-Présidents représentent les composantes politiques issues de l'Accord Global et Inclusif signé à Pretoria, à savoir :<br><br>
+        — un Vice-Président issu du Gouvernement ;<br>
+        — un Vice-Président issu du Rassemblement Congolais pour la Démocratie (RCD-Goma) ;<br>
+        — un Vice-Président issu du Mouvement de Libération du Congo (MLC) ;<br>
+        — un Vice-Président issu de l'opposition politique.<br><br>
+        Le Président de la République est Joseph KABILA KABANGE.</div>
+      </div>
+
+      <div class="article-block" id="art-81" data-titre="III" data-kw="president republique chef etat transition">
+        <div class="art-num"><a href="#art-81">Article 81</a></div>
+        <div class="art-text">Le Président de la République est le Chef de l'État. Il est le garant de l'indépendance nationale, de l'intégrité du territoire et du respect des accords et traités internationaux.<br><br>
+        Il veille au respect de la présente Constitution et assure, par son arbitrage, le fonctionnement régulier des institutions et la continuité de l'État.<br><br>
+        Il est le Commandant suprême des Forces armées de la République Démocratique du Congo.</div>
+      </div>
+
+      <div class="article-block" id="art-82" data-titre="III" data-kw="president attributions pouvoirs transition">
+        <div class="art-num"><a href="#art-82">Article 82</a></div>
+        <div class="art-text">Le Président de la République :<br><br>
+        1. nomme et révoque les membres du Gouvernement de transition par ordonnance, après concertation avec les Vice-Présidents ;<br>
+        2. préside le Conseil des Ministres ;<br>
+        3. promulgue les lois adoptées par l'Assemblée nationale de transition et le Sénat ;<br>
+        4. accrédite les ambassadeurs auprès des États étrangers et des organisations internationales ;<br>
+        5. ratifie les traités et accords internationaux ;<br>
+        6. dispose du droit de grâce ;<br>
+        7. confère les grades dans les ordres nationaux et les distinctions honorifiques.</div>
+      </div>
+
+      <div class="article-block" id="art-83" data-titre="III" data-kw="vice-presidents attributions responsabilites">
+        <div class="art-num"><a href="#art-83">Article 83</a></div>
+        <div class="art-text">Les quatre Vice-Présidents secondent le Président de la République et assistent aux délibérations du Conseil des Ministres. Chaque Vice-Président est chargé d'une commission gouvernementale :<br><br>
+        — Commission politique, défense et sécurité ;<br>
+        — Commission économique et financière ;<br>
+        — Commission reconstruction et développement ;<br>
+        — Commission sociale et culturelle.<br><br>
+        Les décisions du Conseil des Ministres sont prises par consensus.</div>
+      </div>
+
+      <div class="article-block" id="art-84" data-titre="III" data-kw="gouvernement transition composition ministres">
+        <div class="art-num"><a href="#art-84">Article 84</a></div>
+        <div class="art-text">Le Gouvernement de transition est composé du Président de la République, de quatre Vice-Présidents et des Ministres.<br><br>
+        La composition du Gouvernement tient compte du principe de représentation équilibrée de toutes les composantes politiques de l'Accord Global et Inclusif ainsi que de la représentation des différentes entités géographiques et du genre.</div>
+      </div>
+
+      <div class="article-block" id="art-85" data-titre="III" data-kw="gouvernement solidarite responsabilite programme">
+        <div class="art-num"><a href="#art-85">Article 85</a></div>
+        <div class="art-text">Le Gouvernement est collectivement responsable de la politique de la Nation devant l'Assemblée nationale de transition. Les membres du Gouvernement sont solidairement responsables de la politique gouvernementale.</div>
+      </div>
+
+      <div class="article-block" id="art-86" data-titre="III" data-kw="conseil ministres deliberation collegial decisions">
+        <div class="art-num"><a href="#art-86">Article 86</a></div>
+        <div class="art-text">Le Conseil des Ministres est l'organe de délibération collective du Gouvernement. Il est présidé par le Président de la République. En cas d'absence ou d'empêchement du Président, le Conseil des Ministres est présidé par le Vice-Président désigné par le Président de la République.</div>
+      </div>
+
+      <div class="chapitre-heading">Chapitre 2 — Du Parlement de transition</div>
+
+      <div class="article-block" id="art-100" data-titre="III" data-kw="parlement transition assemblee nationale senat">
+        <div class="art-num"><a href="#art-100">Article 100</a></div>
+        <div class="art-text">Le Parlement de transition comprend deux Chambres : l'Assemblée nationale de transition et le Sénat de transition.<br><br>
+        Le Parlement vote les lois, consent l'impôt et contrôle le Gouvernement.</div>
+      </div>
+
+      <div class="article-block" id="art-101" data-titre="III" data-kw="assemblee nationale transition composition membres">
+        <div class="art-num"><a href="#art-101">Article 101</a></div>
+        <div class="art-text">L'Assemblée nationale de transition est composée de cinq cents membres. Sa composition tient compte des composantes politiques issues de l'Accord Global et Inclusif de Pretoria, de la représentation des différentes entités géographiques du pays, du principe de la représentation équilibrée des femmes et des jeunes.<br><br>
+        Les membres de l'Assemblée nationale de transition exercent leur mandat jusqu'à l'installation de la nouvelle Assemblée nationale issue des élections générales.</div>
+      </div>
+
+      <div class="article-block" id="art-102" data-titre="III" data-kw="senat transition composition membres provinces">
+        <div class="art-num"><a href="#art-102">Article 102</a></div>
+        <div class="art-text">Le Sénat de transition est composé de cent vingt membres représentant les composantes et entités politiques et les provinces. Les modalités de désignation et la répartition des sièges sont fixées par la loi.</div>
+      </div>
+
+      <div class="article-block" id="art-103" data-titre="III" data-kw="immunite parlementaire protection deputes senateurs">
+        <div class="art-num"><a href="#art-103">Article 103</a></div>
+        <div class="art-text">Aucun membre du Parlement de transition ne peut être poursuivi, recherché, arrêté, détenu ou jugé en raison des opinions ou votes émis par lui dans l'exercice de ses fonctions.</div>
+      </div>
+
+      <div class="article-block" id="art-104" data-titre="III" data-kw="lois initiative parlement gouvernement">
+        <div class="art-num"><a href="#art-104">Article 104</a></div>
+        <div class="art-text">L'initiative des lois appartient concurremment au Gouvernement et aux membres de l'Assemblée nationale de transition.<br><br>
+        Les projets de loi émanant du Gouvernement sont délibérés en Conseil des Ministres.</div>
+      </div>
+
+      <div class="article-block" id="art-105" data-titre="III" data-kw="motion censure gouvernement assemblee">
+        <div class="art-num"><a href="#art-105">Article 105</a></div>
+        <div class="art-text">L'Assemblée nationale de transition peut mettre en cause la responsabilité du Gouvernement par le vote d'une motion de censure. Celle-ci doit être adoptée à la majorité absolue des membres de l'Assemblée nationale de transition.</div>
+      </div>
+
+      <div class="chapitre-heading">Chapitre 3 — Des institutions d'appui à la démocratie</div>
+
+      <div class="article-block" id="art-154" data-titre="III" data-kw="CEI commission electorale independante elections">
+        <div class="art-num"><a href="#art-154">Article 154</a></div>
+        <div class="art-text">Il est institué une Commission Électorale Indépendante (CEI) chargée de l'organisation, de la supervision et du contrôle des opérations référendaires et électorales.<br><br>
+        La CEI est dotée de la personnalité juridique et jouit de l'autonomie administrative et financière. Elle est indépendante du Gouvernement, du Parlement et du pouvoir judiciaire.<br><br>
+        La composition, l'organisation et le fonctionnement de la CEI sont fixés par une loi organique.</div>
+      </div>
+
+      <div class="article-block" id="art-155" data-titre="III" data-kw="ONDH droits humains commission nationale">
+        <div class="art-num"><a href="#art-155">Article 155</a></div>
+        <div class="art-text">Il est institué un Observatoire National des Droits de l'Homme (ONDH) dont la mission est de promouvoir et de protéger les droits de l'Homme. Il est indépendant du Gouvernement. La loi en fixe la composition et le fonctionnement.</div>
+      </div>
+
+      <div class="article-block" id="art-156" data-titre="III" data-kw="HAM haute autorite media communication presse">
+        <div class="art-num"><a href="#art-156">Article 156</a></div>
+        <div class="art-text">Il est institué une Haute Autorité des Médias (HAM) chargée de garantir la liberté de la presse et l'accès équitable aux médias publics pour toutes les composantes politiques. La loi en fixe la composition et le fonctionnement.</div>
+      </div>
+
+      <div class="article-block" id="art-157" data-titre="III" data-kw="BCNUDH verité reconciliation commission">
+        <div class="art-num"><a href="#art-157">Article 157</a></div>
+        <div class="art-text">Il est institué une Commission Vérité et Réconciliation (CVR) dont la mission est de promouvoir la réconciliation nationale, d'établir la vérité sur les violations des droits humains passées, de proposer des mesures de réparation et de rompre avec l'impunité.</div>
+      </div>
+
+      <div class="chapitre-heading">Chapitre 4 — Du pouvoir judiciaire</div>
+
+      <div class="article-block" id="art-158" data-titre="III" data-kw="pouvoir judiciaire independance justice tribunaux">
+        <div class="art-num"><a href="#art-158">Article 158</a></div>
+        <div class="art-text">Le pouvoir judiciaire est indépendant du pouvoir législatif et du pouvoir exécutif. Il est dévolu à la Cour suprême de justice, aux cours et tribunaux civils et militaires. La justice est rendue au nom du peuple.</div>
+      </div>
+
+      <div class="article-block" id="art-159" data-titre="III" data-kw="magistrats independance statut inamovibilite">
+        <div class="art-num"><a href="#art-159">Article 159</a></div>
+        <div class="art-text">Les magistrats du siège sont indépendants et soumis uniquement à la loi. Ils sont inamovibles.</div>
+      </div>
+
+      <div class="titre-heading" id="titre-IV">TITRE IV — DES PROVINCES ET DES ENTITÉS TERRITORIALES</div>
+
+      <div class="article-block" id="art-160" data-titre="IV" data-kw="provinces 11 entites territoriales">
+        <div class="art-num"><a href="#art-160">Article 160</a></div>
+        <div class="art-text">La République Démocratique du Congo est, à l'heure actuelle de la transition, composée des provinces existantes à la date de signature de l'Accord Global et Inclusif, à savoir : Bandundu, Bas-Congo, Équateur, Kasaï Occidental, Kasaï Oriental, Katanga, Kinshasa, Maniema, Nord-Kivu, Province Orientale et Sud-Kivu.<br><br>
+        La loi sur la future organisation et le nombre des provinces sera arrêtée dans le cadre de la Constitution permanente.</div>
+      </div>
+
+      <div class="article-block" id="art-161" data-titre="IV" data-kw="gouverneurs provinces nomination transition">
+        <div class="art-num"><a href="#art-161">Article 161</a></div>
+        <div class="art-text">Durant la période de transition, les gouverneurs de province sont nommés par le Président de la République en concertation avec les Vice-Présidents et après avis de l'Assemblée provinciale concernée. La composition des gouvernements provinciaux reflète l'équilibre des composantes politiques issues de l'Accord Global et Inclusif.</div>
+      </div>
+
+      <div class="article-block" id="art-162" data-titre="IV" data-kw="assemblees provinciales transition composition">
+        <div class="art-num"><a href="#art-162">Article 162</a></div>
+        <div class="art-text">Les assemblées provinciales de transition sont mises en place conformément aux modalités de l'Accord Global et Inclusif. Elles exercent les compétences provinciales jusqu'à l'organisation des élections provinciales.</div>
+      </div>
+
+      <div class="titre-heading" id="titre-V">TITRE V — DES DISPOSITIONS TRANSITOIRES ET FINALES</div>
+
+      <div class="article-block" id="art-195" data-titre="V" data-kw="transition duree 24 mois elections calendrier">
+        <div class="art-num"><a href="#art-195">Article 195</a></div>
+        <div class="art-text">La période de transition est fixée à deux ans à compter de l'installation effective du Gouvernement de transition. Elle peut être prorogée par le Parlement de transition pour une période n'excédant pas six mois, deux fois seulement et pour des raisons dûment motivées.</div>
+      </div>
+
+      <div class="article-block" id="art-196" data-titre="V" data-kw="elections referendum constitution 2005 2006">
+        <div class="art-num"><a href="#art-196">Article 196</a></div>
+        <div class="art-text">Au terme de la période de transition, des élections libres, démocratiques et transparentes seront organisées. Ces élections comprennent notamment :<br><br>
+        — un référendum constitutionnel ;<br>
+        — des élections présidentielle et législatives nationales ;<br>
+        — des élections provinciales.<br><br>
+        La Commission Électorale Indépendante est chargée de l'organisation de ces scrutins.</div>
+      </div>
+
+      <div class="article-block" id="art-197" data-titre="V" data-kw="reunification territoire armee forces armees FARDC">
+        <div class="art-num"><a href="#art-197">Article 197</a></div>
+        <div class="art-text">L'une des missions essentielles de la période de transition est l'intégration des forces combattantes en une armée nationale unifiée et républicaine : les Forces Armées de la République Démocratique du Congo (FARDC).<br><br>
+        Cette intégration doit être réalisée dans le respect du principe de la représentation équilibrée des différentes composantes et entités.</div>
+      </div>
+
+      <div class="article-block" id="art-198" data-titre="V" data-kw="reconciliation nationale paix cohesion">
+        <div class="art-num"><a href="#art-198">Article 198</a></div>
+        <div class="art-text">La réconciliation nationale, la promotion de la paix, de la cohésion sociale et de l'unité nationale constituent des objectifs fondamentaux de la période de transition.</div>
+      </div>
+
+      <div class="article-block" id="art-199" data-titre="V" data-kw="lois existantes maintien abrogation">
+        <div class="art-num"><a href="#art-199">Article 199</a></div>
+        <div class="art-text">Restent en vigueur, jusqu'à leur abrogation, les lois et règlements existants à la date d'entrée en vigueur de la présente Constitution, pour autant qu'ils ne lui soient pas contraires.</div>
+      </div>
+
+      <div class="article-block" id="art-200" data-titre="V" data-kw="revision constitution transition procedure">
+        <div class="art-num"><a href="#art-200">Article 200</a></div>
+        <div class="art-text">La présente Constitution peut être révisée à l'initiative du Président de la République, du Gouvernement ou du Parlement de transition à la majorité des deux tiers de ses membres. Toute révision doit être approuvée par référendum populaire. Elle ne peut porter atteinte aux droits et libertés fondamentaux garantis par la présente Constitution.</div>
+      </div>
+
+      <div class="article-block" id="art-201" data-titre="V" data-kw="entree vigueur promulgation publication">
+        <div class="art-num"><a href="#art-201">Article 201</a></div>
+        <div class="art-text">La présente Constitution entre en vigueur dès sa promulgation par le Président de la République.<br><br>
+        <strong>Fait à Kinshasa, le 4 avril 2003.</strong><br><br>
+        Le Président de la République,<br>
+        <em>Joseph KABILA KABANGE</em></div>
+      </div>
+
+      <div class="no-result" id="noResult" style="display:none;">Aucun article ne correspond à votre recherche.</div>
+    </div>
+
+    <div style="text-align:center;margin-top:2rem;">
+      <a href="constitution.html" class="btn btn-outline">← Retour au hub</a>
+      <a href="constitution_2006.html" class="btn btn-primary" style="margin-left:.5rem;">Constitution 2006 →</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-brand">ParlonsNation — <em>Votre nation, votre voix</em></p>
+      <p class="footer-copy">© 2025 ParlonsNation.com</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('navToggle').addEventListener('click', function() {
+      document.getElementById('navLinks').classList.toggle('open');
+      this.classList.toggle('active');
+    });
+    const articles = Array.from(document.querySelectorAll('.article-block'));
+    const headers = document.querySelectorAll('.titre-heading,.chapitre-heading');
+    const total = articles.length;
+    const countEl = document.getElementById('resultCount');
+
+    function doFilter() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      const titre = document.getElementById('filtreSection').value;
+      let visible = 0;
+      articles.forEach(art => {
+        const show = (!q || art.textContent.toLowerCase().includes(q)) && (!titre || art.dataset.titre === titre);
+        art.style.display = show ? '' : 'none';
+        if(show) visible++;
+      });
+      headers.forEach(h => {
+        let next = h.nextElementSibling; let hv = false;
+        while(next && !next.classList.contains('titre-heading')) {
+          if(next.classList.contains('article-block') && next.style.display !== 'none') { hv = true; break; }
+          next = next.nextElementSibling;
+        }
+        h.style.display = hv ? '' : 'none';
+      });
+      countEl.textContent = (q || titre) ? `${visible}/${total} articles` : `${total} articles`;
+      document.getElementById('noResult').style.display = visible === 0 ? '' : 'none';
+    }
+    document.getElementById('searchInput').addEventListener('input', doFilter);
+    document.getElementById('filtreSection').addEventListener('change', doFilter);
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('filtreSection').value = '';
+      doFilter();
+    });
+  </script>
+</body>
+</html>
