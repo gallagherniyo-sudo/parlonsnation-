@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voter — ParlonsNation</title>
+  <meta name="description" content="Exprimez votre position sur le débat constitutionnel de la RDC.">
+  <meta name="theme-color" content="#0F6E56">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .vote-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--white);
+      margin-bottom: 0.75rem;
+    }
+    .vote-option:hover { border-color: var(--green); box-shadow: 0 0 0 3px rgba(15,110,86,0.1); }
+    .vote-option.selected {
+      border-color: var(--green);
+      background: var(--green-pale);
+      box-shadow: 0 0 0 3px rgba(15,110,86,0.15);
+    }
+    .vote-option input[type="radio"] { display: none; }
+    .vote-option-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-head);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .vote-option-content h3 {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      color: var(--text);
+    }
+    .vote-option-content p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .vote-option.selected .vote-option-content h3 { color: var(--green-dark); }
+    .confirmation-card {
+      background: linear-gradient(135deg, var(--green-dark), var(--green));
+      color: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+    }
+    .confirmation-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .selected-option-display {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50px;
+      padding: 0.6rem 1.25rem;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="logo"><span class="logo-icon">🇨🇩</span> Parlons<span>Nation</span></a>
+    <button class="nav-toggle" id="navToggle">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="voter.html" class="active">Voter</a></li>
+      <li><a href="resultats.html">Résultats</a></li>
+      <li><a href="constitution.html">Constitution</a></li>
+      <li><a href="forum.html">Forum</a></li>
+      <li><a href="inscription.html" class="btn btn-primary btn-sm">S'inscrire</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- En-tête -->
+<div class="page-header">
+  <div class="container">
+    <h1>🗳️ Voter</h1>
+    <p>Exprimez votre position sur la Constitution de la RDC</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div style="max-width:640px;margin:0 auto;">
+
+      <!-- État : Chargement -->
+      <div id="loadingState" class="text-center" style="padding:3rem 0;">
+        <div class="spinner"></div>
+        <p style="color:var(--text-muted);">Vérification de votre inscription…</p>
+      </div>
+
+      <!-- État : Non inscrit -->
+      <div id="notRegistered" class="hidden">
+        <div class="card text-center">
+          <div style="font-size:3rem;margin-bottom:1rem;">🔐</div>
+          <h2 style="font-family:var(--font-head);font-size:1.3rem;font-weight:700;margin-bottom:0.75rem;">Inscription requise</h2>
+          <p style="color:var(--text-muted);margin-bottom:1.5rem;">
+            Pour participer au vote, vous devez d'abord créer votre compte citoyen. L'inscription est gratuite et prend moins de 2 minutes.
+          </p>
+          <a href="inscription.html" class="btn btn-primary btn-lg btn-block">
+            S'inscrire maintenant
+          </a>
+          <p style="margin-top:1rem;font-size:0.82rem;color:var(--text-muted);">Inscription gratuite • Données protégées • Anonymat garanti</p>
+        </div>
+      </div>
+
+      <!-- État : Déjà voté -->
+      <div id="alreadyVoted" class="hidden">
+        <div class="confirmation-card">
+          <div class="confirmation-icon">✅</div>
+          <h2 style="font-family:var(--font-head);font-size:1.5rem;font-weight:700;margin-bottom:0.75rem;">Vous avez déjà voté !</h2>
+          <p style="opacity:0.9;margin-bottom:1rem;">
+            Merci pour votre participation à ce débat historique. Votre voix a bien été enregistrée.
+          </p>
+          <div class="selected-option-display" id="previousVoteDisplay">
+            <strong>Votre vote</strong>
+          </div>
+          <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">
+            <a href="resultats.html" class="btn btn-gold">Voir les résultats →</a>
+            <a href="forum.html" class="btn btn-ghost">Lire le forum</a>
+          </div>
+        </div>
+        <div style="margin-top:1.5rem;text-align:center;">
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.75rem;">Invitez vos proches à participer :</p>
+          <a id="shareVote" href="#" class="btn btn-outline">📱 Partager sur WhatsApp</a>
+        </div>
+      </div>
+
+      <!-- État : Formulaire de vote -->
+      <div id="voteForm" class="hidden">
+
+        <div class="alert alert-info mb-3">
+          🔒 Ce vote est <strong>définitif et anonyme</strong>. Vous ne pouvez voter qu'une seule fois.
+        </div>
+
+        <!-- La question -->
+        <div class="card mb-3" style="border-left:4px solid var(--gold);background:var(--green-pale);">
+          <p style="font-size:0.8rem;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem;">La question du débat</p>
+          <h2 style="font-family:var(--font-head);font-size:1.15rem;font-weight:700;color:var(--green-dark);">
+            Que faut-il faire de la Constitution de la République Démocratique du Congo ?
+          </h2>
+        </div>
+
+        <!-- Les 4 options -->
+        <label class="vote-option" id="opt-A">
+          <input type="radio" name="vote" value="A">
+          <div class="vote-option-badge badge-a">A</div>
+          <div class="vote-option-content">
+            <h3>Changer totalement la Constitution</h3>
+            <p>Rédiger et adopter une toute nouvelle constitution, mieux adaptée aux défis actuels de la RDC et aux aspirations de son peuple.</p>
+          </div>
+        </label>
+
+        <label class="vote-option" id="opt-B">
+          <input type="radio" name="vote" value="B">
+          <div class="vote-option-badge badge-b">B</div>
+          <div class="vote-option-content">
+            <h3>Réviser partiellement</h3>
+            <p>Amender certains articles précis de la constitution de 2006, dans le respect des procédures légales et en préservant les acquis fondamentaux.</p>
+          </div>
+        </label>
+
+        <label class="vote-option" id="opt-C">
+          <input type="radio" name="vote" value="C">
+          <div class="vote-option-badge badge-c">C</div>
+          <div class="vote-option-content">
+            <h3>Conserver la Constitution actuelle</h3>
+            <p>Garder la constitution de 2006 telle quelle et exiger que toutes les institutions la respectent pleinement et sans exception.</p>
+          </div>
+        </label>
+
+        <label class="vote-option" id="opt-D">
+          <input type="radio" name="vote" value="D">
+          <div class="vote-option-badge badge-d">D</div>
+          <div class="vote-option-content">
+            <h3>Abstention</h3>
+            <p>Je ne me prononce pas sur cette question, ou je n'ai pas encore assez d'informations pour me forger une opinion.</p>
+          </div>
+        </label>
+
+        <div id="voteError" class="alert alert-error hidden mt-2">
+          ⚠️ Veuillez sélectionner une option avant de voter.
+        </div>
+
+        <!-- Commentaire optionnel -->
+        <div class="card mt-3" id="commentSection" style="display:none;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="commentaire">
+              Votre opinion (optionnel)
+            </label>
+            <textarea id="commentaire" class="form-control" placeholder="Partagez les raisons de votre choix, vos préoccupations ou vos espoirs pour la RDC..." maxlength="500" rows="4"></textarea>
+            <div style="display:flex;justify-content:space-between;margin-top:0.3rem;">
+              <div class="form-hint">Votre commentaire peut apparaître dans le forum si vous êtes en mode public.</div>
+              <span id="charCount" style="font-size:0.75rem;color:var(--text-muted);">0/500</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="voteSubmitError" class="alert alert-error hidden mt-2"></div>
+
+        <button class="btn btn-primary btn-lg btn-block mt-3" id="submitVote">
+          <span id="submitVoteText">🗳️ Confirmer mon vote</span>
+          <span id="submitVoteSpinner" class="hidden" style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-left:6px;"></span>
+        </button>
+
+        <p style="text-align:center;font-size:0.8rem;color:var(--text-muted);margin-top:0.75rem;">
+          Ce vote est définitif. Vous ne pourrez pas le modifier après confirmation.
+        </p>
+      </div>
+
+      <!-- Succès de vote -->
+      <div id="voteSuccess" class="hidden">
+        <div class="confirmation-card">
+          <div class="confirmation-icon">🇨🇩</div>
+          <h2 style="font-family:var(--font-head);font-size:1.5rem;font-weight:700;margin-bottom:0.5rem;">Vote enregistré !</h2>
+          <p style="opacity:0.9;margin-bottom:0.75rem;">Merci d'avoir participé à ce moment historique pour la RDC.</p>
+          <div class="selected-option-display" id="confirmedVoteDisplay"></div>
+          <p style="font-size:0.85rem;opacity:0.75;margin-top:0.75rem;">
+            "Votre nation, votre voix." — Ensemble, nous construisons la RDC de demain.
+          </p>
+          <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">
+            <a href="resultats.html" class="btn btn-gold">Voir les résultats →</a>
+            <a href="forum.html" class="btn btn-ghost">Lire le forum</a>
+          </div>
+        </div>
+
+        <div style="margin-top:1.5rem;text-align:center;">
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.75rem;">Partagez et invitez vos proches à voter :</p>
+          <a id="shareAfterVote" href="#" class="btn btn-outline">📱 Partager sur WhatsApp</a>
+        </div>
+
+        <div class="card mt-3" style="border-left:4px solid var(--gold);">
+          <h4 style="font-family:var(--font-head);font-weight:700;font-size:0.9rem;margin-bottom:0.5rem;">📖 En savoir plus</h4>
+          <p style="font-size:0.85rem;color:var(--text-muted);">Consultez les articles clés de la Constitution et lisez les opinions de vos compatriotes.</p>
+          <div style="display:flex;gap:0.75rem;margin-top:0.75rem;flex-wrap:wrap;">
+            <a href="constitution.html" class="btn btn-outline btn-sm">Lire la Constitution</a>
+            <a href="forum.html" class="btn btn-outline btn-sm">Forum citoyen</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <span>© 2025 ParlonsNation</span>
+      <span>🔒 Vote sécurisé • Un citoyen, une voix</span>
+      <a href="index.html" style="color:rgba(255,255,255,0.7);">← Accueil</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://yagvezgfmxvrnngrxeuv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ZwpN3mfLueArH7Iq_dJdYA_4ZxY2Ke_';
+const { createClient } = window.supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+const LABELS = {
+  A: 'Changer totalement', B: 'Réviser partiellement',
+  C: 'Conserver telle quelle', D: 'Abstention'
+};
+const COLORS = { A: '#2563EB', B: '#7C3AED', C: '#CE1020', D: '#6B7280' };
+
+function toast(msg, type='success') {
+  const t = document.createElement('div');
+  t.className = `toast${type==='error'?' toast-error':''}`;
+  t.textContent = msg;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(() => t.remove(), 3200);
+}
+
+function show(id) {
+  ['loadingState','notRegistered','alreadyVoted','voteForm','voteSuccess'].forEach(s => {
+    document.getElementById(s).classList.toggle('hidden', s !== id);
+  });
+}
+
+// ── Options sélection ──────────────────────────────────
+let selectedChoix = null;
+document.querySelectorAll('.vote-option').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('.vote-option').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    selectedChoix = opt.querySelector('input[type="radio"]').value;
+    opt.querySelector('input[type="radio"]').checked = true;
+    document.getElementById('voteError').classList.add('hidden');
+    document.getElementById('commentSection').style.display = 'block';
+  });
+});
+
+// Compteur de caractères
+document.getElementById('commentaire').addEventListener('input', function() {
+  document.getElementById('charCount').textContent = `${this.value.length}/500`;
+});
+
+// ── Init : vérifier inscription et votes ──────────────
+async function init() {
+  const citoyenId = localStorage.getItem('pn_citoyen_id');
+
+  if (!citoyenId) {
+    show('notRegistered');
+    return;
+  }
+
+  // Récupérer le sujet actif
+  const { data: sujets } = await db.from('sujets').select('id,titre').eq('actif', true).limit(1);
+  if (!sujets || !sujets.length) {
+    show('notRegistered');
+    toast('Aucun sujet de vote actif pour le moment.', 'error');
+    return;
+  }
+  const sujetId = sujets[0].id;
+
+  // Vérifier si déjà voté
+  const { data: existingVote } = await db
+    .from('votes')
+    .select('choix, commentaire')
+    .eq('citoyen_id', citoyenId)
+    .eq('sujet_id', sujetId)
+    .limit(1);
+
+  if (existingVote && existingVote.length > 0) {
+    const vote = existingVote[0];
+    show('alreadyVoted');
+    const dispEl = document.getElementById('previousVoteDisplay');
+    dispEl.innerHTML = `<strong style="color:${COLORS[vote.choix]}">Option ${vote.choix}</strong> — ${LABELS[vote.choix]}`;
+    localStorage.setItem('pn_voted', 'true');
+    localStorage.setItem('pn_choix', vote.choix);
+  } else {
+    show('voteForm');
+  }
+
+  // Liens de partage
+  const shareUrl = `https://wa.me/?text=${encodeURIComponent('🇨🇩 J\'ai voté sur ParlonsNation — le débat constitutionnel de la RDC. Rejoins-moi : ' + window.location.origin + '/voter.html')}`;
+  const shareEls = ['shareVote','shareAfterVote'];
+  shareEls.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.href = shareUrl;
+  });
+}
+
+// ── Soumission du vote ────────────────────────────────
+document.getElementById('submitVote').addEventListener('click', async () => {
+  if (!selectedChoix) {
+    document.getElementById('voteError').classList.remove('hidden');
+    return;
+  }
+
+  const btn = document.getElementById('submitVote');
+  btn.disabled = true;
+  document.getElementById('submitVoteText').textContent = 'Enregistrement…';
+  document.getElementById('submitVoteSpinner').classList.remove('hidden');
+
+  const errDiv = document.getElementById('voteSubmitError');
+  errDiv.classList.add('hidden');
+
+  try {
+    const citoyenId  = localStorage.getItem('pn_citoyen_id');
+    const provinceId = localStorage.getItem('pn_province_id');
+    const commentaire = document.getElementById('commentaire').value.trim() || null;
+
+    // Récupérer le sujet
+    const { data: sujets } = await db.from('sujets').select('id').eq('actif', true).limit(1);
+    const sujetId = sujets[0].id;
+
+    const { error } = await db.from('votes').insert({
+      citoyen_id:  citoyenId,
+      sujet_id:    sujetId,
+      choix:       selectedChoix,
+      commentaire: commentaire,
+      province_id: provinceId ? parseInt(provinceId) : null
+    });
+
+    if (error) {
+      if (error.code === '23505') {
+        errDiv.textContent = 'Vous avez déjà enregistré un vote. Rafraîchissez la page.';
+      } else {
+        errDiv.textContent = `Erreur : ${error.message}`;
+      }
+      errDiv.classList.remove('hidden');
+      return;
+    }
+
+    localStorage.setItem('pn_voted', 'true');
+    localStorage.setItem('pn_choix', selectedChoix);
+
+    // Afficher le succès
+    show('voteSuccess');
+    const confEl = document.getElementById('confirmedVoteDisplay');
+    confEl.innerHTML = `<strong style="color:${COLORS[selectedChoix]}">Option ${selectedChoix}</strong> — ${LABELS[selectedChoix]}`;
+
+    document.getElementById('shareAfterVote').href =
+      `https://wa.me/?text=${encodeURIComponent('🇨🇩 Je viens de voter sur ParlonsNation ! J\'ai choisi "' + LABELS[selectedChoix] + '" pour notre Constitution. Et vous ? ' + window.location.origin + '/voter.html')}`;
+
+  } catch(err) {
+    errDiv.textContent = `Erreur inattendue : ${err.message}`;
+    errDiv.classList.remove('hidden');
+  } finally {
+    btn.disabled = false;
+    document.getElementById('submitVoteText').textContent = '🗳️ Confirmer mon vote';
+    document.getElementById('submitVoteSpinner').classList.add('hidden');
+  }
+});
+
+init();
+</script>
+</body>
+</html>

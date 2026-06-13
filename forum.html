@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forum citoyen — ParlonsNation</title>
+  <meta name="description" content="Lisez les opinions de vos compatriotes sur le débat constitutionnel de la RDC.">
+  <meta name="theme-color" content="#0F6E56">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .filter-bar {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+    .filter-bar select, .filter-bar input {
+      flex: 1;
+      min-width: 140px;
+      max-width: 220px;
+      padding: 0.5rem 0.75rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      background: var(--white);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .filter-bar select:focus, .filter-bar input:focus {
+      border-color: var(--green);
+    }
+    .forum-empty {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--text-muted);
+    }
+    .forum-empty .big-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .page-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-xs);
+      border: 2px solid var(--border);
+      background: var(--white);
+      color: var(--text);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .page-btn:hover { border-color: var(--green); color: var(--green); }
+    .page-btn.active {
+      background: var(--green);
+      border-color: var(--green);
+      color: var(--white);
+    }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .forum-meta-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .comment-quote {
+      font-size: 1.5rem;
+      line-height: 1;
+      color: var(--green-pale);
+      font-family: Georgia, serif;
+      margin-right: 0.3rem;
+    }
+    .opinion-highlight {
+      background: var(--green-pale);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border-left: 4px solid var(--green);
+    }
+    .opinion-highlight-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="logo"><span class="logo-icon">🇨🇩</span> Parlons<span>Nation</span></a>
+    <button class="nav-toggle" id="navToggle">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="voter.html">Voter</a></li>
+      <li><a href="resultats.html">Résultats</a></li>
+      <li><a href="constitution.html">Constitution</a></li>
+      <li><a href="forum.html" class="active">Forum</a></li>
+      <li><a href="inscription.html" class="btn btn-primary btn-sm">S'inscrire</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- En-tête -->
+<div class="page-header">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+    <div>
+      <h1>💬 Forum citoyen</h1>
+      <p>Les opinions de vos compatriotes sur le débat constitutionnel</p>
+    </div>
+    <a href="voter.html" class="btn btn-gold">
+      ✍️ Laisser mon opinion
+    </a>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Avertissement -->
+    <div class="alert alert-info mb-3">
+      🔐 Seules les opinions des citoyens ayant choisi le mode <strong>public</strong> lors de l'inscription sont visibles ici. Les votes anonymes restent confidentiels.
+    </div>
+
+    <!-- Stats rapides forum -->
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+      <div class="tag" id="tagTotal">… commentaires</div>
+      <div class="tag" id="tagPublic">… avis publics</div>
+    </div>
+
+    <!-- Opinion à la une -->
+    <div id="featuredOpinion" class="hidden">
+      <div class="opinion-highlight">
+        <div class="opinion-highlight-label">⭐ Opinion à la une</div>
+        <p class="comment-quote">"</p>
+        <p id="featuredText" style="font-size:1.05rem;color:var(--text);line-height:1.7;font-style:italic;"></p>
+        <div style="margin-top:0.75rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+          <span id="featuredPseudo" style="font-weight:700;font-size:0.9rem;"></span>
+          <span id="featuredProvince" style="font-size:0.8rem;color:var(--text-muted);"></span>
+          <span id="featuredChoix" class="forum-choix"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtres -->
+    <div class="filter-bar">
+      <select id="filterChoix">
+        <option value="">Toutes les options</option>
+        <option value="A">Option A — Changer</option>
+        <option value="B">Option B — Réviser</option>
+        <option value="C">Option C — Conserver</option>
+        <option value="D">Option D — Abstention</option>
+      </select>
+      <select id="filterProvince">
+        <option value="">Toutes les provinces</option>
+      </select>
+      <input type="text" id="filterSearch" placeholder="Rechercher dans les opinions…">
+    </div>
+
+    <!-- Barre méta -->
+    <div class="forum-meta-bar">
+      <p id="resultCount" style="font-size:0.875rem;color:var(--text-muted);">Chargement…</p>
+      <select id="sortBy" style="padding:0.4rem 0.75rem;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:0.8rem;background:var(--white);">
+        <option value="recent">Plus récents</option>
+        <option value="oldest">Plus anciens</option>
+      </select>
+    </div>
+
+    <!-- Chargement -->
+    <div id="loadingState" class="loading-center">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Liste des opinions -->
+    <div id="forumList" class="hidden"></div>
+
+    <!-- Aucun résultat -->
+    <div id="emptyState" class="forum-empty hidden">
+      <div class="big-icon">🌍</div>
+      <h3 style="font-family:var(--font-head);font-weight:700;margin-bottom:0.5rem;">Aucune opinion trouvée</h3>
+      <p>Soyez le premier à partager votre point de vue sur le débat constitutionnel.</p>
+      <div style="margin-top:1.5rem;">
+        <a href="inscription.html" class="btn btn-primary">S'inscrire et voter →</a>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination"></div>
+
+    <!-- CTA participer -->
+    <div class="card text-center mt-4" style="background:var(--green-pale);border:2px solid var(--green);" id="ctaParticiper">
+      <h3 style="font-family:var(--font-head);font-weight:700;color:var(--green);margin-bottom:0.5rem;">
+        Partagez votre opinion
+      </h3>
+      <p style="color:var(--text-muted);margin-bottom:1rem;font-size:0.9rem;">
+        Inscrivez-vous en mode public pour que votre opinion apparaisse dans ce forum et inspire vos compatriotes.
+      </p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="inscription.html" class="btn btn-primary">S'inscrire gratuitement</a>
+        <a href="voter.html" class="btn btn-outline">Déjà inscrit ? Voter</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">🇨🇩 Parlons<span>Nation</span></a>
+        <p>Forum citoyen neutre. Les opinions exprimées sont celles des citoyens et n'engagent pas ParlonsNation.</p>
+      </div>
+      <div>
+        <h4>Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="resultats.html">Résultats</a></li>
+          <li><a href="constitution.html">Constitution</a></li>
+          <li><a href="voter.html">Voter</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Participer</h4>
+        <a href="inscription.html" class="btn btn-outline btn-sm" style="color:var(--gold);border-color:var(--gold);">S'inscrire →</a>
+        <p style="font-size:0.75rem;margin-top:0.75rem;opacity:0.6;">
+          Choisissez "public" lors de l'inscription pour apparaître dans le forum.
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 ParlonsNation</span>
+      <span>🇨🇩 Votre nation, votre voix.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://yagvezgfmxvrnngrxeuv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ZwpN3mfLueArH7Iq_dJdYA_4ZxY2Ke_';
+const { createClient } = window.supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+const LABELS = { A:'Changer totalement', B:'Réviser partiellement', C:'Conserver telle quelle', D:'Abstention' };
+const COLORS = { A:'#2563EB', B:'#7C3AED', C:'#CE1020', D:'#6B7280' };
+const PER_PAGE = 10;
+
+let allPosts = [];
+let filteredPosts = [];
+let currentPage = 1;
+let provinces = {};
+
+function toast(msg, type='success') {
+  const t = document.createElement('div');
+  t.className = `toast${type==='error'?' toast-error':''}`;
+  t.textContent = msg;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(() => t.remove(), 3200);
+}
+
+function timeAgo(dateStr) {
+  const now = new Date();
+  const date = new Date(dateStr);
+  const diff = Math.floor((now - date) / 1000);
+  if (diff < 60)   return 'à l\'instant';
+  if (diff < 3600) return `il y a ${Math.floor(diff/60)} min`;
+  if (diff < 86400) return `il y a ${Math.floor(diff/3600)}h`;
+  if (diff < 604800) return `il y a ${Math.floor(diff/86400)} jours`;
+  return date.toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+}
+
+function getInitials(pseudo) {
+  if (!pseudo) return '👤';
+  return pseudo.trim().slice(0,2).toUpperCase();
+}
+
+function avatarColor(pseudo) {
+  const colors = ['#0F6E56','#2563EB','#7C3AED','#059669','#d97706','#dc2626'];
+  let hash = 0;
+  for (let c of (pseudo||'A')) hash = (hash + c.charCodeAt(0)) % colors.length;
+  return colors[hash];
+}
+
+// ── Charger les provinces ─────────────────────────────
+async function loadProvinces() {
+  const { data } = await db.from('provinces').select('id, nom').order('nom');
+  if (data) {
+    data.forEach(p => { provinces[p.id] = p.nom; });
+    const sel = document.getElementById('filterProvince');
+    data.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.id;
+      opt.textContent = p.nom;
+      sel.appendChild(opt);
+    });
+  }
+}
+
+// ── Charger les opinions publiques ────────────────────
+async function loadForum() {
+  try {
+    // Récupérer le sujet actif
+    const { data: sujets } = await db.from('sujets').select('id').eq('actif', true).limit(1);
+    if (!sujets || !sujets.length) {
+      document.getElementById('loadingState').classList.add('hidden');
+      document.getElementById('emptyState').classList.remove('hidden');
+      return;
+    }
+    const sujetId = sujets[0].id;
+
+    // Votes avec commentaires (on récupère max 500 pour filter client-side)
+    const { data: votes, error } = await db
+      .from('votes')
+      .select(`
+        id,
+        choix,
+        commentaire,
+        province_id,
+        created_at,
+        citoyens ( pseudo, mode_affichage )
+      `)
+      .eq('sujet_id', sujetId)
+      .not('commentaire', 'is', null)
+      .neq('commentaire', '')
+      .order('created_at', { ascending: false })
+      .limit(500);
+
+    if (error) throw error;
+
+    // Filtrer les votes publics avec commentaire
+    const publicVotes = (votes||[]).filter(v => {
+      const citoyen = v.citoyens;
+      if (!citoyen) return false;
+      if (citoyen.mode_affichage !== 'public') return false;
+      return v.commentaire && v.commentaire.trim().length > 0;
+    });
+
+    // Votes avec commentaire (y compris anonymes, pour les stats)
+    const totalWithComment = (votes||[]).length;
+    document.getElementById('tagTotal').textContent = `${totalWithComment.toLocaleString('fr-FR')} commentaires`;
+    document.getElementById('tagPublic').textContent = `${publicVotes.length.toLocaleString('fr-FR')} avis publics`;
+
+    allPosts = publicVotes;
+    document.getElementById('loadingState').classList.add('hidden');
+
+    // Opinion à la une (la plus longue)
+    if (publicVotes.length > 0) {
+      const featured = publicVotes.reduce((a, b) =>
+        (b.commentaire||'').length > (a.commentaire||'').length ? b : a
+      );
+      if (featured.commentaire && featured.commentaire.length > 80) {
+        const fDiv = document.getElementById('featuredOpinion');
+        fDiv.classList.remove('hidden');
+        document.getElementById('featuredText').textContent = featured.commentaire;
+        document.getElementById('featuredPseudo').textContent = featured.citoyens.pseudo || 'Citoyen';
+        document.getElementById('featuredProvince').textContent =
+          featured.province_id ? `📍 ${provinces[featured.province_id]||''}` : '📍 Diaspora';
+        const fcEl = document.getElementById('featuredChoix');
+        fcEl.textContent = `Option ${featured.choix} — ${LABELS[featured.choix]}`;
+        fcEl.className = `forum-choix choix-${featured.choix.toLowerCase()}`;
+      }
+    }
+
+    applyFiltersAndRender();
+
+    // Masquer le CTA si déjà voté
+    if (localStorage.getItem('pn_voted') === 'true') {
+      document.getElementById('ctaParticiper').classList.add('hidden');
+    }
+
+  } catch(err) {
+    console.error('Forum error:', err);
+    document.getElementById('loadingState').classList.add('hidden');
+    document.getElementById('emptyState').classList.remove('hidden');
+    toast('Impossible de charger le forum : ' + err.message, 'error');
+  }
+}
+
+// ── Filtres ────────────────────────────────────────────
+function applyFiltersAndRender() {
+  const choix   = document.getElementById('filterChoix').value;
+  const prov    = document.getElementById('filterProvince').value;
+  const search  = document.getElementById('filterSearch').value.toLowerCase().trim();
+  const sortBy  = document.getElementById('sortBy').value;
+
+  filteredPosts = allPosts.filter(v => {
+    if (choix && v.choix !== choix) return false;
+    if (prov  && String(v.province_id) !== String(prov)) return false;
+    if (search) {
+      const txt = `${v.commentaire||''} ${v.citoyens?.pseudo||''} ${provinces[v.province_id]||''}`.toLowerCase();
+      if (!txt.includes(search)) return false;
+    }
+    return true;
+  });
+
+  if (sortBy === 'oldest') filteredPosts.reverse();
+
+  currentPage = 1;
+  renderPage();
+}
+
+// ── Rendu ──────────────────────────────────────────────
+function renderPage() {
+  const total = filteredPosts.length;
+  const totalPages = Math.ceil(total / PER_PAGE);
+  const start = (currentPage - 1) * PER_PAGE;
+  const pagePosts = filteredPosts.slice(start, start + PER_PAGE);
+
+  document.getElementById('resultCount').textContent =
+    total === 0
+      ? 'Aucune opinion trouvée'
+      : `${total.toLocaleString('fr-FR')} opinion${total>1?'s':''} • Page ${currentPage}/${totalPages||1}`;
+
+  const listEl = document.getElementById('forumList');
+  const emptyEl = document.getElementById('emptyState');
+
+  if (total === 0) {
+    listEl.classList.add('hidden');
+    emptyEl.classList.remove('hidden');
+    document.getElementById('pagination').innerHTML = '';
+    return;
+  }
+
+  listEl.classList.remove('hidden');
+  emptyEl.classList.add('hidden');
+
+  listEl.innerHTML = pagePosts.map(v => {
+    const pseudo   = v.citoyens?.pseudo || 'Citoyen';
+    const province = v.province_id ? provinces[v.province_id] : 'Diaspora';
+    const initials = getInitials(pseudo);
+    const bgColor  = avatarColor(pseudo);
+    const choixLabel = LABELS[v.choix] || '';
+    return `
+      <div class="forum-post">
+        <div class="forum-post-header">
+          <div class="forum-avatar" style="background:${bgColor};">${initials}</div>
+          <div class="forum-post-meta">
+            <div class="forum-pseudo">${escHtml(pseudo)}</div>
+            <div class="forum-province">📍 ${escHtml(province)}</div>
+          </div>
+          <span class="forum-choix choix-${v.choix.toLowerCase()}">Option ${v.choix} — ${choixLabel}</span>
+        </div>
+        <div class="forum-post-body">
+          <span class="comment-quote" style="font-size:1.2rem;color:var(--green-pale);font-family:Georgia,serif;">"</span>${escHtml(v.commentaire)}"
+        </div>
+        <div class="forum-date">${timeAgo(v.created_at)}</div>
+      </div>`;
+  }).join('');
+
+  // Pagination
+  renderPagination(totalPages);
+  window.scrollTo({ top: document.getElementById('forumList').offsetTop - 100, behavior: 'smooth' });
+}
+
+function renderPagination(totalPages) {
+  if (totalPages <= 1) { document.getElementById('pagination').innerHTML = ''; return; }
+
+  let html = '';
+  html += `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+
+  for (let i = 1; i <= totalPages; i++) {
+    if (totalPages > 7 && i > 2 && i < totalPages - 1 && Math.abs(i - currentPage) > 2) {
+      if (i === 3 || i === totalPages - 2) html += `<span style="padding:0 4px;color:var(--text-muted);">…</span>`;
+      continue;
+    }
+    html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+
+  html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+  document.getElementById('pagination').innerHTML = html;
+}
+
+function goPage(n) {
+  const totalPages = Math.ceil(filteredPosts.length / PER_PAGE);
+  if (n < 1 || n > totalPages) return;
+  currentPage = n;
+  renderPage();
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Listeners filtres ─────────────────────────────────
+['filterChoix','filterProvince','sortBy'].forEach(id => {
+  document.getElementById(id).addEventListener('change', applyFiltersAndRender);
+});
+
+let searchTimer;
+document.getElementById('filterSearch').addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(applyFiltersAndRender, 300);
+});
+
+// ── Init ──────────────────────────────────────────────
+loadProvinces().then(loadForum);
+</script>
+</body>
+</html>

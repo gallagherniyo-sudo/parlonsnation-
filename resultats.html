@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Résultats — ParlonsNation</title>
+  <meta name="description" content="Résultats en temps réel du débat constitutionnel de la RDC par province.">
+  <meta name="theme-color" content="#0F6E56">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .province-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .province-row:last-child { border-bottom: none; }
+    .province-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+      min-width: 130px;
+      color: var(--text);
+    }
+    .province-bars { flex: 1; }
+    .province-count {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      min-width: 50px;
+      text-align: right;
+    }
+    .mini-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 2px;
+    }
+    .mini-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+    .last-updated {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      text-align: right;
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .table-results {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+    .table-results th {
+      text-align: left;
+      padding: 0.6rem 0.75rem;
+      background: var(--bg);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid var(--border);
+    }
+    .table-results td {
+      padding: 0.65rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    .table-results tr:last-child td { border-bottom: none; }
+    .table-results tr:hover td { background: var(--bg); }
+    .pct-badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 50px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #d1fae5;
+      color: var(--green-dark);
+      border: 1px solid var(--green);
+      border-radius: 50px;
+      padding: 0.2rem 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="logo"><span class="logo-icon">🇨🇩</span> Parlons<span>Nation</span></a>
+    <button class="nav-toggle" id="navToggle">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="voter.html">Voter</a></li>
+      <li><a href="resultats.html" class="active">Résultats</a></li>
+      <li><a href="constitution.html">Constitution</a></li>
+      <li><a href="forum.html">Forum</a></li>
+      <li><a href="inscription.html" class="btn btn-primary btn-sm">S'inscrire</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- En-tête -->
+<div class="page-header">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+    <div>
+      <h1>📊 Résultats en direct</h1>
+      <p>Consultation sur la Constitution de la RDC</p>
+    </div>
+    <div class="live-badge">
+      <div class="pulse" style="background:#4ade80;"></div>
+      EN DIRECT
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Chargement -->
+    <div id="loadingState" class="loading-center">
+      <div>
+        <div class="spinner"></div>
+        <p class="text-center text-muted">Chargement des résultats…</p>
+      </div>
+    </div>
+
+    <!-- Contenu principal -->
+    <div id="mainContent" class="hidden">
+
+      <!-- Stats globales -->
+      <div class="stats-grid mb-4">
+        <div class="stat-card">
+          <span class="stat-num" id="totalVotes">0</span>
+          <div class="stat-label">votes enregistrés</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="totalInscrits">0</span>
+          <div class="stat-label">citoyens inscrits</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="provincesCount">0</span>
+          <div class="stat-label">provinces représentées</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="diasporaCount">0</span>
+          <div class="stat-label">voix de la diaspora</div>
+        </div>
+      </div>
+
+      <!-- Légende -->
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#2563EB"></div> A — Changer totalement</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#7C3AED"></div> B — Réviser partiellement</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#CE1020"></div> C — Conserver telle quelle</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#6B7280"></div> D — Abstention</div>
+      </div>
+
+      <!-- Graphique global (Doughnut) -->
+      <div class="grid-2 mb-4" style="align-items:start;">
+        <div class="chart-container">
+          <div class="chart-title">Résultats globaux</div>
+          <div id="noVotesMsg" class="hidden text-center" style="padding:2rem 0;color:var(--text-muted);">
+            <p>Aucun vote enregistré pour l'instant.<br><a href="inscription.html">Soyez le premier à voter !</a></p>
+          </div>
+          <div id="doughnutWrapper">
+            <canvas id="doughnutChart" height="260"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-title">Détail par option</div>
+          <div id="detailBars"></div>
+          <div class="last-updated" id="lastUpdated"></div>
+        </div>
+      </div>
+
+      <!-- Graphique par province -->
+      <div class="chart-container mb-4">
+        <div class="chart-title">Votes par province (option dominante)</div>
+        <div id="noProvinceMsg" class="hidden text-center" style="padding:1.5rem 0;color:var(--text-muted);">
+          <p>Aucune donnée provinciale disponible pour l'instant.</p>
+        </div>
+        <canvas id="provinceChart" style="max-height:400px;"></canvas>
+      </div>
+
+      <!-- Tableau provincial détaillé -->
+      <div class="card mb-4">
+        <div class="chart-title">Tableau détaillé par province</div>
+        <div id="provinceTable" style="overflow-x:auto;">
+          <div class="loading-center"><div class="spinner"></div></div>
+        </div>
+      </div>
+
+      <!-- Bouton de mise à jour -->
+      <div class="text-center mb-3">
+        <button class="btn btn-outline" id="refreshBtn">🔄 Actualiser les données</button>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-top:0.4rem;" id="refreshTime"></p>
+      </div>
+
+    </div>
+
+    <!-- CTA si pas encore voté -->
+    <div id="ctaVote" class="card text-center" style="background:var(--green-pale);border:2px solid var(--green);margin-top:2rem;" id="ctaVoteCard">
+      <h3 style="font-family:var(--font-head);font-weight:700;color:var(--green);margin-bottom:0.5rem;">
+        Votre voix n'est pas encore comptée
+      </h3>
+      <p style="color:var(--text-muted);margin-bottom:1rem;">
+        Rejoignez des milliers de Congolais qui font entendre leur voix sur ce débat historique.
+      </p>
+      <a href="inscription.html" class="btn btn-primary">S'inscrire et voter →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <span>© 2025 ParlonsNation</span>
+      <span>Données mises à jour en temps réel</span>
+      <a href="index.html" style="color:rgba(255,255,255,0.7);">← Accueil</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script>
+const SUPABASE_URL = 'https://yagvezgfmxvrnngrxeuv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ZwpN3mfLueArH7Iq_dJdYA_4ZxY2Ke_';
+const { createClient } = window.supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+const LABELS  = { A:'Changer totalement', B:'Réviser partiellement', C:'Conserver telle quelle', D:'Abstention' };
+const COLORS  = { A:'#2563EB', B:'#7C3AED', C:'#CE1020', D:'#6B7280' };
+const CHOICES = ['A','B','C','D'];
+
+let doughnutChart = null;
+let provinceChart = null;
+
+// ── Vérifier si l'utilisateur a voté ─────────────────
+const hasVoted = localStorage.getItem('pn_voted') === 'true';
+if (hasVoted) {
+  document.getElementById('ctaVote').classList.add('hidden');
+}
+
+// ── Chargement des données ─────────────────────────────
+async function loadResults() {
+  try {
+    // Sujet actif
+    const { data: sujets } = await db.from('sujets').select('id').eq('actif', true).limit(1);
+    if (!sujets || !sujets.length) {
+      document.getElementById('loadingState').classList.add('hidden');
+      return;
+    }
+    const sujetId = sujets[0].id;
+
+    // Tous les votes avec province
+    const { data: votes } = await db
+      .from('votes')
+      .select('choix, province_id')
+      .eq('sujet_id', sujetId);
+
+    // Total inscrits
+    const { count: totalInscrits } = await db
+      .from('citoyens').select('*', { count:'exact', head:true });
+
+    // Diaspora
+    const { count: diasporaCount } = await db
+      .from('citoyens').select('*', { count:'exact', head:true }).eq('diaspora', true);
+
+    // Toutes les provinces
+    const { data: provinces } = await db
+      .from('provinces').select('id, nom').order('nom');
+
+    document.getElementById('loadingState').classList.add('hidden');
+    document.getElementById('mainContent').classList.remove('hidden');
+
+    const total = votes ? votes.length : 0;
+    document.getElementById('totalVotes').textContent   = total.toLocaleString('fr-FR');
+    document.getElementById('totalInscrits').textContent = (totalInscrits||0).toLocaleString('fr-FR');
+    document.getElementById('diasporaCount').textContent = (diasporaCount||0).toLocaleString('fr-FR');
+
+    // Décompte global
+    const counts = { A:0, B:0, C:0, D:0 };
+    const byProvince = {};
+    (votes||[]).forEach(v => {
+      if (counts[v.choix] !== undefined) counts[v.choix]++;
+      if (v.province_id) {
+        if (!byProvince[v.province_id]) byProvince[v.province_id] = { A:0,B:0,C:0,D:0,total:0 };
+        byProvince[v.province_id][v.choix]++;
+        byProvince[v.province_id].total++;
+      }
+    });
+
+    const provincesWithVotes = Object.keys(byProvince).length;
+    document.getElementById('provincesCount').textContent = provincesWithVotes;
+
+    // ── Graphique Doughnut ──────────────────────────────
+    if (total === 0) {
+      document.getElementById('noVotesMsg').classList.remove('hidden');
+      document.getElementById('doughnutWrapper').classList.add('hidden');
+    } else {
+      const ctx = document.getElementById('doughnutChart').getContext('2d');
+      if (doughnutChart) doughnutChart.destroy();
+      doughnutChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: CHOICES.map(c => `Option ${c} — ${LABELS[c]}`),
+          datasets: [{
+            data: CHOICES.map(c => counts[c]),
+            backgroundColor: CHOICES.map(c => COLORS[c]),
+            borderWidth: 3,
+            borderColor: '#fff',
+            hoverOffset: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position:'bottom', labels:{ font:{size:12}, padding:14 } },
+            tooltip: {
+              callbacks: {
+                label: ctx => {
+                  const val = ctx.raw;
+                  const pct = total ? Math.round(val/total*100) : 0;
+                  return ` ${val.toLocaleString('fr-FR')} votes (${pct}%)`;
+                }
+              }
+            }
+          },
+          cutout: '60%'
+        }
+      });
+    }
+
+    // ── Barres détail global ────────────────────────────
+    let detailHtml = '';
+    CHOICES.forEach(c => {
+      const pct = total ? Math.round(counts[c]/total*100) : 0;
+      detailHtml += `
+        <div style="margin-bottom:0.9rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.3rem;">
+            <span style="font-weight:700;font-size:0.9rem;">
+              <span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:${COLORS[c]};color:#fff;text-align:center;line-height:22px;font-size:0.75rem;font-weight:700;margin-right:6px;">${c}</span>
+              ${LABELS[c]}
+            </span>
+            <span style="font-weight:700;font-size:0.95rem;">${pct}%
+              <span style="color:var(--text-muted);font-weight:400;font-size:0.8rem;">(${counts[c].toLocaleString('fr-FR')})</span>
+            </span>
+          </div>
+          <div class="progress"><div class="progress-bar bar-${c.toLowerCase()}" style="width:${pct}%"></div></div>
+        </div>`;
+    });
+    document.getElementById('detailBars').innerHTML = detailHtml;
+
+    const now = new Date();
+    document.getElementById('lastUpdated').textContent =
+      `Mis à jour le ${now.toLocaleDateString('fr-FR')} à ${now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}`;
+    document.getElementById('refreshTime').textContent =
+      `Dernière actualisation : ${now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}`;
+
+    // ── Graphique par province ──────────────────────────
+    const provMap = {};
+    (provinces||[]).forEach(p => { provMap[p.id] = p.nom; });
+
+    const activeProvinces = Object.entries(byProvince)
+      .filter(([,d]) => d.total > 0)
+      .sort(([,a],[,b]) => b.total - a.total)
+      .slice(0, 20);
+
+    if (activeProvinces.length === 0) {
+      document.getElementById('noProvinceMsg').classList.remove('hidden');
+      document.getElementById('provinceChart').classList.add('hidden');
+    } else {
+      const provLabels = activeProvinces.map(([id]) => provMap[id] || `Province ${id}`);
+      const ctx2 = document.getElementById('provinceChart').getContext('2d');
+      if (provinceChart) provinceChart.destroy();
+      provinceChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: provLabels,
+          datasets: CHOICES.map(c => ({
+            label: `Option ${c}`,
+            data: activeProvinces.map(([,d]) => d[c]),
+            backgroundColor: COLORS[c],
+            borderRadius: 4,
+          }))
+        },
+        options: {
+          responsive: true,
+          indexAxis: 'y',
+          plugins: {
+            legend: { position:'top', labels:{ font:{size:12} } },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` Option ${ctx.dataset.label.slice(-1)} : ${ctx.raw} vote${ctx.raw>1?'s':''}`
+              }
+            }
+          },
+          scales: {
+            x: { stacked: true, grid:{ display:false } },
+            y: { stacked: true, ticks:{ font:{size:12} } }
+          }
+        }
+      });
+    }
+
+    // ── Tableau provincial ──────────────────────────────
+    if (activeProvinces.length === 0) {
+      document.getElementById('provinceTable').innerHTML =
+        '<p class="text-center text-muted" style="padding:1.5rem;">Aucune donnée provinciale disponible.</p>';
+    } else {
+      let tableHtml = `
+        <table class="table-results">
+          <thead>
+            <tr>
+              <th>Province</th>
+              <th>Total</th>
+              <th style="color:#2563EB;">A</th>
+              <th style="color:#7C3AED;">B</th>
+              <th style="color:#CE1020;">C</th>
+              <th style="color:#6B7280;">D</th>
+              <th>Tendance</th>
+            </tr>
+          </thead>
+          <tbody>`;
+
+      activeProvinces.forEach(([id, d]) => {
+        const nom = provMap[id] || `Province ${id}`;
+        const dominant = CHOICES.reduce((a,b) => d[a] > d[b] ? a : b);
+        const domPct = d.total ? Math.round(d[dominant]/d.total*100) : 0;
+        tableHtml += `
+          <tr>
+            <td><strong>${nom}</strong></td>
+            <td>${d.total}</td>
+            <td>${d.A}</td>
+            <td>${d.B}</td>
+            <td>${d.C}</td>
+            <td>${d.D}</td>
+            <td>
+              <span class="pct-badge" style="background:${COLORS[dominant]}">
+                ${dominant} ${domPct}%
+              </span>
+            </td>
+          </tr>`;
+      });
+
+      tableHtml += '</tbody></table>';
+      document.getElementById('provinceTable').innerHTML = tableHtml;
+    }
+
+  } catch(err) {
+    console.error('Erreur chargement résultats:', err);
+    document.getElementById('loadingState').innerHTML =
+      `<div class="alert alert-error">Impossible de charger les résultats : ${err.message}</div>`;
+  }
+}
+
+document.getElementById('refreshBtn').addEventListener('click', () => {
+  document.getElementById('mainContent').classList.add('hidden');
+  document.getElementById('loadingState').classList.remove('hidden');
+  loadResults();
+});
+
+loadResults();
+
+// Auto-refresh toutes les 60 secondes
+setInterval(loadResults, 60000);
+</script>
+</body>
+</html>

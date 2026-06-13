@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Constitution — ParlonsNation</title>
+  <meta name="description" content="Les articles clés de la Constitution de la RDC expliqués simplement pour chaque citoyen.">
+  <meta name="theme-color" content="#0F6E56">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .tab-nav {
+      display: flex;
+      gap: 0.25rem;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 2rem;
+      overflow-x: auto;
+      padding-bottom: 0;
+    }
+    .tab-btn {
+      padding: 0.65rem 1.1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { color: var(--green); }
+    .tab-btn.active {
+      color: var(--green);
+      border-bottom-color: var(--green);
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .argument-grid {
+      display: grid;
+      gap: 1rem;
+    }
+    @media(min-width:640px) { .argument-grid { grid-template-columns: 1fr 1fr; } }
+    .argument-card {
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--border);
+    }
+    .argument-card h4 {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .argument-card ul { padding-left: 0; }
+    .argument-card li {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      padding: 0.3rem 0;
+      padding-left: 1.2rem;
+      position: relative;
+      line-height: 1.5;
+      border-bottom: 1px solid var(--border);
+    }
+    .argument-card li:last-child { border-bottom: none; }
+    .argument-card li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+      color: inherit;
+    }
+    .pour-card { background: #f0fdf4; border-color: #4ade80; }
+    .pour-card h4 { color: #166534; }
+    .pour-card li::before { color: #166534; }
+    .contre-card { background: #fff1f2; border-color: #fca5a5; }
+    .contre-card h4 { color: #991b1b; }
+    .contre-card li::before { color: #991b1b; }
+    .neutre-card { background: #eff6ff; border-color: #93c5fd; }
+    .neutre-card h4 { color: #1e40af; }
+    .neutre-card li::before { color: #1e40af; }
+    .timeline {
+      position: relative;
+      padding-left: 1.5rem;
+    }
+    .timeline::before {
+      content:'';
+      position:absolute;
+      left:0;
+      top:0;
+      bottom:0;
+      width:2px;
+      background:var(--border);
+    }
+    .timeline-item {
+      position:relative;
+      padding-bottom:1.5rem;
+    }
+    .timeline-item::before {
+      content:'';
+      position:absolute;
+      left:-1.62rem;
+      top:4px;
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:var(--green);
+      border:2px solid var(--white);
+      box-shadow:0 0 0 2px var(--green);
+    }
+    .timeline-year {
+      font-family:var(--font-head);
+      font-size:0.8rem;
+      font-weight:700;
+      color:var(--green);
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      margin-bottom:0.2rem;
+    }
+    .timeline-item h4 {
+      font-family:var(--font-head);
+      font-size:0.95rem;
+      font-weight:700;
+      color:var(--text);
+      margin-bottom:0.3rem;
+    }
+    .timeline-item p { font-size:0.875rem; color:var(--text-muted); line-height:1.6; }
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius:var(--radius-sm);
+      margin-bottom:0.5rem;
+      overflow:hidden;
+    }
+    .faq-question {
+      width:100%;
+      text-align:left;
+      padding:1rem 1.25rem;
+      background:var(--white);
+      border:none;
+      cursor:pointer;
+      font-family:var(--font-body);
+      font-size:0.9rem;
+      font-weight:600;
+      color:var(--text);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:0.5rem;
+      transition:background 0.2s;
+    }
+    .faq-question:hover { background:var(--green-pale); }
+    .faq-arrow { transition:transform 0.3s; flex-shrink:0; }
+    .faq-item.open .faq-arrow { transform:rotate(180deg); }
+    .faq-answer {
+      display:none;
+      padding:0 1.25rem 1rem;
+      font-size:0.875rem;
+      color:var(--text-muted);
+      line-height:1.7;
+      background:var(--white);
+    }
+    .faq-item.open .faq-answer { display:block; }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="logo"><span class="logo-icon">🇨🇩</span> Parlons<span>Nation</span></a>
+    <button class="nav-toggle" id="navToggle">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="voter.html">Voter</a></li>
+      <li><a href="resultats.html">Résultats</a></li>
+      <li><a href="constitution.html" class="active">Constitution</a></li>
+      <li><a href="forum.html">Forum</a></li>
+      <li><a href="inscription.html" class="btn btn-primary btn-sm">S'inscrire</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- En-tête -->
+<div class="page-header">
+  <div class="container">
+    <h1>📜 La Constitution de la RDC</h1>
+    <p>Les articles clés expliqués simplement • Adoptée en 2006 • 229 articles</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Intro -->
+    <div class="card mb-4" style="border-left:4px solid var(--gold);background:var(--green-pale);">
+      <h2 style="font-family:var(--font-head);font-size:1.15rem;font-weight:700;color:var(--green-dark);margin-bottom:0.5rem;">
+        Pourquoi ce débat maintenant ?
+      </h2>
+      <p style="color:var(--text);font-size:0.95rem;line-height:1.7;">
+        La Constitution de la RDC, adoptée par référendum le <strong>18 décembre 2005</strong> et promulguée le <strong>18 février 2006</strong>, est la loi fondamentale du pays.
+        Elle définit l'organisation de l'État, les droits des citoyens et les règles du jeu politique.
+        Depuis 2024, des voix s'élèvent pour la modifier, réviser ou remplacer entièrement — un débat qui concerne
+        chacun des 100 millions de Congolais.
+      </p>
+    </div>
+
+    <!-- Onglets -->
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="articles">Articles clés</button>
+      <button class="tab-btn" data-tab="arguments">Arguments</button>
+      <button class="tab-btn" data-tab="historique">Historique</button>
+      <button class="tab-btn" data-tab="faq">FAQ</button>
+    </div>
+
+    <!-- ONGLET : Articles clés -->
+    <div class="tab-panel active" id="tab-articles">
+
+      <div class="article-card" id="article1">
+        <div class="article-num">Article 1</div>
+        <h3>La République Démocratique du Congo</h3>
+        <blockquote>
+          "La République Démocratique du Congo est, dans ses frontières du 30 juin 1960, un État de droit, indépendant et souverain, uni et indivisible, social, démocratique et laïc."
+        </blockquote>
+        <p>Cet article fondateur définit la nature même de l'État congolais : une démocratie laïque, sociale et indivisible. Toute modification de cet article toucherait les fondements identitaires du pays.</p>
+      </div>
+
+      <div class="article-card">
+        <div class="article-num">Article 5</div>
+        <h3>La souveraineté appartient au peuple</h3>
+        <blockquote>
+          "La souveraineté nationale appartient au peuple. Tout pouvoir émane du peuple qui l'exerce directement par voie de référendum ou d'élections et indirectement par ses représentants."
+        </blockquote>
+        <p>Ce principe fondamental consacre la démocratie représentative et directe. Le peuple congolais est la source de tout pouvoir — y compris celui de modifier la Constitution.</p>
+      </div>
+
+      <div class="article-card">
+        <div class="article-num">Articles 71–73</div>
+        <h3>Le Président de la République</h3>
+        <blockquote>
+          "Le Président de la République est élu au suffrage universel direct pour un mandat de cinq ans renouvelable une seule fois."
+        </blockquote>
+        <p>La limitation à deux mandats présidentiels est l'un des points les plus débattus. Certains souhaitent la modifier ; d'autres estiment qu'elle protège contre la confiscation du pouvoir.</p>
+        <div style="margin-top:0.75rem;display:flex;flex-wrap:wrap;gap:0.5rem;">
+          <span class="tag">2 mandats maximum</span>
+          <span class="tag">5 ans par mandat</span>
+          <span class="tag">Suffrage universel direct</span>
+        </div>
+      </div>
+
+      <div class="article-card" id="article220">
+        <div class="article-num">Article 220 — Le verrou constitutionnel</div>
+        <h3>Ce qui ne peut PAS être révisé</h3>
+        <blockquote>
+          "La forme républicaine de l'État, le principe du suffrage universel, la forme représentative du gouvernement, le nombre et la durée des mandats du Président de la République, l'indépendance du pouvoir judiciaire, le pluralisme politique et syndical ne peuvent faire l'objet d'aucune révision constitutionnelle."
+        </blockquote>
+        <p>
+          Cet article "verrouille" les dispositions les plus fondamentales. Son existence même est au cœur du débat :
+          peut-on contourner ce verrou par un référendum populaire pour adopter une nouvelle constitution ?
+          Les juristes sont divisés sur cette question.
+        </p>
+        <div class="alert alert-warning mt-2" style="margin-bottom:0;">
+          ⚖️ C'est autour de cet article que s'articule l'essentiel du débat constitutionnel actuel en RDC.
+        </div>
+      </div>
+
+      <div class="article-card">
+        <div class="article-num">Articles 16–61</div>
+        <h3>Les droits fondamentaux des citoyens</h3>
+        <p>Ces articles garantissent les libertés essentielles de chaque Congolais :</p>
+        <div style="display:grid;gap:0.4rem;margin-top:0.75rem;">
+          <div style="display:flex;gap:0.5rem;align-items:center;font-size:0.875rem;">
+            <span style="color:var(--green);font-weight:700;">✓</span> Droit à la vie et à l'intégrité physique (Art. 16)
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;font-size:0.875rem;">
+            <span style="color:var(--green);font-weight:700;">✓</span> Liberté d'expression et de presse (Art. 23–24)
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;font-size:0.875rem;">
+            <span style="color:var(--green);font-weight:700;">✓</span> Liberté de conscience et de religion (Art. 22)
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;font-size:0.875rem;">
+            <span style="color:var(--green);font-weight:700;">✓</span> Droit à l'éducation et à la santé (Art. 43–47)
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;font-size:0.875rem;">
+            <span style="color:var(--green);font-weight:700;">✓</span> Égalité homme-femme (Art. 14)
+          </div>
+        </div>
+      </div>
+
+      <div class="article-card">
+        <div class="article-num">Article 217–225 — La révision</div>
+        <h3>Comment modifier la Constitution ?</h3>
+        <p>La procédure est strictement encadrée :</p>
+        <ol style="padding-left:1.2rem;margin-top:0.75rem;">
+          <li style="font-size:0.875rem;color:var(--text-muted);margin-bottom:0.5rem;line-height:1.6;">
+            <strong>Initiative :</strong> Le Président de la République, le Gouvernement, ou un tiers des membres du Parlement peuvent proposer une révision.
+          </li>
+          <li style="font-size:0.875rem;color:var(--text-muted);margin-bottom:0.5rem;line-height:1.6;">
+            <strong>Vote :</strong> Adoptée à la majorité des 3/5 de chaque chambre siégeant en congrès, <em>ou</em> par référendum populaire.
+          </li>
+          <li style="font-size:0.875rem;color:var(--text-muted);line-height:1.6;">
+            <strong>Limite :</strong> Certaines dispositions (Art. 220) sont totalement intangibles, même par référendum selon l'interprétation dominante.
+          </li>
+        </ol>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="voter.html" class="btn btn-primary btn-lg">🗳️ Donner mon avis maintenant</a>
+      </div>
+    </div>
+
+    <!-- ONGLET : Arguments -->
+    <div class="tab-panel" id="tab-arguments">
+
+      <div class="mb-4">
+        <h2 style="font-family:var(--font-head);font-size:1.15rem;font-weight:700;margin-bottom:1rem;">Option A — Changer totalement la Constitution</h2>
+        <div class="argument-grid">
+          <div class="argument-card pour-card">
+            <h4>✅ Arguments pour</h4>
+            <ul>
+              <li>La constitution actuelle a été rédigée dans un contexte post-guerre qui a changé</li>
+              <li>Un nouveau texte peut mieux refléter les aspirations de 2025</li>
+              <li>Permet de repenser entièrement l'organisation territoriale</li>
+              <li>Opportunité de renforcer la décentralisation réelle</li>
+              <li>Consolider la participation citoyenne dans la gouvernance</li>
+            </ul>
+          </div>
+          <div class="argument-card contre-card">
+            <h4>❌ Arguments contre</h4>
+            <ul>
+              <li>Risque d'instabilité institutionnelle dans un contexte sécuritaire difficile</li>
+              <li>Peut rouvrir des débats dangereux sur les mandats présidentiels</li>
+              <li>Processus long et coûteux pour un pays en développement</li>
+              <li>La constitution de 2006 reste largement méconnue et peu appliquée</li>
+              <li>Risque de régression sur les droits acquis</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <h2 style="font-family:var(--font-head);font-size:1.15rem;font-weight:700;margin-bottom:1rem;">Option B — Réviser partiellement</h2>
+        <div class="argument-grid">
+          <div class="argument-card pour-card">
+            <h4>✅ Arguments pour</h4>
+            <ul>
+              <li>Approche chirurgicale : corriger sans tout démolir</li>
+              <li>Préserve les acquis démocratiques de 2006</li>
+              <li>Peut améliorer des articles sur la décentralisation</li>
+              <li>Procédure prévue et encadrée par la Constitution elle-même</li>
+              <li>Moins coûteux et moins risqué politiquement</li>
+            </ul>
+          </div>
+          <div class="argument-card contre-card">
+            <h4>❌ Arguments contre</h4>
+            <ul>
+              <li>Quels articles réviser ? Le consensus est difficile</li>
+              <li>Risque que la révision soit instrumentalisée politiquement</li>
+              <li>Les articles visés peuvent toucher aux droits fondamentaux</li>
+              <li>L'article 220 interdit certaines révisions jugées nécessaires</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <h2 style="font-family:var(--font-head);font-size:1.15rem;font-weight:700;margin-bottom:1rem;">Option C — Conserver la Constitution</h2>
+        <div class="argument-grid">
+          <div class="argument-card pour-card">
+            <h4>✅ Arguments pour</h4>
+            <ul>
+              <li>La constitution de 2006 contient d'excellentes dispositions jamais appliquées</li>
+              <li>Le problème n'est pas le texte, mais son application par les institutions</li>
+              <li>La stabilité constitutionnelle favorise la confiance des investisseurs</li>
+              <li>Évite les dangers d'un vide juridique</li>
+              <li>Protège les mandats limités et les droits acquis</li>
+            </ul>
+          </div>
+          <div class="argument-card contre-card">
+            <h4>❌ Arguments contre</h4>
+            <ul>
+              <li>Certaines dispositions sont inadaptées aux réalités d'aujourd'hui</li>
+              <li>La décentralisation prévue est restée largement théorique</li>
+              <li>Les mêmes problèmes de gouvernance persistent depuis 2006</li>
+              <li>Un texte qui n'est pas appliqué perd progressivement sa légitimité</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="voter.html" class="btn btn-primary btn-lg">🗳️ Exprimer mon choix</a>
+      </div>
+    </div>
+
+    <!-- ONGLET : Historique -->
+    <div class="tab-panel" id="tab-historique">
+      <h2 style="font-family:var(--font-head);font-size:1.15rem;font-weight:700;margin-bottom:1.5rem;">L'histoire constitutionnelle du Congo</h2>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">1960</div>
+          <h4>Indépendance — Loi fondamentale</h4>
+          <p>Le Congo accède à l'indépendance le 30 juin 1960. La Loi fondamentale, héritée de la Belgique, instaure un régime parlementaire bicaméral. Patrice Lumumba devient Premier ministre.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1964</div>
+          <h4>Constitution de Luluabourg</h4>
+          <p>Adoptée par référendum, cette constitution instaure un État fédéral. Elle sera rapidement suspendue après le coup d'État de Mobutu en 1965.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1967</div>
+          <h4>Constitution de la IIe République (Mobutu)</h4>
+          <p>Mobutu instaure un régime à parti unique (MPR). La constitution concentre tous les pouvoirs entre ses mains pendant plus de 25 ans.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1990–2003</div>
+          <h4>Transition démocratique et guerres</h4>
+          <p>Chute de Mobutu en 1997, première et deuxième guerres du Congo. Plusieurs actes constitutionnels se succèdent sans aboutir à une constitution stable.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2005–2006</div>
+          <h4>Constitution de la IIIe République</h4>
+          <p>Adoptée par référendum le 18 décembre 2005 avec 84,3% de "oui", promulguée le 18 février 2006. Elle instaure un régime semi-présidentiel, un parlement bicaméral et la décentralisation en 26 provinces. C'est la constitution actuellement en vigueur.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2011</div>
+          <h4>Révision de l'article 71</h4>
+          <p>La constitution est révisée pour passer à l'élection présidentielle à un seul tour (suppression du second tour). Cette révision est controversée car adoptée par le Congrès avant les élections.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2024–2025</div>
+          <h4>Le grand débat</h4>
+          <p>Le président Félix Tshisekedi ouvre le débat sur une possible révision ou remplacement de la constitution. La société civile, les partis politiques et les citoyens s'expriment. ParlonsNation vous donne la parole.</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="voter.html" class="btn btn-primary btn-lg">🗳️ Participer au débat</a>
+      </div>
+    </div>
+
+    <!-- ONGLET : FAQ -->
+    <div class="tab-panel" id="tab-faq">
+      <h2 style="font-family:var(--font-head);font-size:1.15rem;font-weight:700;margin-bottom:1.5rem;">Questions fréquentes sur le débat constitutionnel</h2>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Peut-on vraiment changer la Constitution de la RDC ?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+          Oui, la constitution prévoit elle-même les modalités de sa révision (articles 217-225). La procédure normale nécessite un vote à la majorité des 3/5 du Congrès (Assemblée nationale + Sénat réunis). Une alternative est le référendum populaire. Cependant, l'article 220 interdit de toucher à certaines dispositions fondamentales, même par référendum selon l'interprétation dominante.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Qu'est-ce que l'article 220 et pourquoi est-il si important ?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+          L'article 220 est le "verrou constitutionnel" qui interdit de réviser certaines dispositions fondamentales, notamment la limitation des mandats présidentiels à deux. Certains juristes estiment qu'une nouvelle constitution (et non une révision) pourrait contourner ce verrou, mais cette interprétation est très contestée. C'est l'un des points les plus débattus du débat actuel.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Quelle est la différence entre "réviser" et "changer" la Constitution ?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+          <strong>Réviser</strong> signifie modifier certains articles précis tout en conservant le reste de la constitution. C'est une procédure prévue et encadrée par la constitution elle-même. <strong>Changer</strong> ou <strong>remplacer</strong> signifie adopter un texte entièrement nouveau, généralement via une Assemblée constituante et un référendum. Ce processus est beaucoup plus profond et ne suit pas les mêmes règles procédurales.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Pourquoi ce débat a-t-il lieu maintenant ?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+          Plusieurs facteurs convergent : le président Tshisekedi a évoqué la possibilité d'une nouvelle constitution ; des acteurs politiques souhaitent modifier les règles sur les mandats ; la décentralisation prévue en 2006 est insuffisamment mise en œuvre ; et les défis sécuritaires à l'Est du pays soulèvent des questions sur l'efficacité du cadre constitutionnel actuel. Le contexte électoral y contribue également.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          La Constitution protège-t-elle vraiment les droits des citoyens ?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+          La constitution de 2006 contient une charte des droits très complète (articles 16-61) garantissant la liberté d'expression, le droit à la santé, à l'éducation, l'égalité homme-femme, etc. Le problème reconnu par tous est son application insuffisante par les institutions. Pour certains, il faut renforcer ces mécanismes ; pour d'autres, le texte est bon mais son application politique fait défaut.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Qu'arriverait-il aux mandats présidentiels en cours si la Constitution change ?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+          C'est une question juridique et politique centrale. En droit constitutionnel comparé, une nouvelle constitution "remet le compteur à zéro" des mandats — ce qui permettrait à un président d'en exercer deux nouveaux. C'est précisément pourquoi ce sujet est controversé et pourquoi beaucoup de citoyens sont vigilants face aux arguments en faveur d'un changement constitutionnel.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Comment puis-je m'informer davantage ?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+          Vous pouvez lire le texte intégral de la Constitution sur le site officiel de la présidence de la RDC. Suivez également les analyses de la société civile congolaise, des universités de Kinshasa et des juristes constitutionnalistes. ParlonsNation vous encourage à vous informer auprès de sources diverses avant de former votre opinion.
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="voter.html" class="btn btn-primary btn-lg">🗳️ Je suis prêt(e) à voter</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">🇨🇩 Parlons<span>Nation</span></a>
+        <p>Plateforme neutre d'information et de consultation citoyenne. ParlonsNation ne prend pas position dans ce débat.</p>
+      </div>
+      <div>
+        <h4>Pages</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="voter.html">Voter</a></li>
+          <li><a href="resultats.html">Résultats</a></li>
+          <li><a href="forum.html">Forum</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Participer</h4>
+        <a href="inscription.html" class="btn btn-outline btn-sm" style="color:var(--gold);border-color:var(--gold);">S'inscrire →</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 ParlonsNation</span>
+      <span>🇨🇩 Votre nation, votre voix.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// Onglets
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+    window.scrollTo({ top: document.querySelector('.tab-nav').offsetTop - 80, behavior: 'smooth' });
+  });
+});
+
+// FAQ accordion
+document.querySelectorAll('.faq-question').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+// Ouvrir onglet si ancre #article220
+if (window.location.hash === '#article220') {
+  window.addEventListener('load', () => {
+    const el = document.getElementById('article220');
+    if (el) { el.scrollIntoView({ behavior:'smooth', block:'center' }); }
+  });
+}
+</script>
+</body>
+</html>

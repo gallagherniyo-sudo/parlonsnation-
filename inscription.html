@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S'inscrire — ParlonsNation</title>
+  <meta name="description" content="Inscrivez-vous pour participer au débat constitutionnel de la RDC.">
+  <meta name="theme-color" content="#0F6E56">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="logo"><span class="logo-icon">🇨🇩</span> Parlons<span>Nation</span></a>
+    <button class="nav-toggle" id="navToggle">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="voter.html">Voter</a></li>
+      <li><a href="resultats.html">Résultats</a></li>
+      <li><a href="constitution.html">Constitution</a></li>
+      <li><a href="forum.html">Forum</a></li>
+      <li><a href="inscription.html" class="btn btn-primary btn-sm active">S'inscrire</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- En-tête -->
+<div class="page-header">
+  <div class="container">
+    <h1>Créer votre compte citoyen</h1>
+    <p>Inscription gratuite • Données sécurisées • Anonymat garanti</p>
+  </div>
+</div>
+
+<!-- Formulaire d'inscription -->
+<section class="section">
+  <div class="container">
+    <div style="max-width:580px;margin:0 auto;">
+
+      <!-- Alerte déjà inscrit -->
+      <div id="alreadyRegistered" class="alert alert-warning hidden">
+        ⚠️ Vous êtes déjà inscrit sur cet appareil. <a href="voter.html">Aller voter →</a>
+      </div>
+
+      <!-- Indicateur d'étapes -->
+      <div class="steps" id="stepsIndicator">
+        <div class="step active" id="step-ind-1">
+          <div class="step-num">1</div>
+          <div class="step-label">Identité</div>
+        </div>
+        <div class="step-line" id="line-1"></div>
+        <div class="step" id="step-ind-2">
+          <div class="step-num">2</div>
+          <div class="step-label">Localisation</div>
+        </div>
+        <div class="step-line" id="line-2"></div>
+        <div class="step" id="step-ind-3">
+          <div class="step-num">3</div>
+          <div class="step-label">Confidentialité</div>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 1 : Identité -->
+      <div id="formStep1" class="card">
+        <h2 style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.25rem;">Étape 1 — Votre identité</h2>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.5rem;">
+          Votre numéro CIN ne sera jamais stocké. Il est converti en empreinte numérique (hash SHA-256) dès votre appareil.
+        </p>
+
+        <div class="alert alert-info mb-3">
+          🔒 Aucune donnée personnelle n'est envoyée vers nos serveurs. Seule une empreinte numérique anonyme est transmise.
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="cin">
+            Numéro de Carte d'Identité Nationale (CIN) <span class="required">*</span>
+          </label>
+          <input type="text" id="cin" class="form-control" placeholder="Ex: 1234567890123456" maxlength="30" autocomplete="off">
+          <div class="form-hint">Obligatoire. Saisir sans espaces ni tirets.</div>
+          <div class="form-error" id="cin-error">Veuillez entrer un numéro CIN valide.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="telephone">
+            Numéro de téléphone <span style="color:var(--text-muted);font-weight:400;">(optionnel)</span>
+          </label>
+          <input type="tel" id="telephone" class="form-control" placeholder="Ex: +243 81 234 5678" autocomplete="off">
+          <div class="form-hint">Utilisé uniquement pour éviter les doublons. Jamais stocké en clair.</div>
+        </div>
+
+        <div class="form-check">
+          <input type="checkbox" id="diaspora">
+          <label for="diaspora">
+            <strong>Je vis en dehors de la RDC (diaspora)</strong><br>
+            <span style="font-size:0.82rem;color:var(--text-muted);">Cocher si vous résidez à l'étranger</span>
+          </label>
+        </div>
+
+        <button class="btn btn-primary btn-block mt-3" id="nextStep1">Continuer →</button>
+      </div>
+
+      <!-- ÉTAPE 2 : Localisation -->
+      <div id="formStep2" class="card hidden">
+        <h2 style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.25rem;">Étape 2 — Votre localisation</h2>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.5rem;">
+          Ces informations permettent d'afficher les résultats par province et territoire.
+        </p>
+
+        <div id="localRDC">
+          <div class="form-group">
+            <label class="form-label" for="province">
+              Province <span class="required">*</span>
+            </label>
+            <select id="province" class="form-control">
+              <option value="">— Sélectionnez votre province —</option>
+            </select>
+            <div class="form-error" id="province-error">Veuillez sélectionner votre province.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="territoire">
+              Territoire / Commune / Ville
+            </label>
+            <input type="text" id="territoire" class="form-control" placeholder="Ex: Kinshasa, Goma, Lubumbashi...">
+            <div class="form-hint">Optionnel. Commune, territoire ou ville de résidence.</div>
+          </div>
+        </div>
+
+        <div id="diasporaInfo" class="hidden">
+          <div class="alert alert-info">
+            🌍 En tant que membre de la diaspora, votre voix compte tout autant. La province de localisation est optionnelle.
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="paysResidence">Pays de résidence</label>
+            <input type="text" id="paysResidence" class="form-control" placeholder="Ex: France, Belgique, Canada...">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="provinceOrigine">Province d'origine (optionnel)</label>
+            <select id="provinceOrigine" class="form-control">
+              <option value="">— Aucune / Je ne sais pas —</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:1rem;margin-top:1.5rem;">
+          <button class="btn btn-outline" id="backStep1">← Retour</button>
+          <button class="btn btn-primary" style="flex:1;" id="nextStep2">Continuer →</button>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 3 : Confidentialité -->
+      <div id="formStep3" class="card hidden">
+        <h2 style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.25rem;">Étape 3 — Votre confidentialité</h2>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.5rem;">
+          Choisissez comment vous souhaitez apparaître dans le forum citoyen.
+        </p>
+
+        <div class="form-group">
+          <label class="form-label">Mode d'affichage <span class="required">*</span></label>
+
+          <div style="display:grid;gap:0.75rem;margin-bottom:0.5rem;">
+            <label style="display:flex;align-items:flex-start;gap:0.75rem;padding:1rem;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s;" id="card-anonyme">
+              <input type="radio" name="modeAffichage" value="anonyme" id="radio-anonyme" checked style="margin-top:3px;accent-color:var(--green);">
+              <div>
+                <strong>🔒 Anonyme (recommandé)</strong><br>
+                <span style="font-size:0.82rem;color:var(--text-muted);">Votre vote et commentaires apparaissent comme "Citoyen anonyme". Votre identité est protégée.</span>
+              </div>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:0.75rem;padding:1rem;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s;" id="card-public">
+              <input type="radio" name="modeAffichage" value="public" id="radio-public" style="margin-top:3px;accent-color:var(--green);">
+              <div>
+                <strong>🌐 Public</strong><br>
+                <span style="font-size:0.82rem;color:var(--text-muted);">Votre pseudo et votre province s'affichent dans le forum. Votre CIN reste toujours protégé.</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group hidden" id="pseudoGroup">
+          <label class="form-label" for="pseudo">
+            Pseudo public <span class="required">*</span>
+          </label>
+          <input type="text" id="pseudo" class="form-control" placeholder="Ex: CitoyenKinois, VoixDuKivu..." maxlength="30">
+          <div class="form-hint">Entre 3 et 30 caractères. Pas de données personnelles.</div>
+          <div class="form-error" id="pseudo-error">Le pseudo doit faire entre 3 et 30 caractères.</div>
+        </div>
+
+        <div id="inscriptionError" class="alert alert-error hidden" style="margin-top:1rem;"></div>
+
+        <div style="display:flex;gap:1rem;margin-top:1.5rem;">
+          <button class="btn btn-outline" id="backStep2">← Retour</button>
+          <button class="btn btn-primary" style="flex:1;" id="submitInscription" id="submitBtn">
+            <span id="submitText">Finaliser l'inscription</span>
+            <span id="submitSpinner" class="hidden" style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-left:6px;"></span>
+          </button>
+        </div>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-top:0.75rem;text-align:center;">
+          En vous inscrivant, vous confirmez être citoyen congolais et acceptez de voter une seule fois.
+        </p>
+      </div>
+
+      <!-- Succès -->
+      <div id="successCard" class="card text-center hidden">
+        <div style="font-size:3.5rem;margin-bottom:1rem;">🎉</div>
+        <h2 style="font-family:var(--font-head);font-size:1.5rem;font-weight:700;color:var(--green);margin-bottom:0.5rem;">Inscription réussie !</h2>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem;">
+          Bienvenue, <strong id="welcomeName">citoyen</strong> ! Vous faites maintenant partie des <strong id="successCount">…</strong> Congolais qui participent à ce débat historique.
+        </p>
+        <div class="alert alert-success mb-3">
+          ✅ Votre compte a été créé avec succès. Vous pouvez maintenant voter.
+        </div>
+        <a href="voter.html" class="btn btn-primary btn-lg btn-block">
+          🗳️ Aller voter maintenant
+        </a>
+        <a href="index.html" class="btn btn-outline btn-block mt-2">Retour à l'accueil</a>
+        <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.75rem;">Partagez avec vos proches :</p>
+          <a id="shareSuccess" href="#" class="btn btn-outline btn-sm">📱 Partager sur WhatsApp</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <span>© 2025 ParlonsNation</span>
+      <span>🔒 Données chiffrées • Hébergement sécurisé</span>
+      <a href="index.html" style="color:rgba(255,255,255,0.7);">← Retour à l'accueil</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://yagvezgfmxvrnngrxeuv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ZwpN3mfLueArH7Iq_dJdYA_4ZxY2Ke_';
+const { createClient } = window.supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Navigation mobile
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// ── Utilitaires ─────────────────────────────────────────
+async function sha256(str) {
+  if (!str || !str.trim()) return null;
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str.trim().toUpperCase()));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function toast(msg, type = 'success') {
+  const t = document.createElement('div');
+  t.className = `toast${type === 'error' ? ' toast-error' : ''}`;
+  t.textContent = msg;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(() => t.remove(), 3200);
+}
+
+// ── Vérifier si déjà inscrit ──────────────────────────
+if (localStorage.getItem('pn_citoyen_id')) {
+  document.getElementById('alreadyRegistered').classList.remove('hidden');
+}
+
+// ── Charger les provinces ─────────────────────────────
+async function loadProvinces() {
+  const { data } = await db.from('provinces').select('id, nom').order('nom');
+  if (!data) return;
+  const selects = ['province', 'provinceOrigine'];
+  selects.forEach(id => {
+    const sel = document.getElementById(id);
+    data.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.id;
+      opt.textContent = p.nom;
+      sel.appendChild(opt);
+    });
+  });
+}
+loadProvinces();
+
+// ── Diaspora toggle ───────────────────────────────────
+document.getElementById('diaspora').addEventListener('change', function() {
+  document.getElementById('localRDC').classList.toggle('hidden', this.checked);
+  document.getElementById('diasporaInfo').classList.toggle('hidden', !this.checked);
+});
+
+// ── Mode affichage toggle ─────────────────────────────
+document.querySelectorAll('input[name="modeAffichage"]').forEach(radio => {
+  radio.addEventListener('change', function() {
+    const isPublic = this.value === 'public';
+    document.getElementById('pseudoGroup').classList.toggle('hidden', !isPublic);
+    document.getElementById('card-anonyme').style.borderColor = !isPublic ? 'var(--green)' : 'var(--border)';
+    document.getElementById('card-public').style.borderColor  = isPublic  ? 'var(--green)' : 'var(--border)';
+  });
+});
+// Initialiser
+document.getElementById('card-anonyme').style.borderColor = 'var(--green)';
+
+// ── Navigation entre étapes ───────────────────────────
+let currentStep = 1;
+
+function showStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById(`formStep${i}`).classList.toggle('hidden', i !== n);
+    const ind = document.getElementById(`step-ind-${i}`);
+    ind.classList.remove('active', 'done');
+    if (i < n)  ind.classList.add('done');
+    if (i === n) ind.classList.add('active');
+    if (i < 3) {
+      document.getElementById(`line-${i}`).classList.toggle('done', i < n);
+    }
+  });
+  currentStep = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Étape 1 → 2
+document.getElementById('nextStep1').addEventListener('click', () => {
+  const cin = document.getElementById('cin').value.trim();
+  if (cin.length < 6) {
+    document.getElementById('cin-error').classList.add('show');
+    document.getElementById('cin').focus();
+    return;
+  }
+  document.getElementById('cin-error').classList.remove('show');
+  showStep(2);
+});
+
+// Étape 2 → 3
+document.getElementById('nextStep2').addEventListener('click', () => {
+  const isDiaspora = document.getElementById('diaspora').checked;
+  if (!isDiaspora) {
+    const prov = document.getElementById('province').value;
+    if (!prov) {
+      document.getElementById('province-error').classList.add('show');
+      document.getElementById('province').focus();
+      return;
+    }
+    document.getElementById('province-error').classList.remove('show');
+  }
+  showStep(3);
+});
+
+// Retour 2 → 1
+document.getElementById('backStep1').addEventListener('click', () => showStep(1));
+// Retour 3 → 2
+document.getElementById('backStep2').addEventListener('click', () => showStep(2));
+
+// ── Soumission finale ─────────────────────────────────
+document.getElementById('submitInscription').addEventListener('click', async () => {
+  const modeAffichage = document.querySelector('input[name="modeAffichage"]:checked').value;
+  const pseudo = document.getElementById('pseudo').value.trim();
+  const errDiv = document.getElementById('inscriptionError');
+  errDiv.classList.add('hidden');
+
+  if (modeAffichage === 'public' && (pseudo.length < 3 || pseudo.length > 30)) {
+    document.getElementById('pseudo-error').classList.add('show');
+    document.getElementById('pseudo').focus();
+    return;
+  }
+  document.getElementById('pseudo-error').classList.remove('show');
+
+  const btn = document.getElementById('submitInscription');
+  btn.disabled = true;
+  document.getElementById('submitText').textContent = 'Inscription en cours…';
+  document.getElementById('submitSpinner').classList.remove('hidden');
+
+  try {
+    const cin        = document.getElementById('cin').value.trim();
+    const telephone  = document.getElementById('telephone').value.trim();
+    const isDiaspora = document.getElementById('diaspora').checked;
+    const territoire = document.getElementById('territoire').value.trim();
+
+    const cinHash  = await sha256(cin);
+    const telHash  = telephone ? await sha256(telephone) : null;
+
+    let provinceId = null;
+    if (!isDiaspora) {
+      provinceId = document.getElementById('province').value || null;
+    } else {
+      const provOrig = document.getElementById('provinceOrigine').value;
+      provinceId = provOrig || null;
+    }
+
+    const payload = {
+      cin_hash:       cinHash,
+      telephone_hash: telHash,
+      province_id:    provinceId ? parseInt(provinceId) : null,
+      territoire:     territoire || null,
+      mode_affichage: modeAffichage,
+      pseudo:         modeAffichage === 'public' ? pseudo : null,
+      diaspora:       isDiaspora
+    };
+
+    const { data, error } = await db.from('citoyens').insert(payload).select('id').single();
+
+    if (error) {
+      if (error.code === '23505') {
+        errDiv.textContent = '⚠️ Ce numéro CIN ou téléphone est déjà inscrit. Si c\'est vous, vous avez peut-être déjà voté.';
+      } else {
+        errDiv.textContent = `Erreur : ${error.message}`;
+      }
+      errDiv.classList.remove('hidden');
+      return;
+    }
+
+    // Stocker la session locale
+    localStorage.setItem('pn_citoyen_id', data.id);
+    localStorage.setItem('pn_province_id', provinceId || '');
+    localStorage.setItem('pn_mode', modeAffichage);
+    localStorage.setItem('pn_pseudo', modeAffichage === 'public' ? pseudo : '');
+
+    // Afficher le succès
+    document.getElementById('formStep3').classList.add('hidden');
+    document.getElementById('stepsIndicator').classList.add('hidden');
+    document.getElementById('successCard').classList.remove('hidden');
+
+    const displayName = modeAffichage === 'public' ? pseudo : 'Citoyen';
+    document.getElementById('welcomeName').textContent = displayName;
+
+    // Recharger le compteur
+    const { count } = await db.from('citoyens').select('*', { count: 'exact', head: true });
+    document.getElementById('successCount').textContent = (count || 0).toLocaleString('fr-FR');
+
+    document.getElementById('shareSuccess').href =
+      `https://wa.me/?text=${encodeURIComponent('🇨🇩 Je viens de m\'inscrire sur ParlonsNation pour donner mon avis sur la Constitution de la RDC. Rejoins-moi : ' + window.location.origin + '/inscription.html')}`;
+
+  } catch (err) {
+    errDiv.textContent = `Erreur inattendue : ${err.message}`;
+    errDiv.classList.remove('hidden');
+  } finally {
+    btn.disabled = false;
+    document.getElementById('submitText').textContent = 'Finaliser l\'inscription';
+    document.getElementById('submitSpinner').classList.add('hidden');
+  }
+});
+</script>
+</body>
+</html>

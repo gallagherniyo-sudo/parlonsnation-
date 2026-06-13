@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ParlonsNation — Votre nation, votre voix.</title>
+  <meta name="description" content="Plateforme de consultation citoyenne sur le débat constitutionnel de la République Démocratique du Congo.">
+  <meta name="theme-color" content="#0F6E56">
+  <meta property="og:title" content="ParlonsNation — Votre nation, votre voix.">
+  <meta property="og:description" content="Participez au débat constitutionnel le plus important de la RDC. Chaque voix compte.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🇨🇩</span>
+      Parlons<span>Nation</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active">Accueil</a></li>
+      <li><a href="voter.html">Voter</a></li>
+      <li><a href="resultats.html">Résultats</a></li>
+      <li><a href="constitution.html">Constitution</a></li>
+      <li><a href="forum.html">Forum</a></li>
+      <li><a href="inscription.html" class="btn btn-primary btn-sm">S'inscrire</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <!-- Drapeau RDC -->
+    <div class="hero-flag">
+      <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+        <rect width="900" height="600" fill="#007FFF"/>
+        <line x1="0" y1="600" x2="900" y2="0" stroke="#F7D618" stroke-width="230"/>
+        <line x1="0" y1="600" x2="900" y2="0" stroke="#CE1020" stroke-width="200"/>
+        <polygon fill="#F7D618" points="80,20 94.7,54.8 132.3,58 103.8,82.7 112.3,119.5 80,100 47.7,119.5 56.2,82.7 27.7,58 65.3,54.8"/>
+      </svg>
+    </div>
+
+    <h1>Parlons<span>Nation</span></h1>
+    <p class="slogan">"Votre nation, votre voix."</p>
+    <p class="hero-desc">
+      La République Démocratique du Congo est à un tournant historique. Le débat sur notre constitution nous concerne tous. Faites entendre votre voix, partout où vous êtes.
+    </p>
+
+    <!-- Compteur live -->
+    <div class="hero-counter">
+      <div class="pulse"></div>
+      <span>
+        <strong class="count" id="counter">…</strong>
+        citoyens inscrits et comptant
+      </span>
+    </div>
+
+    <div class="hero-cta">
+      <a href="inscription.html" class="btn btn-gold btn-lg">S'inscrire et voter</a>
+      <a href="resultats.html" class="btn btn-ghost btn-lg">Voir les résultats</a>
+    </div>
+  </div>
+</section>
+
+<!-- Bandeau d'info -->
+<div style="background:var(--gold);padding:0.75rem 0;">
+  <div class="container text-center">
+    <p style="font-weight:600;font-size:0.9rem;color:var(--green-dark);">
+      📢 Consultation ouverte à tous les Congolais — en RDC et en diaspora. Vote anonyme et sécurisé.
+    </p>
+  </div>
+</div>
+
+<!-- La question centrale -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h2 class="section-title">La grande question</h2>
+      <p class="section-sub">Que faut-il faire de la Constitution de la RDC ?</p>
+    </div>
+    <div class="vote-grid">
+      <!-- Option A -->
+      <div class="vote-card card-hover">
+        <div class="badge badge-a">A</div>
+        <h3>Changer la Constitution</h3>
+        <p>Rédiger une toute nouvelle constitution, adaptée aux réalités actuelles du pays et de ses citoyens.</p>
+      </div>
+      <!-- Option B -->
+      <div class="vote-card card-hover">
+        <div class="badge badge-b">B</div>
+        <h3>Réviser partiellement</h3>
+        <p>Modifier certains articles spécifiques tout en conservant les fondements de la constitution de 2006.</p>
+      </div>
+      <!-- Option C -->
+      <div class="vote-card card-hover">
+        <div class="badge badge-c">C</div>
+        <h3>Conserver telle quelle</h3>
+        <p>Garder la constitution actuelle et en assurer le respect total par toutes les institutions.</p>
+      </div>
+      <!-- Option D -->
+      <div class="vote-card card-hover">
+        <div class="badge badge-d">D</div>
+        <h3>Abstention</h3>
+        <p>Je ne me prononce pas sur cette question, ou je manque d'informations suffisantes.</p>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <a href="inscription.html" class="btn btn-primary btn-lg">Participer maintenant</a>
+      <p style="margin-top:0.75rem;font-size:0.85rem;color:var(--text-muted);">Inscription gratuite • Vote sécurisé • Anonymat garanti</p>
+    </div>
+  </div>
+</section>
+
+<!-- Stats rapides -->
+<section class="section">
+  <div class="container">
+    <div class="text-center mb-3">
+      <h2 class="section-title">Le pays s'exprime</h2>
+      <p class="section-sub">Résultats en temps réel</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-num" id="totalVotes">…</span>
+        <div class="stat-label">votes enregistrés</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num" id="nbProvinces">26</span>
+        <div class="stat-label">provinces représentées</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num" id="nbInscrits">…</span>
+        <div class="stat-label">citoyens inscrits</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num" id="diasporaStat">…</span>
+        <div class="stat-label">voix de la diaspora</div>
+      </div>
+    </div>
+
+    <!-- Mini résultats -->
+    <div class="card mt-3" id="miniResults">
+      <div class="spinner"></div>
+    </div>
+    <div class="text-center mt-2">
+      <a href="resultats.html" class="btn btn-outline">Voir les résultats complets →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Comment ça marche -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h2 class="section-title">Comment participer ?</h2>
+      <p class="section-sub">Simple, rapide et sécurisé — en 3 étapes</p>
+    </div>
+    <div class="grid-3">
+      <div class="card text-center card-hover">
+        <div style="font-size:2.5rem;margin-bottom:1rem;">📝</div>
+        <h3 style="font-family:var(--font-head);font-weight:700;margin-bottom:0.5rem;">1. S'inscrire</h3>
+        <p style="font-size:0.9rem;color:var(--text-muted);">Créez votre compte citoyen avec votre numéro CIN. Vos données sont hashées et jamais partagées.</p>
+      </div>
+      <div class="card text-center card-hover">
+        <div style="font-size:2.5rem;margin-bottom:1rem;">🗳️</div>
+        <h3 style="font-family:var(--font-head);font-weight:700;margin-bottom:0.5rem;">2. Voter</h3>
+        <p style="font-size:0.9rem;color:var(--text-muted);">Choisissez parmi les 4 options et laissez un commentaire optionnel. Un seul vote par citoyen.</p>
+      </div>
+      <div class="card text-center card-hover">
+        <div style="font-size:2.5rem;margin-bottom:1rem;">📊</div>
+        <h3 style="font-family:var(--font-head);font-weight:700;margin-bottom:0.5rem;">3. Suivre</h3>
+        <p style="font-size:0.9rem;color:var(--text-muted);">Consultez les résultats en temps réel, par province, et lisez les opinions de vos compatriotes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pourquoi c'est important -->
+<section class="section section-dark">
+  <div class="container">
+    <div class="grid-2" style="align-items:center;gap:3rem;">
+      <div>
+        <h2 class="section-title">Pourquoi votre voix compte</h2>
+        <p class="section-sub">Le débat constitutionnel engage l'avenir de 100 millions de Congolais</p>
+        <p style="opacity:0.85;line-height:1.8;margin-bottom:1.5rem;">
+          La constitution est le contrat fondamental entre les citoyens et leurs institutions.
+          Toute modification touche directement à nos libertés, à la gouvernance du pays,
+          à l'organisation des élections, et à la protection de nos droits fondamentaux.
+        </p>
+        <p style="opacity:0.85;line-height:1.8;margin-bottom:1.5rem;">
+          ParlonsNation vous offre un espace neutre pour exprimer votre position,
+          informé et libre. Que vous soyez à Kinshasa, au Katanga, au Nord-Kivu
+          ou en diaspora — votre avis est précieux.
+        </p>
+        <a href="constitution.html" class="btn btn-ghost">Lire les articles clés →</a>
+      </div>
+      <div>
+        <div class="card" style="background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.15);">
+          <div style="color:rgba(255,255,255,0.9);">
+            <h4 style="font-family:var(--font-head);font-size:1rem;color:var(--gold);margin-bottom:0.5rem;">📌 Ce que dit l'Article 220</h4>
+            <p style="font-size:0.875rem;font-style:italic;line-height:1.7;opacity:0.9;margin-bottom:1rem;">
+              "La forme républicaine de l'État, le principe du suffrage universel, la forme représentative du gouvernement, le nombre et la durée des mandats du Président de la République... ne peuvent faire l'objet d'aucune révision constitutionnelle."
+            </p>
+            <a href="constitution.html#article220" style="color:var(--gold);font-size:0.85rem;font-weight:600;">En savoir plus →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Partagez -->
+<section class="section section-alt">
+  <div class="container text-center">
+    <h2 class="section-title">Partagez sur WhatsApp</h2>
+    <p class="section-sub">Invitez vos proches à faire entendre leur voix</p>
+    <a id="shareWhatsApp" href="#" class="btn btn-primary btn-lg">
+      📱 Partager sur WhatsApp
+    </a>
+    <p style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted);">"Parlons de notre constitution ensemble — partagez ce lien avec vos proches"</p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">🇨🇩 Parlons<span>Nation</span></a>
+        <p>Plateforme de consultation citoyenne sur le débat constitutionnel de la RDC. Neutre, sécurisée, accessible à tous.</p>
+      </div>
+      <div>
+        <h4>Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="inscription.html">S'inscrire</a></li>
+          <li><a href="voter.html">Voter</a></li>
+          <li><a href="resultats.html">Résultats</a></li>
+          <li><a href="constitution.html">Constitution</a></li>
+          <li><a href="forum.html">Forum citoyen</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informations</h4>
+        <ul class="footer-links">
+          <li><a href="#">À propos</a></li>
+          <li><a href="#">Confidentialité</a></li>
+          <li><a href="#">Sécurité des données</a></li>
+        </ul>
+        <div style="margin-top:1rem;">
+          <p style="font-size:0.8rem;opacity:0.6;">Données hébergées de façon sécurisée.<br>Aucun CIN n'est stocké en clair.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 ParlonsNation — Tous droits réservés</span>
+      <span>🇨🇩 Fait pour les Congolais, par des Congolais</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://yagvezgfmxvrnngrxeuv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ZwpN3mfLueArH7Iq_dJdYA_4ZxY2Ke_';
+const { createClient } = window.supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Navigation mobile
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// Compteur d'inscrits
+async function loadCounter() {
+  try {
+    const { count } = await db.from('citoyens').select('*', { count: 'exact', head: true });
+    if (count !== null) {
+      document.getElementById('counter').textContent = count.toLocaleString('fr-FR');
+      document.getElementById('nbInscrits').textContent = count.toLocaleString('fr-FR');
+    }
+  } catch (e) { console.warn('Compteur:', e.message); }
+}
+
+// Statistiques votes
+async function loadStats() {
+  try {
+    const { data: sujets } = await db.from('sujets').select('id').eq('actif', true).limit(1);
+    if (!sujets || !sujets.length) return;
+    const sujetId = sujets[0].id;
+
+    const { data: votes } = await db.from('votes').select('choix').eq('sujet_id', sujetId);
+    if (!votes) return;
+
+    const total = votes.length;
+    document.getElementById('totalVotes').textContent = total.toLocaleString('fr-FR');
+
+    const counts = { A: 0, B: 0, C: 0, D: 0 };
+    votes.forEach(v => { if (counts[v.choix] !== undefined) counts[v.choix]++; });
+
+    const diaspora = await db.from('citoyens').select('*', { count: 'exact', head: true }).eq('diaspora', true);
+    document.getElementById('diasporaStat').textContent = (diaspora.count || 0).toLocaleString('fr-FR');
+
+    const labels = {
+      A: 'Changer totalement',
+      B: 'Réviser partiellement',
+      C: 'Conserver telle quelle',
+      D: 'Abstention'
+    };
+    const colors = { A: '#2563EB', B: '#7C3AED', C: '#CE1020', D: '#6B7280' };
+
+    if (total === 0) {
+      document.getElementById('miniResults').innerHTML = `<p class="text-center text-muted" style="padding:1rem;">Aucun vote enregistré pour l'instant. <a href="inscription.html">Soyez le premier !</a></p>`;
+      return;
+    }
+
+    let html = `<p class="chart-title">Résultats actuels — ${total.toLocaleString('fr-FR')} votes</p>`;
+    ['A','B','C','D'].forEach(choix => {
+      const pct = total ? Math.round((counts[choix] / total) * 100) : 0;
+      html += `
+        <div style="margin-bottom:0.75rem;">
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:0.25rem;">
+            <span><strong style="color:${colors[choix]}">Option ${choix}</strong> — ${labels[choix]}</span>
+            <span style="font-weight:700;">${pct}% <span style="color:var(--text-muted);font-weight:400;">(${counts[choix].toLocaleString('fr-FR')})</span></span>
+          </div>
+          <div class="progress"><div class="progress-bar bar-${choix.toLowerCase()}" style="width:${pct}%"></div></div>
+        </div>`;
+    });
+    document.getElementById('miniResults').innerHTML = html;
+  } catch(e) { console.warn('Stats:', e.message); }
+}
+
+// WhatsApp share
+document.getElementById('shareWhatsApp').href =
+  `https://wa.me/?text=${encodeURIComponent('🇨🇩 Participons ensemble au débat sur la Constitution de la RDC ! Donnez votre avis sur ParlonsNation — ' + window.location.origin + '/index.html — "Votre nation, votre voix."')}`;
+
+// Init
+loadCounter();
+loadStats();
+</script>
+</body>
+</html>
