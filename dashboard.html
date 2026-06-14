@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Admin — ParlonsNation</title>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src https://*.supabase.co; img-src 'self' data:;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src https://fonts.googleapis.com https://fonts.gstatic.com https://cdn.quilljs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.quilljs.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdn.quilljs.com; connect-src https://*.supabase.co; img-src 'self' data:;">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="robots" content="noindex,nofollow">
+  <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.7/quill.snow.css">
   <link rel="stylesheet" href="style.css">
   <style>
     /* ── Layout dashboard ── */
@@ -170,6 +171,66 @@
     /* ── Spinner ── */
     .panel-loading { text-align:center; padding:2.5rem; color:var(--text-muted); font-size:0.9rem; }
 
+    /* ── Config toggles ── */
+    .config-section { margin-bottom:2rem; }
+    .config-section h4 { font-family:var(--font-head); font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--green); margin-bottom:1rem; padding-bottom:0.4rem; border-bottom:2px solid var(--green-pale); }
+    .config-row { display:flex; align-items:center; justify-content:space-between; padding:0.75rem 0; border-bottom:1px solid #f3f4f6; gap:1rem; flex-wrap:wrap; }
+    .config-row:last-child { border-bottom:none; }
+    .config-label { flex:1; }
+    .config-label strong { display:block; font-size:0.88rem; color:var(--text); }
+    .config-label small { font-size:0.75rem; color:var(--text-muted); }
+    .config-val { flex-shrink:0; }
+    .config-val input[type="text"], .config-val input[type="number"] {
+      padding:0.4rem 0.7rem; border:1.5px solid var(--border); border-radius:var(--radius-sm);
+      font-family:var(--font-body); font-size:0.85rem; width:220px;
+    }
+    .config-val input:focus { outline:none; border-color:var(--green); }
+
+    /* ── Toggle switch ── */
+    .toggle-wrap { display:flex; align-items:center; gap:0.5rem; }
+    .toggle { position:relative; width:44px; height:24px; cursor:pointer; }
+    .toggle input { opacity:0; width:0; height:0; }
+    .toggle-slider { position:absolute; inset:0; background:#d1d5db; border-radius:24px; transition:0.2s; }
+    .toggle-slider::before { content:''; position:absolute; width:18px; height:18px; left:3px; bottom:3px; background:#fff; border-radius:50%; transition:0.2s; }
+    .toggle input:checked + .toggle-slider { background:var(--green); }
+    .toggle input:checked + .toggle-slider::before { transform:translateX(20px); }
+    .toggle-label { font-size:0.82rem; font-weight:600; color:var(--text-muted); }
+
+    /* ── Color picker ── */
+    .color-row { display:flex; align-items:center; gap:0.75rem; }
+    .color-preview { width:36px; height:36px; border-radius:var(--radius-sm); border:2px solid var(--border); cursor:pointer; overflow:hidden; position:relative; }
+    .color-preview input[type="color"] { position:absolute; inset:-4px; width:calc(100%+8px); height:calc(100%+8px); border:none; cursor:pointer; opacity:0; }
+    .color-swatch { width:100%; height:100%; }
+
+    /* ── Quill editor ── */
+    .editor-wrap { border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; }
+    .editor-wrap .ql-toolbar { border:none; border-bottom:1px solid var(--border); background:#f8f9fa; }
+    .editor-wrap .ql-container { border:none; font-family:var(--font-body); font-size:0.9rem; min-height:200px; }
+    .page-selector { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem; }
+    .page-btn { padding:0.4rem 0.9rem; border:1.5px solid var(--border); border-radius:50px; font-size:0.8rem; font-weight:600; cursor:pointer; background:#fff; color:var(--text); transition:all 0.15s; }
+    .page-btn:hover, .page-btn.active { border-color:var(--green); background:var(--green-pale); color:var(--green); }
+
+    /* ── API keys ── */
+    .api-key-row { display:grid; grid-template-columns:1fr auto; gap:0.5rem; align-items:center; margin-bottom:0.75rem; }
+    .api-key-row input { padding:0.5rem 0.9rem; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-family:monospace; font-size:0.82rem; background:#f8f9fa; }
+    .api-key-row input:focus { outline:none; border-color:var(--green); background:#fff; }
+
+    /* ── Admins list ── */
+    .admin-badge { display:inline-flex; align-items:center; padding:0.2rem 0.65rem; border-radius:50px; font-size:0.72rem; font-weight:700; }
+    .role-super_admin { background:#fef3c7; color:#92400e; }
+    .role-moderateur  { background:#eff6ff; color:#1e40af; }
+    .role-analyste    { background:#f0fdf4; color:#065f46; }
+    .role-partenaire_api { background:#f5f3ff; color:#5b21b6; }
+
+    /* ── Live preview bar ── */
+    .appearance-preview {
+      background:var(--green); color:#fff; padding:0.75rem 1.25rem;
+      border-radius:var(--radius-sm); margin-bottom:1rem; display:flex;
+      align-items:center; justify-content:space-between; transition:background 0.3s;
+    }
+    .appearance-preview .prev-logo { font-family:var(--font-head); font-weight:800; font-size:1.1rem; }
+    .appearance-preview .prev-btn { background:var(--gold); color:#000; padding:0.3rem 0.8rem; border-radius:var(--radius-sm); font-size:0.8rem; font-weight:700; }
+
     /* ── Responsive sidebar toggle ── */
     .sidebar-toggle { display:none; position:fixed; bottom:1.5rem; left:1.5rem; z-index:200;
       background:var(--green-dark); color:#fff; border:none; border-radius:50%; width:48px; height:48px;
@@ -246,6 +307,11 @@
         <button class="nav-item" data-section="provinces"><span class="nav-icon">🗺️</span> Provinces</button>
         <button class="nav-item" data-section="exports"><span class="nav-icon">📤</span> Exports</button>
         <button class="nav-item" data-section="logs"><span class="nav-icon">📝</span> Logs</button>
+        <button class="nav-item" data-section="config"><span class="nav-icon">⚙️</span> Configuration</button>
+        <button class="nav-item" data-section="pages"><span class="nav-icon">📄</span> Pages</button>
+        <button class="nav-item" data-section="apparence"><span class="nav-icon">🎨</span> Apparence</button>
+        <button class="nav-item" data-section="admins_mgmt"><span class="nav-icon">👤</span> Admins</button>
+        <button class="nav-item" data-section="apikeys"><span class="nav-icon">🔑</span> Clés API</button>
       </nav>
       <div class="sidebar-footer">
         <button class="logout-btn" id="logoutBtn">🔓 Déconnexion</button>
@@ -427,6 +493,222 @@
         </div>
       </div>
 
+
+      <!-- ── CONFIGURATION ── -->
+      <div id="section-config" style="display:none;">
+        <div class="dash-topbar">
+          <h2>⚙️ Configuration générale</h2>
+          <button class="refresh-btn" id="refreshConfig">↻ Actualiser</button>
+        </div>
+
+        <div class="config-section">
+          <h4>Fonctionnalités</h4>
+          <div class="config-row">
+            <div class="config-label"><strong>Inscriptions ouvertes</strong><small>Permettre de nouveaux citoyens de s'inscrire</small></div>
+            <div class="config-val toggle-wrap">
+              <label class="toggle"><input type="checkbox" id="cfg-inscriptions_ouvertes"><span class="toggle-slider"></span></label>
+              <span class="toggle-label" id="lbl-inscriptions_ouvertes">—</span>
+            </div>
+          </div>
+          <div class="config-row">
+            <div class="config-label"><strong>Votes ouverts</strong><small>Permettre le vote sur les sujets</small></div>
+            <div class="config-val toggle-wrap">
+              <label class="toggle"><input type="checkbox" id="cfg-votes_ouverts"><span class="toggle-slider"></span></label>
+              <span class="toggle-label" id="lbl-votes_ouverts">—</span>
+            </div>
+          </div>
+          <div class="config-row">
+            <div class="config-label"><strong>Forum ouvert</strong><small>Activer les commentaires du forum</small></div>
+            <div class="config-val toggle-wrap">
+              <label class="toggle"><input type="checkbox" id="cfg-forum_ouvert"><span class="toggle-slider"></span></label>
+              <span class="toggle-label" id="lbl-forum_ouvert">—</span>
+            </div>
+          </div>
+          <div class="config-row">
+            <div class="config-label"><strong>Afficher les résultats</strong><small>Rendre les résultats visibles au public</small></div>
+            <div class="config-val toggle-wrap">
+              <label class="toggle"><input type="checkbox" id="cfg-afficher_resultats"><span class="toggle-slider"></span></label>
+              <span class="toggle-label" id="lbl-afficher_resultats">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="config-section">
+          <h4>Textes du site</h4>
+          <div class="config-row">
+            <div class="config-label"><strong>Nom du site</strong></div>
+            <div class="config-val"><input type="text" id="cfg-site_nom" placeholder="ParlonsNation"></div>
+          </div>
+          <div class="config-row">
+            <div class="config-label"><strong>Slogan</strong></div>
+            <div class="config-val"><input type="text" id="cfg-site_slogan" placeholder="Ta voix, notre avenir"></div>
+          </div>
+          <div class="config-row">
+            <div class="config-label"><strong>Message de fermeture</strong><small>Affiché quand le site est fermé</small></div>
+            <div class="config-val"><input type="text" id="cfg-message_fermeture" placeholder="Le site est temporairement fermé…" style="width:320px;"></div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem;">
+          <button class="btn-action btn-approve" onclick="saveAllConfig()">💾 Enregistrer</button>
+        </div>
+        <div id="config-msg" style="margin-top:0.75rem;font-size:0.85rem;color:var(--green);"></div>
+      </div>
+
+      <!-- ── PAGES ── -->
+      <div id="section-pages" style="display:none;">
+        <div class="dash-topbar">
+          <h2>📄 Gestion des pages</h2>
+        </div>
+        <div class="page-selector">
+          <button class="page-btn active" data-slug="a_propos" onclick="selectPage(this,'a_propos')">À propos</button>
+          <button class="page-btn" data-slug="confidentialite" onclick="selectPage(this,'confidentialite')">Confidentialité</button>
+          <button class="page-btn" data-slug="banniere_accueil" onclick="selectPage(this,'banniere_accueil')">Bannière d'accueil</button>
+          <button class="page-btn" data-slug="faq" onclick="selectPage(this,'faq')">FAQ</button>
+        </div>
+        <div style="margin-bottom:0.5rem;">
+          <input type="text" id="page-titre" placeholder="Titre de la page" style="width:100%;padding:0.6rem 0.9rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:0.9rem;box-sizing:border-box;margin-bottom:0.5rem;">
+        </div>
+        <div class="editor-wrap">
+          <div id="quill-editor" style="min-height:300px;"></div>
+        </div>
+        <div style="display:flex;gap:0.75rem;align-items:center;margin-top:0.75rem;flex-wrap:wrap;">
+          <label style="display:flex;align-items:center;gap:0.4rem;font-size:0.83rem;cursor:pointer;">
+            <input type="checkbox" id="page-actif" checked> Page active (visible au public)
+          </label>
+          <button class="btn-action btn-approve" onclick="savePage()" style="margin-left:auto;">💾 Enregistrer la page</button>
+        </div>
+        <div id="page-msg" style="margin-top:0.5rem;font-size:0.85rem;color:var(--green);"></div>
+      </div>
+
+      <!-- ── APPARENCE ── -->
+      <div id="section-apparence" style="display:none;">
+        <div class="dash-topbar">
+          <h2>🎨 Apparence</h2>
+        </div>
+
+        <div class="appearance-preview" id="prev-bar">
+          <span class="prev-logo" id="prev-logo">ParlonsNation</span>
+          <span class="prev-btn" id="prev-btn" style="background:#F7C518;">Participer</span>
+        </div>
+
+        <div class="config-section">
+          <h4>Couleurs</h4>
+          <div class="config-row">
+            <div class="config-label"><strong>Couleur principale (vert)</strong><small>Barre de navigation, boutons primaires</small></div>
+            <div class="config-val color-row">
+              <div class="color-preview" id="prev-green">
+                <div class="color-swatch" id="swatch-green"></div>
+                <input type="color" id="color-couleur_principale" value="#0F6E56" oninput="liveColorPreview('couleur_principale',this.value)">
+              </div>
+              <span id="hex-couleur_principale" style="font-family:monospace;font-size:0.82rem;">#0F6E56</span>
+            </div>
+          </div>
+          <div class="config-row">
+            <div class="config-label"><strong>Couleur accent (or)</strong><small>Badges, highlights, boutons secondaires</small></div>
+            <div class="config-val color-row">
+              <div class="color-preview">
+                <div class="color-swatch" id="swatch-gold"></div>
+                <input type="color" id="color-couleur_accent" value="#F7C518" oninput="liveColorPreview('couleur_accent',this.value)">
+              </div>
+              <span id="hex-couleur_accent" style="font-family:monospace;font-size:0.82rem;">#F7C518</span>
+            </div>
+          </div>
+          <div class="config-row">
+            <div class="config-label"><strong>Couleur rouge</strong><small>Alertes, drapeau, erreurs</small></div>
+            <div class="config-val color-row">
+              <div class="color-preview">
+                <div class="color-swatch" id="swatch-red"></div>
+                <input type="color" id="color-couleur_rouge" value="#CE1020" oninput="liveColorPreview('couleur_rouge',this.value)">
+              </div>
+              <span id="hex-couleur_rouge" style="font-family:monospace;font-size:0.82rem;">#CE1020</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <button class="btn-action btn-approve" onclick="saveApparence()">💾 Enregistrer les couleurs</button>
+          <button class="btn-action" style="background:#6b7280;color:#fff;" onclick="resetColors()">↺ Couleurs par défaut</button>
+        </div>
+        <div id="apparence-msg" style="margin-top:0.75rem;font-size:0.85rem;color:var(--green);"></div>
+      </div>
+
+      <!-- ── ADMINS ── -->
+      <div id="section-admins_mgmt" style="display:none;">
+        <div class="dash-topbar">
+          <h2>👤 Gestion des administrateurs</h2>
+          <button class="refresh-btn" id="refreshAdmins">↻ Actualiser</button>
+        </div>
+
+        <div class="card" style="margin-bottom:1.5rem;">
+          <h4 style="margin:0 0 1rem;font-family:var(--font-head);font-size:0.9rem;">Créer un nouvel admin</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
+            <input type="email" id="new-admin-email" placeholder="Adresse email" style="padding:0.5rem 0.8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);">
+            <input type="password" id="new-admin-pwd" placeholder="Mot de passe (min 12 car.)" style="padding:0.5rem 0.8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
+            <input type="text" id="new-admin-nom" placeholder="Nom complet" style="padding:0.5rem 0.8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);">
+            <select id="new-admin-role" style="padding:0.5rem 0.8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);">
+              <option value="moderateur">Modérateur</option>
+              <option value="analyste">Analyste</option>
+              <option value="super_admin">Super Admin</option>
+              <option value="partenaire_api">Partenaire API</option>
+            </select>
+          </div>
+          <button class="btn-action btn-approve" onclick="createAdmin()">➕ Créer l'admin</button>
+          <div id="admin-create-msg" style="margin-top:0.5rem;font-size:0.83rem;color:var(--green);"></div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Email</th><th>Nom</th><th>Rôle</th><th>Dernière connexion</th><th>Statut</th><th>Actions</th></tr></thead>
+            <tbody id="admins-tbody"><tr><td colspan="6" style="text-align:center;color:var(--text-muted);">Chargement…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── CLÉS API ── -->
+      <div id="section-apikeys" style="display:none;">
+        <div class="dash-topbar">
+          <h2>🔑 Clés API</h2>
+        </div>
+        <div class="card">
+          <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:1.25rem;">
+            Ces clés sont chiffrées côté serveur et jamais exposées publiquement. Seuls les Super Admins peuvent les consulter ou les modifier.
+          </p>
+
+          <div class="config-section">
+            <h4>Africa's Talking (SMS OTP)</h4>
+            <div class="api-key-row">
+              <input type="password" id="ak-africastalking_api_key" placeholder="Clé API Africa's Talking">
+              <button class="btn-action btn-approve" onclick="saveApiKey('africastalking_api_key')">💾</button>
+            </div>
+            <div class="api-key-row" style="grid-template-columns:1fr auto;">
+              <input type="password" id="ak-africastalking_username" placeholder="Username Africa's Talking">
+              <button class="btn-action btn-approve" onclick="saveApiKey('africastalking_username')">💾</button>
+            </div>
+          </div>
+
+          <div class="config-section">
+            <h4>Mindee OCR (Carte d'identité)</h4>
+            <div class="api-key-row">
+              <input type="password" id="ak-mindee_api_key" placeholder="Clé API Mindee">
+              <button class="btn-action btn-approve" onclick="saveApiKey('mindee_api_key')">💾</button>
+            </div>
+          </div>
+
+          <div class="config-section">
+            <h4>Google Maps</h4>
+            <div class="api-key-row">
+              <input type="password" id="ak-google_maps_api_key" placeholder="Clé API Google Maps">
+              <button class="btn-action btn-approve" onclick="saveApiKey('google_maps_api_key')">💾</button>
+            </div>
+          </div>
+
+          <div id="apikeys-msg" style="margin-top:0.5rem;font-size:0.83rem;color:var(--green);"></div>
+        </div>
+      </div>
+
     </main>
   </div>
 </div>
@@ -497,7 +779,7 @@ function startSessionTimer() {
 }
 
 // ── NAVIGATION SECTIONS ───────────────────────────────────
-const sections = ['metrics','citoyens','sujets','forum','provinces','exports','logs'];
+const sections = ['metrics','citoyens','sujets','forum','provinces','exports','logs','config','pages','apparence','admins_mgmt','apikeys'];
 let currentSection = 'metrics';
 
 function showSection(name) {
@@ -517,7 +799,12 @@ function loadSection(name) {
   if (name === 'sujets')    loadSujets();
   if (name === 'forum')     loadForum();
   if (name === 'provinces') loadProvinces();
-  if (name === 'logs')      loadLogs();
+  if (name === 'logs')        loadLogs();
+  if (name === 'config')      loadConfig();
+  if (name === 'pages')       loadPages();
+  if (name === 'apparence')   loadApparence();
+  if (name === 'admins_mgmt') loadAdminsMgmt();
+  if (name === 'apikeys')     loadApiKeys();
 }
 
 document.querySelectorAll('.nav-item').forEach(btn => {
@@ -961,9 +1248,273 @@ async function loadLogs() {
     </tr>`).join('');
 }
 
+// ── CONFIGURATION ─────────────────────────────────────────
+let _cfgCache = {};
+
+async function loadConfig() {
+  const { data } = await db.rpc('admin_get_api_keys', {}).catch(() => ({ data: null }));
+  // Load public config (not api keys)
+  const { data: rows } = await db.from('configuration').select('cle,valeur,type').neq('type','api_key');
+  if (!rows) return;
+  _cfgCache = {};
+  rows.forEach(r => { _cfgCache[r.cle] = { valeur: r.valeur, type: r.type }; });
+
+  // Populate toggles
+  ['inscriptions_ouvertes','votes_ouverts','forum_ouvert','afficher_resultats'].forEach(k => {
+    const el = document.getElementById('cfg-' + k);
+    const lbl = document.getElementById('lbl-' + k);
+    if (!el) return;
+    const val = _cfgCache[k]?.valeur === 'true';
+    el.checked = val;
+    if (lbl) lbl.textContent = val ? 'Activé' : 'Désactivé';
+    el.onchange = () => { if (lbl) lbl.textContent = el.checked ? 'Activé' : 'Désactivé'; };
+  });
+
+  // Populate text inputs
+  ['site_nom','site_slogan','message_fermeture'].forEach(k => {
+    const el = document.getElementById('cfg-' + k);
+    if (el) el.value = _cfgCache[k]?.valeur || '';
+  });
+}
+
+async function saveAllConfig() {
+  const msg = document.getElementById('config-msg');
+  msg.textContent = 'Enregistrement…';
+  const saves = [];
+
+  ['inscriptions_ouvertes','votes_ouverts','forum_ouvert','afficher_resultats'].forEach(k => {
+    const el = document.getElementById('cfg-' + k);
+    if (el) saves.push(db.rpc('admin_set_config', { p_session: adminSession.token, p_cle: k, p_valeur: el.checked ? 'true' : 'false', p_type: 'boolean' }));
+  });
+  ['site_nom','site_slogan','message_fermeture'].forEach(k => {
+    const el = document.getElementById('cfg-' + k);
+    if (el) saves.push(db.rpc('admin_set_config', { p_session: adminSession.token, p_cle: k, p_valeur: el.value, p_type: 'text' }));
+  });
+
+  const results = await Promise.all(saves);
+  const err = results.find(r => r.error);
+  if (err) { msg.style.color = 'var(--red-drc)'; msg.textContent = 'Erreur: ' + err.error.message; }
+  else { msg.style.color = 'var(--green)'; msg.textContent = '✓ Configuration enregistrée'; setTimeout(() => msg.textContent = '', 3000); }
+}
+
+document.getElementById('refreshConfig')?.addEventListener('click', loadConfig);
+
+// ── PAGES ─────────────────────────────────────────────────
+let _quill = null;
+let _currentPageSlug = 'a_propos';
+
+function selectPage(btn, slug) {
+  document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  _currentPageSlug = slug;
+  loadPageContent(slug);
+}
+
+async function loadPages() {
+  if (!_quill) {
+    _quill = new Quill('#quill-editor', {
+      theme: 'snow',
+      modules: { toolbar: [
+        [{ header: [2, 3, false] }],
+        ['bold','italic','underline'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['link'],
+        ['clean']
+      ]}
+    });
+  }
+  loadPageContent(_currentPageSlug);
+}
+
+async function loadPageContent(slug) {
+  const { data } = await db.from('pages_contenu').select('titre,contenu,actif').eq('slug', slug).maybeSingle();
+  if (!data) return;
+  document.getElementById('page-titre').value = data.titre || '';
+  document.getElementById('page-actif').checked = data.actif !== false;
+  if (_quill) _quill.root.innerHTML = data.contenu || '';
+}
+
+async function savePage() {
+  const msg = document.getElementById('page-msg');
+  msg.textContent = 'Enregistrement…';
+  const contenu = _quill ? _quill.root.innerHTML : '';
+  const titre = document.getElementById('page-titre').value;
+  const actif = document.getElementById('page-actif').checked;
+  const { error } = await db.rpc('admin_save_page', {
+    p_session: adminSession.token,
+    p_slug: _currentPageSlug,
+    p_titre: titre,
+    p_contenu: contenu,
+    p_actif: actif
+  });
+  if (error) { msg.style.color = 'var(--red-drc)'; msg.textContent = 'Erreur: ' + error.message; }
+  else { msg.style.color = 'var(--green)'; msg.textContent = '✓ Page enregistrée'; setTimeout(() => msg.textContent = '', 3000); }
+}
+
+// ── APPARENCE ─────────────────────────────────────────────
+const DEFAULT_COLORS = { couleur_principale: '#0F6E56', couleur_accent: '#F7C518', couleur_rouge: '#CE1020' };
+
+function liveColorPreview(key, value) {
+  const hex = document.getElementById('hex-' + key);
+  if (hex) hex.textContent = value;
+  if (key === 'couleur_principale') {
+    document.getElementById('prev-bar').style.background = value;
+  }
+  if (key === 'couleur_accent') {
+    document.getElementById('prev-btn').style.background = value;
+  }
+  // Update swatch
+  const swatchMap = { couleur_principale: 'green', couleur_accent: 'gold', couleur_rouge: 'red' };
+  const swatch = document.getElementById('swatch-' + (swatchMap[key] || key));
+  if (swatch) swatch.style.background = value;
+}
+
+async function loadApparence() {
+  const { data: rows } = await db.from('configuration').select('cle,valeur').in('cle', ['couleur_principale','couleur_accent','couleur_rouge']);
+  if (!rows) return;
+  rows.forEach(r => {
+    const input = document.getElementById('color-' + r.cle);
+    if (input) { input.value = r.valeur; liveColorPreview(r.cle, r.valeur); }
+  });
+}
+
+async function saveApparence() {
+  const msg = document.getElementById('apparence-msg');
+  msg.textContent = 'Enregistrement…';
+  const keys = ['couleur_principale','couleur_accent','couleur_rouge'];
+  const saves = keys.map(k => {
+    const el = document.getElementById('color-' + k);
+    return el ? db.rpc('admin_set_config', { p_session: adminSession.token, p_cle: k, p_valeur: el.value, p_type: 'text' }) : Promise.resolve({});
+  });
+  const results = await Promise.all(saves);
+  const err = results.find(r => r.error);
+  if (err) { msg.style.color = 'var(--red-drc)'; msg.textContent = 'Erreur: ' + err.error.message; }
+  else {
+    msg.style.color = 'var(--green)'; msg.textContent = '✓ Couleurs enregistrées';
+    setTimeout(() => msg.textContent = '', 3000);
+    // Apply colors to dashboard itself
+    keys.forEach(k => {
+      const el = document.getElementById('color-' + k);
+      if (!el) return;
+      const cssMap = { couleur_principale: '--green', couleur_accent: '--gold', couleur_rouge: '--red-drc' };
+      document.documentElement.style.setProperty(cssMap[k], el.value);
+    });
+  }
+}
+
+async function resetColors() {
+  Object.entries(DEFAULT_COLORS).forEach(([k, v]) => {
+    const el = document.getElementById('color-' + k);
+    if (el) { el.value = v; liveColorPreview(k, v); }
+  });
+}
+
+// ── ADMINS MANAGEMENT ─────────────────────────────────────
+async function loadAdminsMgmt() {
+  const tbody = document.getElementById('admins-tbody');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">Chargement…</td></tr>';
+  const { data, error } = await db.rpc('admin_list_admins', { p_session: adminSession.token });
+  if (error || !data) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--red-drc);">Accès refusé ou erreur</td></tr>';
+    return;
+  }
+  if (!data.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Aucun admin</td></tr>'; return; }
+  tbody.innerHTML = data.map(a => `
+    <tr>
+      <td>${a.email}</td>
+      <td>${a.nom_complet || '—'}</td>
+      <td><span class="admin-badge role-${a.role}">${a.role}</span></td>
+      <td>${a.derniere_connexion ? new Date(a.derniere_connexion).toLocaleString('fr-CD') : 'Jamais'}</td>
+      <td>${a.actif ? '<span style="color:var(--green);font-weight:700;">Actif</span>' : '<span style="color:var(--red-drc);">Désactivé</span>'}</td>
+      <td>
+        <button class="btn-action ${a.actif ? 'btn-reject' : 'btn-approve'}" onclick="toggleAdmin('${a.id}',${!a.actif})">${a.actif ? 'Désactiver' : 'Activer'}</button>
+      </td>
+    </tr>`).join('');
+}
+
+async function createAdmin() {
+  const email = document.getElementById('new-admin-email').value.trim();
+  const pwd   = document.getElementById('new-admin-pwd').value;
+  const nom   = document.getElementById('new-admin-nom').value.trim();
+  const role  = document.getElementById('new-admin-role').value;
+  const msg   = document.getElementById('admin-create-msg');
+  if (!email || !pwd || !nom) { msg.style.color='var(--red-drc)'; msg.textContent='Remplir tous les champs'; return; }
+  if (pwd.length < 12) { msg.style.color='var(--red-drc)'; msg.textContent='Mot de passe trop court (min 12 caractères)'; return; }
+
+  const pwdHash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pwd))))
+    .map(b => b.toString(16).padStart(2,'0')).join('');
+
+  const { error } = await db.rpc('admin_create_admin', {
+    p_session: adminSession.token,
+    p_email: email,
+    p_password_hash: pwdHash,
+    p_nom_complet: nom,
+    p_role: role
+  });
+  if (error) { msg.style.color='var(--red-drc)'; msg.textContent='Erreur: '+error.message; }
+  else {
+    msg.style.color='var(--green)'; msg.textContent='✓ Admin créé avec succès';
+    document.getElementById('new-admin-email').value='';
+    document.getElementById('new-admin-pwd').value='';
+    document.getElementById('new-admin-nom').value='';
+    setTimeout(() => { msg.textContent=''; loadAdminsMgmt(); }, 1500);
+  }
+}
+
+async function toggleAdmin(adminId, activate) {
+  const { error } = await db.rpc('admin_toggle_admin', {
+    p_session: adminSession.token,
+    p_admin_id: adminId,
+    p_actif: activate
+  });
+  if (!error) loadAdminsMgmt();
+  else showToast('Erreur: '+error.message, 'error');
+}
+
+document.getElementById('refreshAdmins')?.addEventListener('click', loadAdminsMgmt);
+
+// ── CLÉS API ──────────────────────────────────────────────
+async function loadApiKeys() {
+  const msg = document.getElementById('apikeys-msg');
+  const { data, error } = await db.rpc('admin_get_api_keys', { p_session: adminSession.token });
+  if (error) {
+    msg.style.color='var(--red-drc)';
+    msg.textContent = 'Accès refusé. Seuls les Super Admins peuvent voir les clés API.';
+    return;
+  }
+  msg.textContent = '';
+  const keys = ['africastalking_api_key','africastalking_username','mindee_api_key','google_maps_api_key'];
+  const rows = Array.isArray(data) ? data : [];
+  keys.forEach(k => {
+    const el = document.getElementById('ak-' + k);
+    const row = rows.find(r => r.cle === k);
+    if (el) el.placeholder = row?.valeur ? '••••••••••••' : '(non configuré)';
+  });
+}
+
+async function saveApiKey(key) {
+  const el = document.getElementById('ak-' + key);
+  const msg = document.getElementById('apikeys-msg');
+  if (!el || !el.value) return;
+  const { error } = await db.rpc('admin_set_config', {
+    p_session: adminSession.token,
+    p_cle: key,
+    p_valeur: el.value,
+    p_type: 'api_key'
+  });
+  if (error) { msg.style.color='var(--red-drc)'; msg.textContent='Erreur: '+error.message; }
+  else {
+    msg.style.color='var(--green)'; msg.textContent='✓ Clé enregistrée';
+    el.value = '';
+    el.placeholder = '••••••••••••';
+    setTimeout(() => msg.textContent = '', 3000);
+  }
+}
+
 // ── INIT ──────────────────────────────────────────────────
 adminSession = loadSession();
 if (adminSession) enterDashboard();
 </script>
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 </body>
 </html>
