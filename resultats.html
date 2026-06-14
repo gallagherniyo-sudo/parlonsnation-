@@ -177,10 +177,10 @@
 
       <!-- Légende -->
       <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#2563EB"></div> A — Changer totalement</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#7C3AED"></div> B — Réviser partiellement</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#CE1020"></div> C — Conserver telle quelle</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#6B7280"></div> D — Abstention</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--color-a,#2563EB)"></div> A — <span data-config="label_option_a">Changer totalement</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--color-b,#7C3AED)"></div> B — <span data-config="label_option_b">Réviser partiellement</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--color-c,#CE1020)"></div> C — <span data-config="label_option_c">Conserver telle quelle</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--color-d,#6B7280)"></div> D — <span data-config="label_option_d">Abstention</span></div>
       </div>
 
       <!-- Graphique global (Doughnut) -->
@@ -245,7 +245,7 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-bottom" style="border-top:none;padding-top:0;">
-      <span>© 2025 ParlonsNation</span>
+      <span data-copyright data-config="copyright_texte">© 2026 ParlonsNation</span>
       <span>Données mises à jour en temps réel</span>
       <a href="index.html" style="color:rgba(255,255,255,0.7);">← Accueil</a>
     </div>
@@ -265,9 +265,10 @@ document.getElementById('navToggle').addEventListener('click', () => {
   document.getElementById('navLinks').classList.toggle('open');
 });
 
-const LABELS  = { A:'Changer totalement', B:'Réviser partiellement', C:'Conserver telle quelle', D:'Abstention' };
-const COLORS  = { A:'#2563EB', B:'#7C3AED', C:'#CE1020', D:'#6B7280' };
+const LABELS  = window.PNLabels || { A:'Changer totalement', B:'Réviser partiellement', C:'Conserver telle quelle', D:'Abstention' };
+const COLORS  = window.PNColors || { A:'#2563EB', B:'#7C3AED', C:'#CE1020', D:'#6B7280' };
 const CHOICES = ['A','B','C','D'];
+document.addEventListener('pn:config', () => { Object.assign(LABELS, window.PNLabels||{}); Object.assign(COLORS, window.PNColors||{}); });
 
 let doughnutChart = null;
 let provinceChart = null;

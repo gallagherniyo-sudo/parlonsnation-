@@ -247,7 +247,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2025 ParlonsNation</span>
+      <span data-copyright data-config="copyright_texte">© 2026 ParlonsNation</span>
       <span>🇨🇩 Votre nation, votre voix.</span>
     </div>
   </div>
@@ -267,8 +267,9 @@ document.getElementById('navToggle').addEventListener('click', () => {
   document.getElementById('navLinks').classList.toggle('open');
 });
 
-const LABELS = { A:'Changer totalement', B:'Réviser partiellement', C:'Conserver telle quelle', D:'Abstention' };
-const COLORS = { A:'#2563EB', B:'#7C3AED', C:'#CE1020', D:'#6B7280' };
+const LABELS = window.PNLabels || { A:'Changer totalement', B:'Réviser partiellement', C:'Conserver telle quelle', D:'Abstention' };
+const COLORS = window.PNColors || { A:'#2563EB', B:'#7C3AED', C:'#CE1020', D:'#6B7280' };
+document.addEventListener('pn:config', () => { Object.assign(LABELS, window.PNLabels||{}); Object.assign(COLORS, window.PNColors||{}); });
 const PER_PAGE = 10;
 
 let allPosts = [];

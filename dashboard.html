@@ -171,6 +171,22 @@
     /* ── Spinner ── */
     .panel-loading { text-align:center; padding:2.5rem; color:var(--text-muted); font-size:0.9rem; }
 
+    /* ── Config tabs ── */
+    .cfg-tabs { display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:1.25rem; border-bottom:2px solid var(--border); padding-bottom:0; }
+    .cfg-tab {
+      padding:0.55rem 1.1rem; border:none; background:transparent; font-family:var(--font-body);
+      font-size:0.83rem; font-weight:600; color:var(--text-muted); cursor:pointer; border-radius:var(--radius-sm) var(--radius-sm) 0 0;
+      border-bottom:3px solid transparent; margin-bottom:-2px; transition:all 0.15s;
+    }
+    .cfg-tab:hover { color:var(--green); background:var(--green-pale); }
+    .cfg-tab.active { color:var(--green); border-bottom-color:var(--green); background:var(--green-pale); }
+    .cfgtab-panel { animation:fadeIn 0.15s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
+    .cfg-save-msg { min-height:1.4rem; font-size:0.82rem; font-weight:600; margin-top:0.5rem; transition:opacity 0.3s; }
+    .api-key-row { display:grid; grid-template-columns:100px 1fr auto auto; gap:0.5rem; align-items:center; margin-bottom:0.65rem; }
+    .api-key-row input { padding:0.45rem 0.75rem; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-family:monospace; font-size:0.82rem; background:#f8f9fa; }
+    .api-key-row input:focus { outline:none; border-color:var(--green); background:#fff; }
+
     /* ── Config toggles ── */
     .config-section { margin-bottom:2rem; }
     .config-section h4 { font-family:var(--font-head); font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--green); margin-bottom:1rem; padding-bottom:0.4rem; border-bottom:2px solid var(--green-pale); }
@@ -501,57 +517,156 @@
           <button class="refresh-btn" id="refreshConfig">↻ Actualiser</button>
         </div>
 
-        <div class="config-section">
-          <h4>Fonctionnalités</h4>
-          <div class="config-row">
-            <div class="config-label"><strong>Inscriptions ouvertes</strong><small>Permettre de nouveaux citoyens de s'inscrire</small></div>
-            <div class="config-val toggle-wrap">
-              <label class="toggle"><input type="checkbox" id="cfg-inscriptions_ouvertes"><span class="toggle-slider"></span></label>
-              <span class="toggle-label" id="lbl-inscriptions_ouvertes">—</span>
+        <!-- Onglets -->
+        <div class="cfg-tabs">
+          <button class="cfg-tab active" onclick="showCfgTab('general',this)">🔧 Général</button>
+          <button class="cfg-tab" onclick="showCfgTab('apparence',this)">🎨 Apparence</button>
+          <button class="cfg-tab" onclick="showCfgTab('contenu',this)">📝 Contenu</button>
+          <button class="cfg-tab" onclick="showCfgTab('inscription',this)">📋 Inscription</button>
+          <button class="cfg-tab" onclick="showCfgTab('api',this)">🔑 API</button>
+        </div>
+
+        <!-- ── Onglet 1 : Général ── -->
+        <div id="cfgtab-general" class="cfgtab-panel">
+          <div class="config-section">
+            <h4>Accès au site</h4>
+            <div id="cfg-rows-general"></div>
+          </div>
+          <div class="config-section">
+            <h4>Paramètres</h4>
+            <div class="config-row">
+              <div class="config-label"><strong>Âge minimum</strong><small>Pour s'inscrire et voter</small></div>
+              <div class="config-val"><input type="number" id="cfgi-age_minimum" min="16" max="25" style="width:80px;" onchange="sauvegarderConfig('age_minimum',this.value)"> ans</div>
+            </div>
+            <div class="config-row">
+              <div class="config-label"><strong>Message de fermeture</strong><small>Affiché quand le site ou une section est fermée</small></div>
+              <div class="config-val"><input type="text" id="cfgi-message_fermeture" style="width:320px;" onchange="sauvegarderConfig('message_fermeture',this.value)" placeholder="Le site est temporairement fermé."></div>
             </div>
           </div>
-          <div class="config-row">
-            <div class="config-label"><strong>Votes ouverts</strong><small>Permettre le vote sur les sujets</small></div>
-            <div class="config-val toggle-wrap">
-              <label class="toggle"><input type="checkbox" id="cfg-votes_ouverts"><span class="toggle-slider"></span></label>
-              <span class="toggle-label" id="lbl-votes_ouverts">—</span>
+          <div id="cfg-save-general" class="cfg-save-msg"></div>
+        </div>
+
+        <!-- ── Onglet 2 : Apparence ── -->
+        <div id="cfgtab-apparence" class="cfgtab-panel hidden">
+          <div class="config-section">
+            <h4>Couleurs du site</h4>
+            <div class="config-row">
+              <div class="config-label"><strong>Couleur principale</strong><small>Navbar, boutons primaires</small></div>
+              <div class="config-val color-row">
+                <div class="color-preview"><div class="color-swatch" id="swatch-couleur_principale"></div><input type="color" id="cfgi-couleur_principale" oninput="liveColorPreview('couleur_principale',this.value)" onchange="sauvegarderConfig('couleur_principale',this.value)"></div>
+                <span id="hex-couleur_principale" style="font-family:monospace;font-size:0.82rem;"></span>
+              </div>
+            </div>
+            <div class="config-row">
+              <div class="config-label"><strong>Couleur accent (or)</strong><small>Badges, highlights</small></div>
+              <div class="config-val color-row">
+                <div class="color-preview"><div class="color-swatch" id="swatch-couleur_accent"></div><input type="color" id="cfgi-couleur_accent" oninput="liveColorPreview('couleur_accent',this.value)" onchange="sauvegarderConfig('couleur_accent',this.value)"></div>
+                <span id="hex-couleur_accent" style="font-family:monospace;font-size:0.82rem;"></span>
+              </div>
+            </div>
+            <div class="config-row">
+              <div class="config-label"><strong>Couleur rouge</strong><small>Alertes, erreurs</small></div>
+              <div class="config-val color-row">
+                <div class="color-preview"><div class="color-swatch" id="swatch-couleur_rouge"></div><input type="color" id="cfgi-couleur_rouge" oninput="liveColorPreview('couleur_rouge',this.value)" onchange="sauvegarderConfig('couleur_rouge',this.value)"></div>
+                <span id="hex-couleur_rouge" style="font-family:monospace;font-size:0.82rem;"></span>
+              </div>
             </div>
           </div>
-          <div class="config-row">
-            <div class="config-label"><strong>Forum ouvert</strong><small>Activer les commentaires du forum</small></div>
-            <div class="config-val toggle-wrap">
-              <label class="toggle"><input type="checkbox" id="cfg-forum_ouvert"><span class="toggle-slider"></span></label>
-              <span class="toggle-label" id="lbl-forum_ouvert">—</span>
+          <div class="config-section">
+            <h4>Bandeau d'annonce</h4>
+            <div class="config-row">
+              <div class="config-label"><strong>Bandeau actif</strong><small>Afficher la bande d'information en haut</small></div>
+              <div class="config-val toggle-wrap">
+                <label class="toggle"><input type="checkbox" id="cfgi-bandeau_actif" onchange="sauvegarderConfig('bandeau_actif',this.checked)"><span class="toggle-slider"></span></label>
+                <span class="toggle-label" id="lbl-bandeau_actif">—</span>
+              </div>
+            </div>
+            <div class="config-row">
+              <div class="config-label"><strong>Texte du bandeau</strong></div>
+              <div class="config-val"><input type="text" id="cfgi-bandeau_texte" style="width:380px;" onchange="sauvegarderConfig('bandeau_texte',this.value)" placeholder="📢 Annonce…"></div>
+            </div>
+            <div class="config-row">
+              <div class="config-label"><strong>Copyright (footer)</strong></div>
+              <div class="config-val"><input type="text" id="cfgi-copyright_texte" style="width:280px;" onchange="sauvegarderConfig('copyright_texte',this.value)" placeholder="© 2026 ParlonsNation…"></div>
             </div>
           </div>
-          <div class="config-row">
-            <div class="config-label"><strong>Afficher les résultats</strong><small>Rendre les résultats visibles au public</small></div>
-            <div class="config-val toggle-wrap">
-              <label class="toggle"><input type="checkbox" id="cfg-afficher_resultats"><span class="toggle-slider"></span></label>
-              <span class="toggle-label" id="lbl-afficher_resultats">—</span>
+          <div id="cfg-save-apparence" class="cfg-save-msg"></div>
+        </div>
+
+        <!-- ── Onglet 3 : Contenu accueil ── -->
+        <div id="cfgtab-contenu" class="cfgtab-panel hidden">
+          <div class="config-section">
+            <h4>Textes généraux</h4>
+            <div class="config-row">
+              <div class="config-label"><strong>Slogan</strong></div>
+              <div class="config-val"><input type="text" id="cfgi-site_slogan" style="width:280px;" onchange="sauvegarderConfig('site_slogan',this.value)"></div>
             </div>
+            <div class="config-row">
+              <div class="config-label"><strong>Question principale</strong></div>
+              <div class="config-val"><input type="text" id="cfgi-question_principale" style="width:380px;" onchange="sauvegarderConfig('question_principale',this.value)"></div>
+            </div>
+          </div>
+          <div class="config-section">
+            <h4>Options de vote</h4>
+            <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem;">Modifier les labels, descriptions et couleurs des 4 options.</p>
+            ${['A','B','C','D'].map(o => '').join('')}
+            <div id="cfg-options-rows">
+              <!-- rempli par loadConfig() -->
+            </div>
+          </div>
+          <div id="cfg-save-contenu" class="cfg-save-msg"></div>
+        </div>
+
+        <!-- ── Onglet 4 : Inscription ── -->
+        <div id="cfgtab-inscription" class="cfgtab-panel hidden">
+          <div class="config-section">
+            <h4>Champs du formulaire d'inscription</h4>
+            <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem;">Chaque modification est sauvegardée immédiatement. ✅</p>
+            <div style="overflow-x:auto;">
+              <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+                <thead>
+                  <tr>
+                    <th style="text-align:left;padding:0.6rem 0.75rem;background:var(--bg);border-bottom:2px solid var(--border);font-weight:700;">Champ</th>
+                    <th style="padding:0.6rem 0.75rem;background:var(--bg);border-bottom:2px solid var(--border);font-weight:700;text-align:center;">Actif</th>
+                    <th style="padding:0.6rem 0.75rem;background:var(--bg);border-bottom:2px solid var(--border);font-weight:700;text-align:center;">Obligatoire</th>
+                  </tr>
+                </thead>
+                <tbody id="cfg-champs-tbody">
+                  <!-- rempli par loadConfig() -->
+                </tbody>
+              </table>
+            </div>
+            <div class="config-row" style="margin-top:1rem;">
+              <div class="config-label"><strong>Âge minimum</strong></div>
+              <div class="config-val"><input type="number" id="cfgi-age_minimum2" min="16" max="25" style="width:80px;" onchange="sauvegarderConfig('age_minimum',this.value)"> ans</div>
+            </div>
+          </div>
+          <div id="cfg-save-inscription" class="cfg-save-msg"></div>
+        </div>
+
+        <!-- ── Onglet 5 : API ── -->
+        <div id="cfgtab-api" class="cfgtab-panel hidden">
+          <div class="card">
+            <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:1.25rem;">
+              Clés chiffrées côté serveur. Seuls les Super Admins peuvent les consulter ou modifier.
+            </p>
+            <div class="config-section">
+              <h4>Africa's Talking (SMS OTP)</h4>
+              <div class="api-key-row"><label style="font-size:0.82rem;font-weight:600;min-width:100px;">Clé API</label><input type="password" id="ak-africastalking_api_key" placeholder="Clé API Africa's Talking"><button class="btn-action btn-approve" onclick="saveApiKey('africastalking_api_key')">💾</button><button class="btn-action" style="background:#3b82f6;color:#fff;" onclick="testerApi('africastalking')">🔌 Tester</button></div>
+              <div class="api-key-row"><label style="font-size:0.82rem;font-weight:600;min-width:100px;">Username</label><input type="password" id="ak-africastalking_username" placeholder="Username"><button class="btn-action btn-approve" onclick="saveApiKey('africastalking_username')">💾</button></div>
+            </div>
+            <div class="config-section">
+              <h4>Mindee OCR (Carte d'identité)</h4>
+              <div class="api-key-row"><label style="font-size:0.82rem;font-weight:600;min-width:100px;">Clé API</label><input type="password" id="ak-mindee_api_key" placeholder="Clé API Mindee"><button class="btn-action btn-approve" onclick="saveApiKey('mindee_api_key')">💾</button><button class="btn-action" style="background:#3b82f6;color:#fff;" onclick="testerApi('mindee')">🔌 Tester</button></div>
+            </div>
+            <div class="config-section">
+              <h4>Google Maps</h4>
+              <div class="api-key-row"><label style="font-size:0.82rem;font-weight:600;min-width:100px;">Clé API</label><input type="password" id="ak-google_maps_api_key" placeholder="Clé API Google Maps"><button class="btn-action btn-approve" onclick="saveApiKey('google_maps_api_key')">💾</button><button class="btn-action" style="background:#3b82f6;color:#fff;" onclick="testerApi('maps')">🔌 Tester</button></div>
+            </div>
+            <div id="apikeys-msg" style="margin-top:0.5rem;font-size:0.83rem;color:var(--green);"></div>
           </div>
         </div>
 
-        <div class="config-section">
-          <h4>Textes du site</h4>
-          <div class="config-row">
-            <div class="config-label"><strong>Nom du site</strong></div>
-            <div class="config-val"><input type="text" id="cfg-site_nom" placeholder="ParlonsNation"></div>
-          </div>
-          <div class="config-row">
-            <div class="config-label"><strong>Slogan</strong></div>
-            <div class="config-val"><input type="text" id="cfg-site_slogan" placeholder="Ta voix, notre avenir"></div>
-          </div>
-          <div class="config-row">
-            <div class="config-label"><strong>Message de fermeture</strong><small>Affiché quand le site est fermé</small></div>
-            <div class="config-val"><input type="text" id="cfg-message_fermeture" placeholder="Le site est temporairement fermé…" style="width:320px;"></div>
-          </div>
-        </div>
-
-        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem;">
-          <button class="btn-action btn-approve" onclick="saveAllConfig()">💾 Enregistrer</button>
-        </div>
         <div id="config-msg" style="margin-top:0.75rem;font-size:0.85rem;color:var(--green);"></div>
       </div>
 
@@ -824,7 +939,16 @@ function loadSection(name) {
   if (name === 'pages')       loadPages();
   if (name === 'apparence')   loadApparence();
   if (name === 'admins_mgmt') loadAdminsMgmt();
-  if (name === 'apikeys')     loadApiKeys();
+  if (name === 'apikeys') {
+    // Clés API maintenant dans l'onglet Configuration > API
+    showSection('config');
+    setTimeout(() => {
+      const apiTab = document.querySelector('.cfg-tab:last-child');
+      if (apiTab) showCfgTab('api', apiTab);
+      loadApiKeys();
+    }, 50);
+    return;
+  }
 }
 
 document.querySelectorAll('.nav-item').forEach(btn => {
@@ -1268,53 +1392,164 @@ async function loadLogs() {
     </tr>`).join('');
 }
 
-// ── CONFIGURATION ─────────────────────────────────────────
+// ── CONFIGURATION — 5 ONGLETS ─────────────────────────────
 let _cfgCache = {};
 
+function showCfgTab(name, btn) {
+  document.querySelectorAll('.cfgtab-panel').forEach(p => p.classList.add('hidden'));
+  document.querySelectorAll('.cfg-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('cfgtab-' + name).classList.remove('hidden');
+  btn.classList.add('active');
+}
+
+// Sauvegarde immédiate d'une seule clé (utilisée par les toggles inline)
+async function sauvegarderConfig(cle, valeur) {
+  const strVal = String(valeur);
+  const { data: r, error } = await db.rpc('admin_set_config', {
+    p_admin_id: adminSession.admin_id,
+    p_cle: cle,
+    p_valeur: strVal
+  });
+  const msgEl = document.querySelector('.cfgtab-panel:not(.hidden) .cfg-save-msg');
+  if (error || (r && !r.success)) {
+    if (msgEl) { msgEl.style.color='var(--red-drc)'; msgEl.textContent='❌ Erreur: '+(error?.message||r?.message); }
+  } else {
+    if (msgEl) { msgEl.style.color='var(--green)'; msgEl.textContent='✅ Sauvegardé'; setTimeout(()=>{ if(msgEl) msgEl.textContent=''; },2500); }
+    _cfgCache[cle] = { valeur: strVal };
+  }
+}
+
+// Rendre un toggle auto-sauvegardé
+function cfgToggle(cle, checked, lblId) {
+  const lbl = document.getElementById(lblId);
+  if (lbl) lbl.textContent = checked ? 'Activé' : 'Désactivé';
+  sauvegarderConfig(cle, checked ? 'true' : 'false');
+}
+
 async function loadConfig() {
-  const { data } = await db.rpc('admin_get_api_keys', {}).catch(() => ({ data: null }));
-  // Load public config (not api keys)
   const { data: rows } = await db.from('configuration').select('cle,valeur,type').neq('type','api_key');
   if (!rows) return;
   _cfgCache = {};
   rows.forEach(r => { _cfgCache[r.cle] = { valeur: r.valeur, type: r.type }; });
 
-  // Populate toggles
-  ['inscriptions_ouvertes','votes_ouverts','forum_ouvert','afficher_resultats'].forEach(k => {
-    const el = document.getElementById('cfg-' + k);
-    const lbl = document.getElementById('lbl-' + k);
-    if (!el) return;
-    const val = _cfgCache[k]?.valeur === 'true';
-    el.checked = val;
-    if (lbl) lbl.textContent = val ? 'Activé' : 'Désactivé';
-    el.onchange = () => { if (lbl) lbl.textContent = el.checked ? 'Activé' : 'Désactivé'; };
-  });
+  const v = k => _cfgCache[k]?.valeur;
+  const vBool = k => v(k) === 'true';
 
-  // Populate text inputs
-  ['site_nom','site_slogan','message_fermeture'].forEach(k => {
-    const el = document.getElementById('cfg-' + k);
-    if (el) el.value = _cfgCache[k]?.valeur || '';
+  // ── Onglet 1 : Général ─────────────────────────────────
+  // Toggles de fonctionnalités — générés dynamiquement
+  const generalToggles = [
+    { cle:'inscriptions_ouvertes', label:'Inscriptions ouvertes', desc:'Permettre de nouveaux citoyens' },
+    { cle:'votes_ouverts',         label:'Votes ouverts',         desc:'Permettre le vote sur les sujets' },
+    { cle:'forum_ouvert',          label:'Forum ouvert',          desc:'Activer les commentaires' },
+    { cle:'afficher_resultats',    label:'Afficher les résultats',desc:'Résultats visibles au public' },
+  ];
+  const gRows = document.getElementById('cfg-rows-general');
+  if (gRows) {
+    gRows.innerHTML = generalToggles.map(t => `
+      <div class="config-row">
+        <div class="config-label"><strong>${t.label}</strong><small>${t.desc}</small></div>
+        <div class="config-val toggle-wrap">
+          <label class="toggle"><input type="checkbox" id="cfgi-${t.cle}" ${vBool(t.cle)?'checked':''} onchange="cfgToggle('${t.cle}',this.checked,'lbl-cfg-${t.cle}')"><span class="toggle-slider"></span></label>
+          <span class="toggle-label" id="lbl-cfg-${t.cle}">${vBool(t.cle)?'Activé':'Désactivé'}</span>
+        </div>
+      </div>`).join('');
+  }
+  const ageEl  = document.getElementById('cfgi-age_minimum');  if (ageEl)  ageEl.value  = v('age_minimum') || '18';
+  const msgEl2 = document.getElementById('cfgi-message_fermeture'); if (msgEl2) msgEl2.value = v('message_fermeture') || '';
+  const ageEl2 = document.getElementById('cfgi-age_minimum2'); if (ageEl2) ageEl2.value = v('age_minimum') || '18';
+
+  // ── Onglet 2 : Apparence ───────────────────────────────
+  ['couleur_principale','couleur_accent','couleur_rouge'].forEach(k => {
+    const inp = document.getElementById('cfgi-' + k);
+    if (inp) { inp.value = v(k) || ''; liveColorPreview(k, inp.value); }
   });
+  const bActif = document.getElementById('cfgi-bandeau_actif');
+  if (bActif) {
+    bActif.checked = vBool('bandeau_actif');
+    const lbl = document.getElementById('lbl-bandeau_actif');
+    if (lbl) lbl.textContent = bActif.checked ? 'Activé' : 'Désactivé';
+  }
+  const bTexte = document.getElementById('cfgi-bandeau_texte');  if (bTexte) bTexte.value = v('bandeau_texte') || '';
+  const cpEl   = document.getElementById('cfgi-copyright_texte'); if (cpEl)  cpEl.value  = v('copyright_texte') || '';
+
+  // ── Onglet 3 : Contenu ─────────────────────────────────
+  const sloganEl = document.getElementById('cfgi-site_slogan');    if (sloganEl) sloganEl.value = v('site_slogan') || '';
+  const qEl      = document.getElementById('cfgi-question_principale'); if (qEl) qEl.value = v('question_principale') || '';
+
+  const optRows = document.getElementById('cfg-options-rows');
+  if (optRows) {
+    optRows.innerHTML = ['A','B','C','D'].map(o => `
+      <div style="border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem 1rem;margin-bottom:0.6rem;">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--color-${o.toLowerCase()},#888);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;">${o}</div>
+          <strong style="font-size:0.88rem;">Option ${o}</strong>
+          <div class="color-preview" style="margin-left:auto;width:28px;height:28px;">
+            <div class="color-swatch" id="swatch-opt-${o}" style="background:${v('couleur_option_'+o.toLowerCase())||'#888'};width:100%;height:100%;border-radius:4px;"></div>
+            <input type="color" id="cfgi-couleur_option_${o.toLowerCase()}" value="${v('couleur_option_'+o.toLowerCase())||'#888888'}"
+              oninput="document.getElementById('swatch-opt-${o}').style.background=this.value"
+              onchange="sauvegarderConfig('couleur_option_${o.toLowerCase()}',this.value)">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+          <input type="text" value="${v('label_option_'+o.toLowerCase())||''}" placeholder="Label option ${o}"
+            style="padding:0.4rem 0.7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.83rem;"
+            onchange="sauvegarderConfig('label_option_${o.toLowerCase()}',this.value)">
+          <input type="text" value="${v('desc_option_'+o.toLowerCase())||''}" placeholder="Description option ${o}"
+            style="padding:0.4rem 0.7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.83rem;"
+            onchange="sauvegarderConfig('desc_option_${o.toLowerCase()}',this.value)">
+        </div>
+      </div>`).join('');
+  }
+
+  // ── Onglet 4 : Inscription ─────────────────────────────
+  const champsConfig = [
+    { id:'nom',            label:'Nom de famille' },
+    { id:'post_nom',       label:'Post-nom' },
+    { id:'prenom',         label:'Prénom' },
+    { id:'date_naissance', label:'Date de naissance' },
+    { id:'sexe',           label:'Sexe' },
+    { id:'cin',            label:'Numéro CIN' },
+    { id:'photo_cin_recto',label:'Photo CIN recto' },
+    { id:'photo_cin_verso',label:'Photo CIN verso' },
+    { id:'territoire',     label:'Territoire / Commune' },
+    { id:'otp_sms',        label:'OTP SMS' },
+    { id:'ocr_cin',        label:'OCR automatique CIN' },
+    { id:'gps',            label:'Géolocalisation GPS' },
+  ];
+  const tbody = document.getElementById('cfg-champs-tbody');
+  if (tbody) {
+    tbody.innerHTML = champsConfig.map(c => {
+      const actifKey   = 'champ_'+c.id+'_actif';
+      const obligKey   = 'champ_'+c.id+'_obligatoire';
+      const isActif    = vBool(actifKey);
+      const isOblig    = vBool(obligKey);
+      return `<tr>
+        <td style="padding:0.55rem 0.75rem;border-bottom:1px solid var(--border);font-size:0.85rem;">${c.label}</td>
+        <td style="padding:0.55rem 0.75rem;border-bottom:1px solid var(--border);text-align:center;">
+          <label class="toggle" title="Actif">
+            <input type="checkbox" ${isActif?'checked':''} onchange="sauvegarderConfig('${actifKey}',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </td>
+        <td style="padding:0.55rem 0.75rem;border-bottom:1px solid var(--border);text-align:center;">
+          <label class="toggle" title="Obligatoire">
+            <input type="checkbox" ${isOblig?'checked':''} onchange="sauvegarderConfig('${obligKey}',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </td>
+      </tr>`;
+    }).join('');
+  }
 }
 
-async function saveAllConfig() {
-  const msg = document.getElementById('config-msg');
-  msg.textContent = 'Enregistrement…';
-  const saves = [];
-
-  ['inscriptions_ouvertes','votes_ouverts','forum_ouvert','afficher_resultats'].forEach(k => {
-    const el = document.getElementById('cfg-' + k);
-    if (el) saves.push(db.rpc('admin_set_config', { p_admin_id: adminSession.admin_id, p_cle: k, p_valeur: el.checked ? 'true' : 'false', p_type: 'boolean' }));
-  });
-  ['site_nom','site_slogan','message_fermeture'].forEach(k => {
-    const el = document.getElementById('cfg-' + k);
-    if (el) saves.push(db.rpc('admin_set_config', { p_admin_id: adminSession.admin_id, p_cle: k, p_valeur: el.value, p_type: 'text' }));
-  });
-
-  const results = await Promise.all(saves);
-  const err = results.find(r => r.error);
-  if (err) { msg.style.color = 'var(--red-drc)'; msg.textContent = 'Erreur: ' + err.error.message; }
-  else { msg.style.color = 'var(--green)'; msg.textContent = '✓ Configuration enregistrée'; setTimeout(() => msg.textContent = '', 3000); }
+// Tester une API
+async function testerApi(service) {
+  const msgEl = document.getElementById('apikeys-msg');
+  msgEl.style.color='var(--text-muted)'; msgEl.textContent=`🔌 Test ${service} en cours…`;
+  // Simulation — en production, appel RPC ou endpoint de test
+  await new Promise(r => setTimeout(r, 800));
+  msgEl.style.color='var(--text-muted)';
+  msgEl.textContent=`ℹ️ Test ${service} : à implémenter côté serveur (SECURITY DEFINER RPC).`;
 }
 
 document.getElementById('refreshConfig')?.addEventListener('click', loadConfig);

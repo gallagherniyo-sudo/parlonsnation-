@@ -48,7 +48,7 @@
     </div>
 
     <h1>Parlons<span>Nation</span></h1>
-    <p class="slogan">"Votre nation, votre voix."</p>
+    <p class="slogan">"<span data-config="site_slogan">Votre nation, votre voix.</span>"</p>
     <p class="hero-desc">
       La République Démocratique du Congo est à un tournant historique. Le débat sur notre constitution nous concerne tous. Faites entendre votre voix, partout où vous êtes.
     </p>
@@ -70,9 +70,9 @@
 </section>
 
 <!-- Bandeau d'info -->
-<div style="background:var(--gold);padding:0.75rem 0;">
+<div id="site-bandeau" style="background:var(--gold);padding:0.75rem 0;">
   <div class="container text-center">
-    <p style="font-weight:600;font-size:0.9rem;color:var(--green-dark);">
+    <p style="font-weight:600;font-size:0.9rem;color:var(--green-dark);" data-config="bandeau_texte">
       📢 Consultation ouverte à tous les Congolais — en RDC et en diaspora. Vote anonyme et sécurisé.
     </p>
   </div>
@@ -89,26 +89,26 @@
       <!-- Option A -->
       <div class="vote-card card-hover">
         <div class="badge badge-a">A</div>
-        <h3>Changer la Constitution</h3>
-        <p>Rédiger une toute nouvelle constitution, adaptée aux réalités actuelles du pays et de ses citoyens.</p>
+        <h3 data-config="label_option_a">Changer totalement</h3>
+        <p data-config="desc_option_a">Rédiger une toute nouvelle constitution, adaptée aux réalités actuelles du pays et de ses citoyens.</p>
       </div>
       <!-- Option B -->
       <div class="vote-card card-hover">
         <div class="badge badge-b">B</div>
-        <h3>Réviser partiellement</h3>
-        <p>Modifier certains articles spécifiques tout en conservant les fondements de la constitution de 2006.</p>
+        <h3 data-config="label_option_b">Réviser partiellement</h3>
+        <p data-config="desc_option_b">Modifier certains articles spécifiques tout en conservant les fondements de la constitution de 2006.</p>
       </div>
       <!-- Option C -->
       <div class="vote-card card-hover">
         <div class="badge badge-c">C</div>
-        <h3>Conserver telle quelle</h3>
-        <p>Garder la constitution actuelle et en assurer le respect total par toutes les institutions.</p>
+        <h3 data-config="label_option_c">Conserver telle quelle</h3>
+        <p data-config="desc_option_c">Garder la constitution actuelle et en assurer le respect total par toutes les institutions.</p>
       </div>
       <!-- Option D -->
       <div class="vote-card card-hover">
         <div class="badge badge-d">D</div>
-        <h3>Abstention</h3>
-        <p>Je ne me prononce pas sur cette question, ou je manque d'informations suffisantes.</p>
+        <h3 data-config="label_option_d">Abstention</h3>
+        <p data-config="desc_option_d">Je ne me prononce pas sur cette question, ou je manque d'informations suffisantes.</p>
       </div>
     </div>
     <div class="text-center mt-4">
@@ -131,7 +131,7 @@
         <div class="stat-label">votes enregistrés</div>
       </div>
       <div class="stat-card">
-        <span class="stat-num" id="nbProvinces">26</span>
+        <span class="stat-num" id="nbProvinces" data-config="nb_provinces">26</span>
         <div class="stat-label">provinces représentées</div>
       </div>
       <div class="stat-card">
@@ -259,7 +259,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2025 ParlonsNation — Tous droits réservés</span>
+      <span data-copyright data-config="copyright_texte">© 2026 ParlonsNation — Tous droits réservés</span>
       <span>🇨🇩 Fait pour les Congolais, par des Congolais</span>
     </div>
   </div>

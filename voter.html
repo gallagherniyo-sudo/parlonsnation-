@@ -268,7 +268,7 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-bottom" style="border-top:none;padding-top:0;">
-      <span>© 2025 ParlonsNation</span>
+      <span data-copyright data-config="copyright_texte">© 2026 ParlonsNation</span>
       <span>🔒 Vote sécurisé • Un citoyen, une voix</span>
       <a href="index.html" style="color:rgba(255,255,255,0.7);">← Accueil</a>
     </div>
@@ -289,11 +289,15 @@ document.getElementById('navToggle').addEventListener('click', () => {
   document.getElementById('navLinks').classList.toggle('open');
 });
 
-const LABELS = {
-  A: 'Changer totalement', B: 'Réviser partiellement',
-  C: 'Conserver telle quelle', D: 'Abstention'
-};
-const COLORS = { A: '#2563EB', B: '#7C3AED', C: '#CE1020', D: '#6B7280' };
+// Labels et couleurs : chargés depuis Supabase via config.js, fallback statique
+const LABELS = window.PNLabels || { A:'Changer totalement', B:'Réviser partiellement', C:'Conserver telle quelle', D:'Abstention' };
+const COLORS = window.PNColors || { A:'#2563EB', B:'#7C3AED', C:'#CE1020', D:'#6B7280' };
+
+// Si config.js n'a pas encore chargé, on écoute l'événement
+document.addEventListener('pn:config', () => {
+  Object.assign(LABELS, window.PNLabels || {});
+  Object.assign(COLORS, window.PNColors || {});
+});
 
 function toast(msg, type='success') {
   const t = document.createElement('div');
