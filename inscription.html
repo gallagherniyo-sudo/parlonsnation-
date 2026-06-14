@@ -235,8 +235,8 @@
 
           <!-- Photos CIN -->
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
-            <div class="form-group" style="margin-bottom:0;">
-              <label class="form-label" for="cin_recto">Photo recto <span class="required">*</span></label>
+            <div class="form-group" id="cfg-wrap-photo_cin_recto" style="margin-bottom:0;">
+              <label class="form-label" for="cin_recto">Photo recto <span class="required" id="req-photo_cin_recto">*</span></label>
               <div class="photo-upload-zone" id="zone-recto">
                 <input type="file" id="cin_recto" accept="image/jpeg,image/png,image/webp">
                 <div class="photo-placeholder">
@@ -248,8 +248,8 @@
               </div>
               <div class="form-error" id="recto-error">La photo recto est obligatoire.</div>
             </div>
-            <div class="form-group" style="margin-bottom:0;">
-              <label class="form-label" for="cin_verso">Photo verso <small style="font-weight:400;color:var(--text-muted);">(optionnel)</small></label>
+            <div class="form-group" id="cfg-wrap-photo_cin_verso" style="margin-bottom:0;">
+              <label class="form-label" for="cin_verso">Photo verso <small style="font-weight:400;color:var(--text-muted);" id="req-photo_cin_verso-optional">(optionnel)</small></label>
               <div class="photo-upload-zone" id="zone-verso">
                 <input type="file" id="cin_verso" accept="image/jpeg,image/png,image/webp">
                 <div class="photo-placeholder">
@@ -783,8 +783,10 @@ document.getElementById('nextStep1').addEventListener('click', () => {
     document.getElementById('cin-error').classList.remove('show');
   }
 
-  // Photo recto obligatoire
-  if (!rectoFile) {
+  // Photo recto — obligatoire selon config (champ_photo_cin_recto_obligatoire)
+  const rectoWrap = document.getElementById('cfg-wrap-photo_cin_recto');
+  const rectoOblig = window.PNConfig?.champ_photo_cin_recto_obligatoire === true;
+  if (rectoOblig && rectoWrap?.style.display !== 'none' && !rectoFile) {
     document.getElementById('recto-error').classList.add('show'); valid = false;
   } else {
     document.getElementById('recto-error').classList.remove('show');
@@ -849,6 +851,22 @@ document.getElementById('otpInput').addEventListener('input', function() {
   this.value = this.value.replace(/\D/g, '').slice(0, 6);
   if (this.value.length === 6) setTimeout(() => document.getElementById('verifyOTP').click(), 250);
 });
+
+// ── Config CMS : visibilité des champs formulaire ────────
+function applyInscriptionConfig(cfg) {
+  function applyField(fieldId) {
+    const wrap  = document.getElementById('cfg-wrap-' + fieldId);
+    const reqEl = document.getElementById('req-' + fieldId);
+    const actif = cfg['champ_' + fieldId + '_actif'];
+    const oblig = cfg['champ_' + fieldId + '_obligatoire'];
+    if (wrap)  wrap.style.display  = actif === false ? 'none' : '';
+    if (reqEl) reqEl.style.display = oblig === true  ? 'inline' : 'none';
+  }
+  applyField('photo_cin_recto');
+  applyField('photo_cin_verso');
+}
+if (window.PNConfig) applyInscriptionConfig(window.PNConfig);
+document.addEventListener('pn:config', e => applyInscriptionConfig(e.detail));
 
 document.getElementById('resendOTP').addEventListener('click', () => {
   generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
