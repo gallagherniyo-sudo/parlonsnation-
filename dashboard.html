@@ -609,9 +609,8 @@
           <div class="config-section">
             <h4>Options de vote</h4>
             <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem;">Modifier les labels, descriptions et couleurs des 4 options.</p>
-            ${['A','B','C','D'].map(o => '').join('')}
-            <div id="cfg-options-rows">
-              <!-- rempli par loadConfig() -->
+            <div id="options-vote-container">
+              <!-- rempli par renderOptionsVote() -->
             </div>
           </div>
           <div id="cfg-save-contenu" class="cfg-save-msg"></div>
@@ -1426,6 +1425,38 @@ function cfgToggle(cle, checked, lblId) {
   sauvegarderConfig(cle, checked ? 'true' : 'false');
 }
 
+function renderOptionsVote(cfg) {
+  const container = document.getElementById('options-vote-container');
+  if (!container) return;
+  container.innerHTML = ['A','B','C','D'].map(o => {
+    const ol = o.toLowerCase();
+    const couleur = cfg['couleur_option_' + ol] || '#888888';
+    const label   = cfg['label_option_'   + ol] || '';
+    const desc    = cfg['desc_option_'    + ol] || '';
+    return `
+      <div style="border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem 1rem;margin-bottom:0.6rem;border-left:4px solid ${couleur};">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+          <div style="width:28px;height:28px;border-radius:50%;background:${couleur};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;">${o}</div>
+          <strong style="font-size:0.88rem;">Option ${o}</strong>
+          <div class="color-preview" style="margin-left:auto;width:28px;height:28px;">
+            <div class="color-swatch" id="swatch-opt-${o}" style="background:${couleur};width:100%;height:100%;border-radius:4px;"></div>
+            <input type="color" id="cfgi-couleur_option_${ol}" value="${couleur}"
+              oninput="document.getElementById('swatch-opt-${o}').style.background=this.value"
+              onchange="sauvegarderConfig('couleur_option_${ol}',this.value)">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+          <input type="text" value="${label}" placeholder="Label option ${o}"
+            style="padding:0.4rem 0.7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.83rem;"
+            onchange="sauvegarderConfig('label_option_${ol}',this.value)">
+          <input type="text" value="${desc}" placeholder="Description option ${o}"
+            style="padding:0.4rem 0.7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.83rem;"
+            onchange="sauvegarderConfig('desc_option_${ol}',this.value)">
+        </div>
+      </div>`;
+  }).join('');
+}
+
 const CHAMPS_INSCRIPTION = [
   { cle:'nom',             label:'Nom de famille' },
   { cle:'post_nom',        label:'Post-nom' },
@@ -1471,10 +1502,14 @@ function renderTableauInscription(cfg) {
 }
 
 async function loadConfig() {
-  const { data: rows } = await db.from('configuration').select('cle,valeur,type').neq('type','api_key');
-  if (!rows) return;
+  const { data: rows, error: cfgErr } = await db.from('configuration').select('cle,valeur,type').neq('type','api_key');
+  if (cfgErr) { console.error('[loadConfig] Erreur Supabase:', cfgErr.message); return; }
+  if (!rows || rows.length === 0) { console.warn('[loadConfig] Aucune config retournée — Patch B exécuté ?'); return; }
+
   _cfgCache = {};
   rows.forEach(r => { _cfgCache[r.cle] = { valeur: r.valeur, type: r.type }; });
+  console.log('[loadConfig] Config chargée:', Object.keys(_cfgCache).length, 'clés');
+  console.log('[loadConfig] champ_nom_actif:', _cfgCache['champ_nom_actif']);
 
   const v = k => _cfgCache[k]?.valeur;
   const vBool = k => v(k) === 'true';
@@ -1516,39 +1551,20 @@ async function loadConfig() {
   const bTexte = document.getElementById('cfgi-bandeau_texte');  if (bTexte) bTexte.value = v('bandeau_texte') || '';
   const cpEl   = document.getElementById('cfgi-copyright_texte'); if (cpEl)  cpEl.value  = v('copyright_texte') || '';
 
-  // ── Onglet 3 : Contenu ─────────────────────────────────
-  const sloganEl = document.getElementById('cfgi-site_slogan');    if (sloganEl) sloganEl.value = v('site_slogan') || '';
-  const qEl      = document.getElementById('cfgi-question_principale'); if (qEl) qEl.value = v('question_principale') || '';
-
-  const optRows = document.getElementById('cfg-options-rows');
-  if (optRows) {
-    optRows.innerHTML = ['A','B','C','D'].map(o => `
-      <div style="border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem 1rem;margin-bottom:0.6rem;">
-        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
-          <div style="width:28px;height:28px;border-radius:50%;background:var(--color-${o.toLowerCase()},#888);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;">${o}</div>
-          <strong style="font-size:0.88rem;">Option ${o}</strong>
-          <div class="color-preview" style="margin-left:auto;width:28px;height:28px;">
-            <div class="color-swatch" id="swatch-opt-${o}" style="background:${v('couleur_option_'+o.toLowerCase())||'#888'};width:100%;height:100%;border-radius:4px;"></div>
-            <input type="color" id="cfgi-couleur_option_${o.toLowerCase()}" value="${v('couleur_option_'+o.toLowerCase())||'#888888'}"
-              oninput="document.getElementById('swatch-opt-${o}').style.background=this.value"
-              onchange="sauvegarderConfig('couleur_option_${o.toLowerCase()}',this.value)">
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
-          <input type="text" value="${v('label_option_'+o.toLowerCase())||''}" placeholder="Label option ${o}"
-            style="padding:0.4rem 0.7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.83rem;"
-            onchange="sauvegarderConfig('label_option_${o.toLowerCase()}',this.value)">
-          <input type="text" value="${v('desc_option_'+o.toLowerCase())||''}" placeholder="Description option ${o}"
-            style="padding:0.4rem 0.7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.83rem;"
-            onchange="sauvegarderConfig('desc_option_${o.toLowerCase()}',this.value)">
-        </div>
-      </div>`).join('');
-  }
-
-  // ── Onglet 4 : Inscription ─────────────────────────────
+  // ── Flat config (string values) partagé par les deux renders ──
   const flatCfg = Object.fromEntries(
     Object.entries(_cfgCache).map(([k, obj]) => [k, obj.valeur])
   );
+
+  // ── Onglet 3 : Contenu ─────────────────────────────────
+  const sloganEl = document.getElementById('cfgi-site_slogan');
+  if (sloganEl) sloganEl.value = v('site_slogan') || '';
+  const qEl = document.getElementById('cfgi-question_principale');
+  if (qEl) qEl.value = v('question_principale') || '';
+  renderOptionsVote(flatCfg);
+
+  // ── Onglet 4 : Inscription ─────────────────────────────
+  console.log('[loadConfig] Tbody inscription:', document.getElementById('tbody-inscription'));
   renderTableauInscription(flatCfg);
   const age2El = document.getElementById('cfgi-age_minimum2');
   if (age2El) age2El.value = v('age_minimum') || '18';
