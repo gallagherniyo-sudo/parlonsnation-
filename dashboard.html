@@ -665,6 +665,26 @@
             <tbody id="admins-tbody"><tr><td colspan="6" style="text-align:center;color:var(--text-muted);">Chargement…</td></tr></tbody>
           </table>
         </div>
+
+        <!-- Changer mon mot de passe -->
+        <div class="card" style="margin-top:1.5rem;">
+          <h4 style="margin:0 0 1rem;font-family:var(--font-head);font-size:0.9rem;">🔒 Changer mon mot de passe</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
+            <input type="password" id="pwd-old" placeholder="Ancien mot de passe" style="padding:0.5rem 0.8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);">
+            <input type="password" id="pwd-new" placeholder="Nouveau (min 12 car.)" oninput="updatePwdStrength(this.value)" style="padding:0.5rem 0.8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);">
+            <input type="password" id="pwd-confirm" placeholder="Confirmer nouveau" style="padding:0.5rem 0.8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);">
+          </div>
+          <div style="margin-bottom:0.75rem;">
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <div style="flex:1;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;">
+                <div id="pwd-strength-bar" style="height:100%;width:0;transition:width 0.3s,background 0.3s;border-radius:3px;"></div>
+              </div>
+              <span id="pwd-strength-lbl" style="font-size:0.75rem;font-weight:600;color:var(--text-muted);min-width:40px;"></span>
+            </div>
+          </div>
+          <button class="btn-action btn-approve" onclick="changePassword()">🔒 Changer le mot de passe</button>
+          <div id="pwd-msg" style="margin-top:0.5rem;font-size:0.83rem;"></div>
+        </div>
       </div>
 
       <!-- ── CLÉS API ── -->
@@ -1284,11 +1304,11 @@ async function saveAllConfig() {
 
   ['inscriptions_ouvertes','votes_ouverts','forum_ouvert','afficher_resultats'].forEach(k => {
     const el = document.getElementById('cfg-' + k);
-    if (el) saves.push(db.rpc('admin_set_config', { p_session: adminSession.token, p_cle: k, p_valeur: el.checked ? 'true' : 'false', p_type: 'boolean' }));
+    if (el) saves.push(db.rpc('admin_set_config', { p_admin_id: adminSession.admin_id, p_cle: k, p_valeur: el.checked ? 'true' : 'false', p_type: 'boolean' }));
   });
   ['site_nom','site_slogan','message_fermeture'].forEach(k => {
     const el = document.getElementById('cfg-' + k);
-    if (el) saves.push(db.rpc('admin_set_config', { p_session: adminSession.token, p_cle: k, p_valeur: el.value, p_type: 'text' }));
+    if (el) saves.push(db.rpc('admin_set_config', { p_admin_id: adminSession.admin_id, p_cle: k, p_valeur: el.value, p_type: 'text' }));
   });
 
   const results = await Promise.all(saves);
@@ -1341,7 +1361,7 @@ async function savePage() {
   const titre = document.getElementById('page-titre').value;
   const actif = document.getElementById('page-actif').checked;
   const { error } = await db.rpc('admin_save_page', {
-    p_session: adminSession.token,
+    p_admin_id: adminSession.admin_id,
     p_slug: _currentPageSlug,
     p_titre: titre,
     p_contenu: contenu,
@@ -1384,7 +1404,7 @@ async function saveApparence() {
   const keys = ['couleur_principale','couleur_accent','couleur_rouge'];
   const saves = keys.map(k => {
     const el = document.getElementById('color-' + k);
-    return el ? db.rpc('admin_set_config', { p_session: adminSession.token, p_cle: k, p_valeur: el.value, p_type: 'text' }) : Promise.resolve({});
+    return el ? db.rpc('admin_set_config', { p_admin_id: adminSession.admin_id, p_cle: k, p_valeur: el.value, p_type: 'text' }) : Promise.resolve({});
   });
   const results = await Promise.all(saves);
   const err = results.find(r => r.error);
@@ -1413,13 +1433,12 @@ async function resetColors() {
 async function loadAdminsMgmt() {
   const tbody = document.getElementById('admins-tbody');
   tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">Chargement…</td></tr>';
-  const { data, error } = await db.rpc('admin_list_admins', { p_session: adminSession.token });
-  if (error || !data) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--red-drc);">Accès refusé ou erreur</td></tr>';
+  const { data, error } = await db.rpc('get_admins');
+  if (error) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--red-drc);">Erreur: ${error.message}</td></tr>`;
     return;
   }
-  if (!data.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Aucun admin</td></tr>'; return; }
-  tbody.innerHTML = data.map(a => `
+  tbody.innerHTML = admins.map(a => `
     <tr>
       <td>${a.email}</td>
       <td>${a.nom_complet || '—'}</td>
@@ -1444,13 +1463,14 @@ async function createAdmin() {
   const pwdHash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pwd))))
     .map(b => b.toString(16).padStart(2,'0')).join('');
 
-  const { error } = await db.rpc('admin_create_admin', {
-    p_session: adminSession.token,
+  const { data: cResult, error } = await db.rpc('admin_create_admin', {
+    p_admin_id: adminSession.admin_id,
     p_email: email,
     p_password_hash: pwdHash,
     p_nom_complet: nom,
     p_role: role
   });
+  if (!error && cResult && !cResult.success) { msg.style.color='var(--red-drc)'; msg.textContent=cResult.message; return; }
   if (error) { msg.style.color='var(--red-drc)'; msg.textContent='Erreur: '+error.message; }
   else {
     msg.style.color='var(--green)'; msg.textContent='✓ Admin créé avec succès';
@@ -1463,8 +1483,8 @@ async function createAdmin() {
 
 async function toggleAdmin(adminId, activate) {
   const { error } = await db.rpc('admin_toggle_admin', {
-    p_session: adminSession.token,
-    p_admin_id: adminId,
+    p_admin_id: adminSession.admin_id,
+    p_target_id: adminId,
     p_actif: activate
   });
   if (!error) loadAdminsMgmt();
@@ -1473,10 +1493,63 @@ async function toggleAdmin(adminId, activate) {
 
 document.getElementById('refreshAdmins')?.addEventListener('click', loadAdminsMgmt);
 
+// ── CHANGEMENT MOT DE PASSE ───────────────────────────────
+async function changePassword() {
+  const oldPwd = document.getElementById('pwd-old').value;
+  const newPwd = document.getElementById('pwd-new').value;
+  const cfm    = document.getElementById('pwd-confirm').value;
+  const msg    = document.getElementById('pwd-msg');
+
+  if (!oldPwd || !newPwd || !cfm) { msg.style.color='var(--red-drc)'; msg.textContent='Remplir tous les champs'; return; }
+  if (newPwd.length < 12) { msg.style.color='var(--red-drc)'; msg.textContent='Nouveau mot de passe trop court (min 12 car.)'; return; }
+  if (newPwd !== cfm) { msg.style.color='var(--red-drc)'; msg.textContent='Les mots de passe ne correspondent pas'; return; }
+
+  const enc  = new TextEncoder();
+  const [oldHash, newHash] = await Promise.all([
+    crypto.subtle.digest('SHA-256', enc.encode(oldPwd)),
+    crypto.subtle.digest('SHA-256', enc.encode(newPwd))
+  ]);
+  const toHex = buf => Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+
+  msg.textContent = 'Changement en cours…'; msg.style.color = 'var(--text-muted)';
+  const { data: r, error } = await db.rpc('admin_change_password', {
+    p_admin_id: adminSession.admin_id,
+    p_old_hash: toHex(oldHash),
+    p_new_hash: toHex(newHash)
+  });
+  if (error || (r && !r.success)) {
+    msg.style.color = 'var(--red-drc)';
+    msg.textContent = r?.message || error?.message || 'Erreur';
+  } else {
+    msg.style.color = 'var(--green)';
+    msg.textContent = '✓ Mot de passe changé avec succès';
+    document.getElementById('pwd-old').value = '';
+    document.getElementById('pwd-new').value = '';
+    document.getElementById('pwd-confirm').value = '';
+    updatePwdStrength('');
+  }
+}
+
+function updatePwdStrength(pwd) {
+  const bar  = document.getElementById('pwd-strength-bar');
+  const lbl  = document.getElementById('pwd-strength-lbl');
+  if (!bar || !lbl) return;
+  let score = 0;
+  if (pwd.length >= 12) score++;
+  if (/[A-Z]/.test(pwd)) score++;
+  if (/[0-9]/.test(pwd)) score++;
+  if (/[^A-Za-z0-9]/.test(pwd)) score++;
+  const levels = ['','Faible','Moyen','Bon','Fort'];
+  const colors = ['','var(--red-drc)','#f59e0b','#3b82f6','var(--green)'];
+  bar.style.width  = (score * 25) + '%';
+  bar.style.background = colors[score] || '#e5e7eb';
+  lbl.textContent  = levels[score] || '';
+}
+
 // ── CLÉS API ──────────────────────────────────────────────
 async function loadApiKeys() {
   const msg = document.getElementById('apikeys-msg');
-  const { data, error } = await db.rpc('admin_get_api_keys', { p_session: adminSession.token });
+  const { data, error } = await db.rpc('admin_get_api_keys', { p_admin_id: adminSession.admin_id });
   if (error) {
     msg.style.color='var(--red-drc)';
     msg.textContent = 'Accès refusé. Seuls les Super Admins peuvent voir les clés API.';
@@ -1497,7 +1570,7 @@ async function saveApiKey(key) {
   const msg = document.getElementById('apikeys-msg');
   if (!el || !el.value) return;
   const { error } = await db.rpc('admin_set_config', {
-    p_session: adminSession.token,
+    p_admin_id: adminSession.admin_id,
     p_cle: key,
     p_valeur: el.value,
     p_type: 'api_key'

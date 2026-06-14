@@ -477,6 +477,182 @@ BEGIN
 END;
 $$;
 
+-- ─── 18. CORRECTIFS ET COMPLÉMENTS ──────────────────────
+
+-- Ajouter nom_complet sur admins (si absent)
+ALTER TABLE admins ADD COLUMN IF NOT EXISTS nom_complet text;
+
+-- Autoriser la lecture publique des provinces (correction filtre dashboard)
+DO $$ BEGIN
+  BEGIN
+    ALTER TABLE provinces ENABLE ROW LEVEL SECURITY;
+  EXCEPTION WHEN others THEN NULL; END;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='provinces' AND policyname='provinces_public_read') THEN
+    EXECUTE 'CREATE POLICY provinces_public_read ON provinces FOR SELECT USING (true)';
+  END IF;
+END $$;
+
+-- get_admins() : lecture simple sans restriction de rôle (le dashboard vérifie déjà l'auth)
+CREATE OR REPLACE FUNCTION get_admins()
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  RETURN (
+    SELECT jsonb_agg(jsonb_build_object(
+      'id',                id::text,
+      'email',             email,
+      'nom_complet',       nom_complet,
+      'role',              role,
+      'actif',             actif,
+      'derniere_connexion', last_login,
+      'created_at',        created_at
+    ) ORDER BY created_at)
+    FROM admins
+  );
+END;
+$$;
+
+-- admin_set_config : accepte maintenant un type optionnel
+CREATE OR REPLACE FUNCTION admin_set_config(
+  p_admin_id uuid,
+  p_cle      text,
+  p_valeur   text,
+  p_type     text DEFAULT NULL
+)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE v_admin admins%ROWTYPE; v_existing_type text;
+BEGIN
+  SELECT * INTO v_admin FROM admins WHERE id = p_admin_id AND actif = true;
+  IF NOT FOUND THEN RETURN jsonb_build_object('success', false, 'message', 'Non autorisé'); END IF;
+
+  SELECT type INTO v_existing_type FROM configuration WHERE cle = p_cle;
+
+  UPDATE configuration
+  SET valeur = p_valeur,
+      type   = COALESCE(p_type, v_existing_type, 'text'),
+      updated_at = now(), updated_by = p_admin_id
+  WHERE cle = p_cle;
+
+  IF NOT FOUND THEN
+    INSERT INTO configuration (cle, valeur, type, updated_by)
+    VALUES (p_cle, p_valeur, COALESCE(p_type, 'text'), p_admin_id);
+  END IF;
+
+  INSERT INTO admin_logs (admin_id, action, details)
+  VALUES (p_admin_id, 'set_config', jsonb_build_object(
+    'cle', p_cle,
+    'valeur', CASE WHEN COALESCE(p_type, v_existing_type) = 'api_key' THEN '***' ELSE p_valeur END
+  ));
+
+  RETURN jsonb_build_object('success', true);
+END;
+$$;
+
+-- admin_save_page : accepte maintenant p_actif
+CREATE OR REPLACE FUNCTION admin_save_page(
+  p_admin_id         uuid,
+  p_slug             text,
+  p_titre            text,
+  p_contenu          text,
+  p_actif            boolean DEFAULT true,
+  p_meta_description text    DEFAULT NULL
+)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE v_admin admins%ROWTYPE;
+BEGIN
+  SELECT * INTO v_admin FROM admins WHERE id = p_admin_id AND actif = true;
+  IF NOT FOUND THEN RETURN jsonb_build_object('success', false, 'message', 'Non autorisé'); END IF;
+
+  INSERT INTO pages_contenu (slug, titre, contenu, actif, meta_description, updated_at, updated_by)
+  VALUES (p_slug, p_titre, p_contenu, p_actif, p_meta_description, now(), p_admin_id)
+  ON CONFLICT (slug) DO UPDATE SET
+    titre            = EXCLUDED.titre,
+    contenu          = EXCLUDED.contenu,
+    actif            = EXCLUDED.actif,
+    meta_description = EXCLUDED.meta_description,
+    updated_at       = now(),
+    updated_by       = p_admin_id;
+
+  INSERT INTO admin_logs (admin_id, action, details)
+  VALUES (p_admin_id, 'save_page', jsonb_build_object('slug', p_slug, 'titre', p_titre));
+
+  RETURN jsonb_build_object('success', true);
+END;
+$$;
+
+-- admin_create_admin : accepte maintenant p_password_hash (hash SHA-256 côté client) + p_nom_complet
+CREATE OR REPLACE FUNCTION admin_create_admin(
+  p_admin_id    uuid,
+  p_email       text,
+  p_password_hash text,
+  p_nom_complet text DEFAULT NULL,
+  p_role        text DEFAULT 'moderateur'
+)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE v_admin admins%ROWTYPE;
+BEGIN
+  SELECT * INTO v_admin FROM admins WHERE id = p_admin_id AND actif = true AND role = 'super_admin';
+  IF NOT FOUND THEN RETURN jsonb_build_object('success', false, 'message', 'Réservé aux super admins'); END IF;
+
+  IF p_role NOT IN ('super_admin','moderateur','analyste','partenaire_api') THEN
+    RETURN jsonb_build_object('success', false, 'message', 'Rôle invalide');
+  END IF;
+
+  INSERT INTO admins (email, password_hash, nom_complet, role)
+  VALUES (p_email, p_password_hash, p_nom_complet, p_role);
+
+  INSERT INTO admin_logs (admin_id, action, details)
+  VALUES (p_admin_id, 'create_admin', jsonb_build_object('email', p_email, 'role', p_role));
+
+  RETURN jsonb_build_object('success', true);
+EXCEPTION WHEN unique_violation THEN
+  RETURN jsonb_build_object('success', false, 'message', 'Cet email est déjà utilisé');
+END;
+$$;
+
+-- admin_change_password : changer son propre mot de passe
+CREATE OR REPLACE FUNCTION admin_change_password(
+  p_admin_id    uuid,
+  p_old_hash    text,
+  p_new_hash    text
+)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE v_admin admins%ROWTYPE;
+BEGIN
+  SELECT * INTO v_admin FROM admins WHERE id = p_admin_id AND actif = true;
+  IF NOT FOUND THEN RETURN jsonb_build_object('success', false, 'message', 'Admin introuvable'); END IF;
+  IF v_admin.password_hash != p_old_hash THEN
+    RETURN jsonb_build_object('success', false, 'message', 'Ancien mot de passe incorrect');
+  END IF;
+
+  UPDATE admins SET password_hash = p_new_hash WHERE id = p_admin_id;
+
+  INSERT INTO admin_logs (admin_id, action, details)
+  VALUES (p_admin_id, 'change_password', jsonb_build_object('email', v_admin.email));
+
+  RETURN jsonb_build_object('success', true);
+END;
+$$;
+
+-- Mise à jour du mot de passe de l'admin initial (K!n$h@sa2026-DRC#Libre)
+UPDATE admins
+SET password_hash = encode(digest('K!n$h@sa2026-DRC#Libre', 'sha256'), 'hex')
+WHERE email = 'admin@parlonsnation.com';
+
 -- ═══════════════════════════════════════════════════════════
 -- FIN DE MIGRATION
 -- Vérification : SELECT column_name FROM information_schema.columns WHERE table_name = 'citoyens';
