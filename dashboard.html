@@ -631,8 +631,8 @@
                     <th style="padding:0.6rem 0.75rem;background:var(--bg);border-bottom:2px solid var(--border);font-weight:700;text-align:center;">Obligatoire</th>
                   </tr>
                 </thead>
-                <tbody id="cfg-champs-tbody">
-                  <!-- rempli par loadConfig() -->
+                <tbody id="tbody-inscription">
+                  <!-- rempli par renderTableauInscription() -->
                 </tbody>
               </table>
             </div>
@@ -1426,6 +1426,50 @@ function cfgToggle(cle, checked, lblId) {
   sauvegarderConfig(cle, checked ? 'true' : 'false');
 }
 
+const CHAMPS_INSCRIPTION = [
+  { cle:'nom',             label:'Nom de famille' },
+  { cle:'post_nom',        label:'Post-nom' },
+  { cle:'prenom',          label:'Prénom' },
+  { cle:'date_naissance',  label:'Date de naissance' },
+  { cle:'sexe',            label:'Sexe' },
+  { cle:'cin',             label:'Numéro CIN' },
+  { cle:'photo_cin_recto', label:'Photo CIN recto' },
+  { cle:'photo_cin_verso', label:'Photo CIN verso' },
+  { cle:'territoire',      label:'Territoire / Commune' },
+  { cle:'otp_sms',         label:'Vérification SMS OTP' },
+  { cle:'ocr_cin',         label:'OCR pièce d\'identité' },
+  { cle:'gps',             label:'Géolocalisation GPS' },
+];
+
+function renderTableauInscription(cfg) {
+  const tbody = document.getElementById('tbody-inscription');
+  if (!tbody) return;
+  tbody.innerHTML = CHAMPS_INSCRIPTION.map(champ => {
+    const actifKey = 'champ_' + champ.cle + '_actif';
+    const obligKey = 'champ_' + champ.cle + '_obligatoire';
+    const isActif  = cfg[actifKey] !== 'false';
+    const isOblig  = cfg[obligKey] === 'true';
+    const td = 'padding:0.55rem 0.75rem;border-bottom:1px solid var(--border)';
+    return `<tr>
+      <td style="${td};font-size:0.85rem;">${champ.label}</td>
+      <td style="${td};text-align:center;">
+        <label class="toggle" title="Actif">
+          <input type="checkbox" ${isActif?'checked':''}
+            onchange="sauvegarderConfig('${actifKey}',this.checked.toString());this.closest('tr').querySelector('td:last-child input').disabled=!this.checked">
+          <span class="toggle-slider"></span>
+        </label>
+      </td>
+      <td style="${td};text-align:center;">
+        <label class="toggle" title="Obligatoire">
+          <input type="checkbox" ${isOblig?'checked':''} ${!isActif?'disabled':''}
+            onchange="sauvegarderConfig('${obligKey}',this.checked.toString())">
+          <span class="toggle-slider"></span>
+        </label>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
 async function loadConfig() {
   const { data: rows } = await db.from('configuration').select('cle,valeur,type').neq('type','api_key');
   if (!rows) return;
@@ -1502,44 +1546,12 @@ async function loadConfig() {
   }
 
   // ── Onglet 4 : Inscription ─────────────────────────────
-  const champsConfig = [
-    { id:'nom',            label:'Nom de famille' },
-    { id:'post_nom',       label:'Post-nom' },
-    { id:'prenom',         label:'Prénom' },
-    { id:'date_naissance', label:'Date de naissance' },
-    { id:'sexe',           label:'Sexe' },
-    { id:'cin',            label:'Numéro CIN' },
-    { id:'photo_cin_recto',label:'Photo CIN recto' },
-    { id:'photo_cin_verso',label:'Photo CIN verso' },
-    { id:'territoire',     label:'Territoire / Commune' },
-    { id:'otp_sms',        label:'OTP SMS' },
-    { id:'ocr_cin',        label:'OCR automatique CIN' },
-    { id:'gps',            label:'Géolocalisation GPS' },
-  ];
-  const tbody = document.getElementById('cfg-champs-tbody');
-  if (tbody) {
-    tbody.innerHTML = champsConfig.map(c => {
-      const actifKey   = 'champ_'+c.id+'_actif';
-      const obligKey   = 'champ_'+c.id+'_obligatoire';
-      const isActif    = vBool(actifKey);
-      const isOblig    = vBool(obligKey);
-      return `<tr>
-        <td style="padding:0.55rem 0.75rem;border-bottom:1px solid var(--border);font-size:0.85rem;">${c.label}</td>
-        <td style="padding:0.55rem 0.75rem;border-bottom:1px solid var(--border);text-align:center;">
-          <label class="toggle" title="Actif">
-            <input type="checkbox" ${isActif?'checked':''} onchange="sauvegarderConfig('${actifKey}',this.checked)">
-            <span class="toggle-slider"></span>
-          </label>
-        </td>
-        <td style="padding:0.55rem 0.75rem;border-bottom:1px solid var(--border);text-align:center;">
-          <label class="toggle" title="Obligatoire">
-            <input type="checkbox" ${isOblig?'checked':''} onchange="sauvegarderConfig('${obligKey}',this.checked)">
-            <span class="toggle-slider"></span>
-          </label>
-        </td>
-      </tr>`;
-    }).join('');
-  }
+  const flatCfg = Object.fromEntries(
+    Object.entries(_cfgCache).map(([k, obj]) => [k, obj.valeur])
+  );
+  renderTableauInscription(flatCfg);
+  const age2El = document.getElementById('cfgi-age_minimum2');
+  if (age2El) age2El.value = v('age_minimum') || '18';
 }
 
 // Tester une API
@@ -1639,7 +1651,7 @@ async function saveApparence() {
   const keys = ['couleur_principale','couleur_accent','couleur_rouge'];
   const saves = keys.map(k => {
     const el = document.getElementById('color-' + k);
-    return el ? db.rpc('admin_set_config', { p_admin_id: adminSession.admin_id, p_cle: k, p_valeur: el.value, p_type: 'text' }) : Promise.resolve({});
+    return el ? db.rpc('admin_set_config', { p_admin_id: adminSession.admin_id, p_cle: k, p_valeur: el.value }) : Promise.resolve({});
   });
   const results = await Promise.all(saves);
   const err = results.find(r => r.error);
@@ -1807,8 +1819,7 @@ async function saveApiKey(key) {
   const { error } = await db.rpc('admin_set_config', {
     p_admin_id: adminSession.admin_id,
     p_cle: key,
-    p_valeur: el.value,
-    p_type: 'api_key'
+    p_valeur: el.value
   });
   if (error) { msg.style.color='var(--red-drc)'; msg.textContent='Erreur: '+error.message; }
   else {
