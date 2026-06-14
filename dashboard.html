@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin — ParlonsNation</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src https://*.supabase.co; img-src 'self' data:;">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Layout dashboard ── */
+    body { background:#f0f2f5; }
+    #loginScreen { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1rem; }
+    .login-card { background:#fff; border-radius:16px; padding:2.5rem; max-width:420px; width:100%; box-shadow:0 8px 32px rgba(0,0,0,.14); }
+    .login-logo { text-align:center; margin-bottom:2rem; }
+    .login-logo .big-icon { font-size:3rem; display:block; margin-bottom:0.5rem; }
+    .login-logo h1 { font-family:var(--font-head); font-size:1.5rem; font-weight:800; color:var(--green); }
+    .login-logo p { font-size:0.85rem; color:var(--text-muted); }
+
+    /* ── Sidebar ── */
+    #dashboard { display:none; min-height:100vh; }
+    .dash-layout { display:flex; min-height:100vh; }
+    .sidebar {
+      width:240px; flex-shrink:0; background:var(--green-dark); color:#fff;
+      display:flex; flex-direction:column; position:sticky; top:0; height:100vh; overflow-y:auto;
+    }
+    .sidebar-logo {
+      padding:1.5rem 1.25rem 1rem; border-bottom:1px solid rgba(255,255,255,.1);
+    }
+    .sidebar-logo .s-brand { font-family:var(--font-head); font-size:1.1rem; font-weight:800; color:#fff; }
+    .sidebar-logo .s-brand span { color:var(--gold); }
+    .sidebar-logo .s-role { font-size:0.72rem; opacity:0.6; margin-top:0.2rem; text-transform:uppercase; letter-spacing:0.05em; }
+    .sidebar-logo .s-email { font-size:0.78rem; opacity:0.8; margin-top:0.15rem; }
+
+    .sidebar-nav { padding:1rem 0; flex:1; }
+    .nav-item {
+      display:flex; align-items:center; gap:0.7rem; padding:0.7rem 1.25rem;
+      font-size:0.88rem; font-weight:600; color:rgba(255,255,255,.75);
+      cursor:pointer; transition:all 0.15s; border:none; background:none; width:100%; text-align:left;
+    }
+    .nav-item:hover { background:rgba(255,255,255,.08); color:#fff; }
+    .nav-item.active { background:rgba(255,255,255,.15); color:#fff; border-right:3px solid var(--gold); }
+    .nav-item .nav-icon { font-size:1.1rem; width:22px; text-align:center; flex-shrink:0; }
+    .sidebar-footer { padding:1.25rem; border-top:1px solid rgba(255,255,255,.1); }
+    .sidebar-footer .logout-btn {
+      display:flex; align-items:center; gap:0.6rem; color:rgba(255,255,255,.6);
+      font-size:0.82rem; cursor:pointer; background:none; border:none; width:100%;
+      transition:color 0.15s;
+    }
+    .sidebar-footer .logout-btn:hover { color:#fff; }
+
+    /* ── Main content ── */
+    .dash-main { flex:1; overflow-x:hidden; padding:2rem; }
+    .dash-topbar {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:2rem; flex-wrap:wrap; gap:1rem;
+    }
+    .dash-topbar h2 { font-family:var(--font-head); font-size:1.4rem; font-weight:800; color:var(--text); }
+    .dash-topbar .refresh-btn {
+      padding:0.5rem 1rem; background:var(--white); border:1.5px solid var(--border);
+      border-radius:var(--radius-sm); font-size:0.82rem; font-weight:600; cursor:pointer;
+      color:var(--text); display:flex; align-items:center; gap:0.4rem; transition:all 0.2s;
+    }
+    .dash-topbar .refresh-btn:hover { border-color:var(--green); color:var(--green); }
+
+    /* ── Metric cards ── */
+    .metrics-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem; margin-bottom:2rem; }
+    .metric-card {
+      background:#fff; border-radius:var(--radius); padding:1.25rem; border:1px solid var(--border);
+      box-shadow:var(--shadow); position:relative; overflow:hidden;
+    }
+    .metric-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--m-color,var(--green)); }
+    .metric-label { font-size:0.75rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); font-weight:700; margin-bottom:0.4rem; }
+    .metric-value { font-family:var(--font-head); font-size:2rem; font-weight:800; color:var(--text); line-height:1; }
+    .metric-sub { font-size:0.75rem; color:var(--text-muted); margin-top:0.3rem; }
+
+    /* ── Panels ── */
+    .dash-panel { background:#fff; border-radius:var(--radius); border:1px solid var(--border); box-shadow:var(--shadow); }
+    .panel-header {
+      padding:1rem 1.25rem; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;
+    }
+    .panel-header h3 { font-family:var(--font-head); font-size:1rem; font-weight:700; color:var(--text); }
+    .panel-body { padding:0; }
+
+    /* ── Table ── */
+    .dash-table { width:100%; border-collapse:collapse; font-size:0.83rem; }
+    .dash-table th {
+      background:#f8f9fa; padding:0.6rem 1rem; text-align:left;
+      font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted);
+      font-weight:700; border-bottom:1px solid var(--border); white-space:nowrap;
+    }
+    .dash-table td { padding:0.65rem 1rem; border-bottom:1px solid #f3f4f6; vertical-align:middle; }
+    .dash-table tr:last-child td { border-bottom:none; }
+    .dash-table tr:hover td { background:#fafafa; }
+    .overflow-x { overflow-x:auto; }
+
+    /* ── Status badges ── */
+    .status-pill {
+      display:inline-flex; align-items:center; padding:0.2rem 0.65rem;
+      border-radius:50px; font-size:0.72rem; font-weight:700; letter-spacing:0.03em;
+    }
+    .st-en_attente { background:#fef3c7; color:#92400e; }
+    .st-verifie    { background:#d1fae5; color:#065f46; }
+    .st-rejete     { background:#fee2e2; color:#991b1b; }
+    .st-suspendu   { background:#e5e7eb; color:#374151; }
+
+    /* ── Action buttons ── */
+    .act-btn {
+      padding:0.25rem 0.6rem; border-radius:var(--radius-xs); font-size:0.75rem; font-weight:600;
+      cursor:pointer; border:1.5px solid; transition:all 0.15s; white-space:nowrap;
+    }
+    .act-verify  { background:#d1fae5; border-color:#6ee7b7; color:#065f46; }
+    .act-reject  { background:#fee2e2; border-color:#fca5a5; color:#991b1b; }
+    .act-suspend { background:#fef3c7; border-color:#fcd34d; color:#92400e; }
+    .act-delete  { background:#fee2e2; border-color:#fca5a5; color:#991b1b; }
+    .act-toggle  { background:#eff6ff; border-color:#93c5fd; color:#1e40af; }
+
+    /* ── Pagination ── */
+    .pagination {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0.75rem 1rem; border-top:1px solid var(--border); font-size:0.82rem;
+    }
+    .pag-btns { display:flex; gap:0.4rem; }
+    .pag-btn {
+      padding:0.35rem 0.75rem; border:1.5px solid var(--border); border-radius:var(--radius-xs);
+      cursor:pointer; font-size:0.8rem; font-weight:600; background:#fff; color:var(--text);
+      transition:all 0.15s;
+    }
+    .pag-btn:hover:not(:disabled) { border-color:var(--green); color:var(--green); }
+    .pag-btn:disabled { opacity:0.4; cursor:not-allowed; }
+    .pag-btn.active { background:var(--green); border-color:var(--green); color:#fff; }
+
+    /* ── Filtres ── */
+    .filter-bar {
+      display:flex; gap:0.5rem; flex-wrap:wrap; padding:0.75rem 1.25rem;
+      border-bottom:1px solid var(--border); align-items:center;
+    }
+    .filter-bar select, .filter-bar input {
+      padding:0.4rem 0.7rem; border:1.5px solid var(--border); border-radius:var(--radius-sm);
+      font-size:0.82rem; font-family:var(--font-body); background:#fff; color:var(--text);
+    }
+    .filter-bar select:focus, .filter-bar input:focus { outline:none; border-color:var(--green); }
+
+    /* ── Vote bar ── */
+    .vote-bar-wrap { background:#f0f0f0; border-radius:4px; height:10px; width:100%; max-width:160px; }
+    .vote-bar { height:10px; border-radius:4px; }
+
+    /* ── Province table ── */
+    .province-option { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:4px; vertical-align:middle; }
+
+    /* ── Export buttons ── */
+    .export-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; padding:1.5rem; }
+    .export-card {
+      border:2px solid var(--border); border-radius:var(--radius-sm); padding:1.25rem;
+      text-align:center; cursor:pointer; transition:all 0.2s;
+    }
+    .export-card:hover { border-color:var(--green); background:var(--green-pale); }
+    .export-card .exp-icon { font-size:2rem; display:block; margin-bottom:0.5rem; }
+    .export-card .exp-label { font-weight:700; font-size:0.9rem; color:var(--text); }
+    .export-card .exp-desc { font-size:0.78rem; color:var(--text-muted); margin-top:0.25rem; }
+
+    /* ── Signalement badge ── */
+    .sig-badge {
+      background:#fee2e2; color:#991b1b; border-radius:50px;
+      font-size:0.7rem; font-weight:700; padding:0.15rem 0.5rem;
+    }
+
+    /* ── Spinner ── */
+    .panel-loading { text-align:center; padding:2.5rem; color:var(--text-muted); font-size:0.9rem; }
+
+    /* ── Responsive sidebar toggle ── */
+    .sidebar-toggle { display:none; position:fixed; bottom:1.5rem; left:1.5rem; z-index:200;
+      background:var(--green-dark); color:#fff; border:none; border-radius:50%; width:48px; height:48px;
+      font-size:1.3rem; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.2); }
+    @media(max-width:768px) {
+      .sidebar { position:fixed; left:-240px; top:0; z-index:150; transition:left 0.3s; height:100%; }
+      .sidebar.open { left:0; }
+      .dash-main { padding:1rem; }
+      .sidebar-toggle { display:flex; align-items:center; justify-content:center; }
+    }
+
+    /* ── Sujet form ── */
+    .sujet-form { padding:1.25rem; border-bottom:1px solid var(--border); background:#f8f9fa; }
+    .sujet-form h4 { font-family:var(--font-head); font-weight:700; font-size:0.9rem; margin-bottom:0.75rem; }
+    .sujet-form .row { display:flex; gap:0.5rem; flex-wrap:wrap; }
+    .sujet-form input, .sujet-form textarea {
+      flex:1; min-width:180px; padding:0.55rem 0.9rem; border:1.5px solid var(--border);
+      border-radius:var(--radius-sm); font-family:var(--font-body); font-size:0.88rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════ -->
+<!-- ÉCRAN LOGIN                            -->
+<!-- ══════════════════════════════════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <span class="big-icon">🇨🇩</span>
+      <h1>Parlons<span style="color:var(--gold-dark);">Nation</span></h1>
+      <p>Espace Administrateur</p>
+    </div>
+
+    <div id="loginError" class="alert alert-error hidden" style="margin-bottom:1rem;"></div>
+
+    <div class="form-group">
+      <label class="form-label" for="loginEmail">Email <span class="required">*</span></label>
+      <input type="email" id="loginEmail" class="form-control" placeholder="admin@parlonsnation.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="loginPassword">Mot de passe <span class="required">*</span></label>
+      <input type="password" id="loginPassword" class="form-control" placeholder="••••••••••••" autocomplete="current-password">
+    </div>
+
+    <button class="btn btn-primary btn-block" id="loginBtn" style="margin-top:0.5rem;">
+      <span id="loginText">Se connecter</span>
+      <span id="loginSpinner" class="hidden" style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-left:6px;"></span>
+    </button>
+
+    <p style="text-align:center;margin-top:1.25rem;font-size:0.8rem;color:var(--text-muted);">
+      <a href="index.html" style="color:var(--green);">← Retour au site public</a>
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- DASHBOARD                              -->
+<!-- ══════════════════════════════════════ -->
+<div id="dashboard">
+  <div class="dash-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="s-brand">Parlons<span>Nation</span></div>
+        <div class="s-email" id="sidebarEmail">—</div>
+        <div class="s-role" id="sidebarRole">—</div>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-section="metrics"><span class="nav-icon">📊</span> Métriques</button>
+        <button class="nav-item" data-section="citoyens"><span class="nav-icon">👥</span> Citoyens</button>
+        <button class="nav-item" data-section="sujets"><span class="nav-icon">📋</span> Sujets & Votes</button>
+        <button class="nav-item" data-section="forum"><span class="nav-icon">💬</span> Modération</button>
+        <button class="nav-item" data-section="provinces"><span class="nav-icon">🗺️</span> Provinces</button>
+        <button class="nav-item" data-section="exports"><span class="nav-icon">📤</span> Exports</button>
+        <button class="nav-item" data-section="logs"><span class="nav-icon">📝</span> Logs</button>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="logout-btn" id="logoutBtn">🔓 Déconnexion</button>
+        <div style="font-size:0.7rem;opacity:0.4;margin-top:0.5rem;">Session expire dans <span id="sessionTimer">—</span></div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="dash-main">
+
+      <!-- ── MÉTRIQUES ── -->
+      <div id="section-metrics">
+        <div class="dash-topbar">
+          <h2>📊 Tableau de bord</h2>
+          <button class="refresh-btn" id="refreshMetrics">↻ Actualiser</button>
+        </div>
+        <div class="metrics-grid" id="metricsGrid">
+          <div class="panel-loading">Chargement…</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1.5rem;" id="metricsCharts">
+          <!-- Vote distribution -->
+          <div class="dash-panel">
+            <div class="panel-header"><h3>🗳️ Répartition des votes</h3></div>
+            <div id="voteDistrib" style="padding:1.25rem;"><div class="panel-loading">Chargement…</div></div>
+          </div>
+          <!-- Statuts citoyens -->
+          <div class="dash-panel">
+            <div class="panel-header"><h3>👥 Statuts inscrits</h3></div>
+            <div id="statutDistrib" style="padding:1.25rem;"><div class="panel-loading">Chargement…</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CITOYENS ── -->
+      <div id="section-citoyens" style="display:none;">
+        <div class="dash-topbar">
+          <h2>👥 Gestion des citoyens</h2>
+          <button class="refresh-btn" id="refreshCitoyens">↻ Actualiser</button>
+        </div>
+        <div class="dash-panel">
+          <div class="filter-bar">
+            <select id="filterStatut">
+              <option value="">Tous les statuts</option>
+              <option value="en_attente">En attente</option>
+              <option value="verifie">Vérifiés</option>
+              <option value="rejete">Rejetés</option>
+              <option value="suspendu">Suspendus</option>
+            </select>
+            <select id="filterProvince"><option value="">Toutes provinces</option></select>
+            <input type="date" id="filterDateMin" placeholder="Depuis">
+            <input type="date" id="filterDateMax" placeholder="Jusqu'à">
+            <button class="act-btn act-toggle" onclick="loadCitoyens(1)">Filtrer</button>
+          </div>
+          <div class="overflow-x">
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th>Date</th><th>Nom</th><th>Province</th><th>Statut</th>
+                  <th>Score</th><th>Photo</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="citoyensBody"><tr><td colspan="7" class="panel-loading">Chargement…</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <span id="citoyensPagInfo" style="font-size:0.82rem;color:var(--text-muted);">—</span>
+            <div class="pag-btns">
+              <button class="pag-btn" id="prevPage" disabled>‹ Précédent</button>
+              <button class="pag-btn" id="nextPage" disabled>Suivant ›</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SUJETS ── -->
+      <div id="section-sujets" style="display:none;">
+        <div class="dash-topbar">
+          <h2>📋 Sujets de consultation</h2>
+          <button class="refresh-btn" id="refreshSujets">↻ Actualiser</button>
+        </div>
+        <div class="dash-panel">
+          <div class="sujet-form">
+            <h4>➕ Ajouter un nouveau sujet</h4>
+            <div class="row">
+              <input type="text" id="newSujetTitre" placeholder="Titre du sujet *" style="flex:2;">
+              <input type="text" id="newSujetDesc" placeholder="Description (optionnel)">
+              <button class="btn btn-primary btn-sm" id="addSujetBtn">Ajouter</button>
+            </div>
+          </div>
+          <div class="overflow-x">
+            <table class="dash-table">
+              <thead><tr><th>Titre</th><th>Statut</th><th>Votes</th><th>Créé le</th><th>Actions</th></tr></thead>
+              <tbody id="sujetsBody"><tr><td colspan="5" class="panel-loading">Chargement…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── FORUM / MODÉRATION ── -->
+      <div id="section-forum" style="display:none;">
+        <div class="dash-topbar">
+          <h2>💬 Modération du forum</h2>
+          <button class="refresh-btn" id="refreshForum">↻ Actualiser</button>
+        </div>
+        <div class="dash-panel">
+          <div class="filter-bar">
+            <select id="filterForumStatut">
+              <option value="">Tous les commentaires</option>
+              <option value="signaled">Avec signalements</option>
+            </select>
+          </div>
+          <div class="overflow-x">
+            <table class="dash-table">
+              <thead><tr><th>Date</th><th>Citoyen</th><th>Commentaire</th><th>Choix</th><th>Signalements</th><th>Action</th></tr></thead>
+              <tbody id="forumBody"><tr><td colspan="6" class="panel-loading">Chargement…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PROVINCES ── -->
+      <div id="section-provinces" style="display:none;">
+        <div class="dash-topbar">
+          <h2>🗺️ Statistiques par province</h2>
+          <button class="refresh-btn" id="refreshProvinces">↻ Actualiser</button>
+        </div>
+        <div class="dash-panel">
+          <div class="overflow-x">
+            <table class="dash-table">
+              <thead><tr><th>#</th><th>Province</th><th>Inscrits</th><th>Votes</th><th>Option dominante</th><th>Taux vote</th></tr></thead>
+              <tbody id="provincesBody"><tr><td colspan="6" class="panel-loading">Chargement…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── EXPORTS ── -->
+      <div id="section-exports" style="display:none;">
+        <div class="dash-topbar"><h2>📤 Exports</h2></div>
+        <div class="dash-panel">
+          <div class="export-grid">
+            <div class="export-card" onclick="exportCSV('votes')">
+              <span class="exp-icon">📊</span>
+              <div class="exp-label">Votes anonymisés (CSV)</div>
+              <div class="exp-desc">Option vote + province + date. Sans données personnelles.</div>
+            </div>
+            <div class="export-card" onclick="exportCSV('citoyens')">
+              <span class="exp-icon">👥</span>
+              <div class="exp-label">Inscrits (CSV)</div>
+              <div class="exp-desc">Province + statut + score + date. Sans CIN ni téléphone.</div>
+            </div>
+            <div class="export-card" onclick="exportCSV('provinces')">
+              <span class="exp-icon">🗺️</span>
+              <div class="exp-label">Statistiques provinces (CSV)</div>
+              <div class="exp-desc">Inscrits + votes + option dominante par province.</div>
+            </div>
+            <div class="export-card" onclick="exportJSON()">
+              <span class="exp-icon">🔌</span>
+              <div class="exp-label">API JSON</div>
+              <div class="exp-desc">Données agrégées au format JSON pour partenaires.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── LOGS ── -->
+      <div id="section-logs" style="display:none;">
+        <div class="dash-topbar">
+          <h2>📝 Logs d'activité</h2>
+          <button class="refresh-btn" id="refreshLogs">↻ Actualiser</button>
+        </div>
+        <div class="dash-panel">
+          <div class="overflow-x">
+            <table class="dash-table">
+              <thead><tr><th>Date</th><th>Admin</th><th>Action</th><th>Détails</th></tr></thead>
+              <tbody id="logsBody"><tr><td colspan="4" class="panel-loading">Chargement…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<button class="sidebar-toggle" id="sidebarToggle">☰</button>
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://yagvezgfmxvrnngrxeuv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ZwpN3mfLueArH7Iq_dJdYA_4ZxY2Ke_';
+const SESSION_TTL  = 2 * 60 * 60 * 1000; // 2 heures
+const PAGE_SIZE    = 20;
+const { createClient } = window.supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const VOTE_LABELS = { A:'Changer totalement', B:'Réviser partiellement', C:'Conserver telle quelle', D:'Abstention' };
+const VOTE_COLORS = { A:'#2563EB', B:'#7C3AED', C:'#CE1020', D:'#6B7280' };
+
+// ── UTILITAIRES ───────────────────────────────────────────
+function toast(msg, type='success') {
+  const t = document.createElement('div');
+  t.className = `toast${type==='error'?' toast-error':''}`;
+  t.textContent = msg;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(() => t.remove(), 3200);
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ── SESSION ───────────────────────────────────────────────
+let adminSession = null;
+
+function loadSession() {
+  const raw = localStorage.getItem('pn_admin_session');
+  if (!raw) return null;
+  const s = JSON.parse(raw);
+  if (Date.now() > s.expiry) { localStorage.removeItem('pn_admin_session'); return null; }
+  return s;
+}
+
+function saveSession(data) {
+  const s = { ...data, expiry: Date.now() + SESSION_TTL };
+  localStorage.setItem('pn_admin_session', JSON.stringify(s));
+  return s;
+}
+
+function clearSession() { localStorage.removeItem('pn_admin_session'); }
+
+// ── TIMER SESSION ─────────────────────────────────────────
+function startSessionTimer() {
+  setInterval(() => {
+    if (!adminSession) return;
+    const left = adminSession.expiry - Date.now();
+    if (left <= 0) { toast('Session expirée. Reconnexion requise.', 'error'); doLogout(); return; }
+    const m = Math.floor(left / 60000);
+    const s = Math.floor((left % 60000) / 1000);
+    document.getElementById('sessionTimer').textContent = `${m}m${String(s).padStart(2,'0')}s`;
+  }, 1000);
+}
+
+// ── NAVIGATION SECTIONS ───────────────────────────────────
+const sections = ['metrics','citoyens','sujets','forum','provinces','exports','logs'];
+let currentSection = 'metrics';
+
+function showSection(name) {
+  sections.forEach(s => {
+    document.getElementById(`section-${s}`).style.display = s === name ? '' : 'none';
+  });
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.section === name);
+  });
+  currentSection = name;
+  loadSection(name);
+}
+
+function loadSection(name) {
+  if (name === 'metrics')   loadMetrics();
+  if (name === 'citoyens')  loadCitoyens(1);
+  if (name === 'sujets')    loadSujets();
+  if (name === 'forum')     loadForum();
+  if (name === 'provinces') loadProvinces();
+  if (name === 'logs')      loadLogs();
+}
+
+document.querySelectorAll('.nav-item').forEach(btn => {
+  btn.addEventListener('click', () => showSection(btn.dataset.section));
+});
+
+// ── LOGIN ─────────────────────────────────────────────────
+document.getElementById('loginBtn').addEventListener('click', doLogin);
+document.getElementById('loginPassword').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+async function doLogin() {
+  const email    = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errDiv   = document.getElementById('loginError');
+  errDiv.classList.add('hidden');
+
+  if (!email || !password) { errDiv.textContent='Email et mot de passe requis.'; errDiv.classList.remove('hidden'); return; }
+
+  document.getElementById('loginBtn').disabled = true;
+  document.getElementById('loginText').textContent = 'Connexion…';
+  document.getElementById('loginSpinner').classList.remove('hidden');
+
+  try {
+    const { data, error } = await db.rpc('admin_login', { p_email: email, p_password: password });
+    if (error || !data?.success) {
+      errDiv.textContent = data?.message || 'Identifiants incorrects.';
+      errDiv.classList.remove('hidden');
+      return;
+    }
+    adminSession = saveSession(data);
+    enterDashboard();
+  } catch(e) {
+    errDiv.textContent = 'Erreur de connexion : ' + e.message;
+    errDiv.classList.remove('hidden');
+  } finally {
+    document.getElementById('loginBtn').disabled = false;
+    document.getElementById('loginText').textContent = 'Se connecter';
+    document.getElementById('loginSpinner').classList.add('hidden');
+  }
+}
+
+function enterDashboard() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('sidebarEmail').textContent = adminSession.email;
+  document.getElementById('sidebarRole').textContent  = adminSession.role.replace('_',' ');
+  loadProvinceFilter();
+  showSection('metrics');
+  startSessionTimer();
+}
+
+// ── LOGOUT ────────────────────────────────────────────────
+document.getElementById('logoutBtn').addEventListener('click', doLogout);
+function doLogout() {
+  clearSession(); adminSession = null;
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginPassword').value = '';
+}
+
+// ── SIDEBAR MOBILE TOGGLE ─────────────────────────────────
+document.getElementById('sidebarToggle').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+// ── MÉTRIQUES ─────────────────────────────────────────────
+document.getElementById('refreshMetrics').addEventListener('click', loadMetrics);
+
+async function loadMetrics() {
+  try {
+    const [
+      { count: total },
+      { data: byStatut },
+      { count: today },
+      { count: week },
+      { data: byVote }
+    ] = await Promise.all([
+      db.from('citoyens').select('*', { count:'exact', head:true }),
+      db.from('citoyens').select('statut'),
+      db.from('citoyens').select('*', { count:'exact', head:true }).gte('created_at', new Date().toISOString().slice(0,10)),
+      db.from('citoyens').select('*', { count:'exact', head:true }).gte('created_at', new Date(Date.now()-7*864e5).toISOString()),
+      db.from('votes').select('choix')
+    ]);
+
+    const statuts = { en_attente:0, verifie:0, rejete:0, suspendu:0 };
+    (byStatut||[]).forEach(r => { if(statuts[r.statut]!==undefined) statuts[r.statut]++; });
+
+    const totalV = (byVote||[]).length;
+    const tauxVerif = total > 0 ? Math.round((statuts.verifie / total) * 100) : 0;
+
+    const cards = [
+      { label:'Total inscrits',   value:(total||0).toLocaleString('fr-FR'), sub:'depuis le lancement', color:'#0F6E56' },
+      { label:'Aujourd\'hui',     value:(today||0).toLocaleString('fr-FR'), sub:'nouvelles inscriptions', color:'#2563EB' },
+      { label:'Cette semaine',    value:(week||0).toLocaleString('fr-FR'),  sub:'7 derniers jours', color:'#7C3AED' },
+      { label:'Total votes',      value:(totalV).toLocaleString('fr-FR'),   sub:'votes enregistrés', color:'#CE1020' },
+      { label:'Taux vérification',value:tauxVerif+'%',                       sub:`${statuts.verifie} vérifiés`, color:'#059669' },
+      { label:'En attente',       value:(statuts.en_attente).toLocaleString('fr-FR'), sub:'à traiter', color:'#f59e0b' },
+    ];
+
+    document.getElementById('metricsGrid').innerHTML = cards.map(c => `
+      <div class="metric-card" style="--m-color:${c.color}">
+        <div class="metric-label">${c.label}</div>
+        <div class="metric-value">${c.value}</div>
+        <div class="metric-sub">${c.sub}</div>
+      </div>`).join('');
+
+    // Votes distribution
+    const voteCount = { A:0, B:0, C:0, D:0 };
+    (byVote||[]).forEach(r => { if(voteCount[r.choix]!==undefined) voteCount[r.choix]++; });
+    const vMax = Math.max(...Object.values(voteCount), 1);
+    document.getElementById('voteDistrib').innerHTML = Object.entries(voteCount).map(([k,v]) => `
+      <div style="margin-bottom:0.75rem;">
+        <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:0.3rem;">
+          <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${VOTE_COLORS[k]};margin-right:5px;"></span><strong>Option ${k}</strong> — ${VOTE_LABELS[k]}</span>
+          <strong>${v} (${totalV?Math.round(v/totalV*100):0}%)</strong>
+        </div>
+        <div class="vote-bar-wrap" style="max-width:100%">
+          <div class="vote-bar" style="width:${Math.round(v/vMax*100)}%;background:${VOTE_COLORS[k]};"></div>
+        </div>
+      </div>`).join('');
+
+    // Statuts distribution
+    const statutColors = { en_attente:'#f59e0b', verifie:'#059669', rejete:'#CE1020', suspendu:'#6B7280' };
+    document.getElementById('statutDistrib').innerHTML = Object.entries(statuts).map(([k,v]) => `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #f3f4f6;font-size:0.85rem;">
+        <span style="display:flex;align-items:center;gap:0.5rem;">
+          <span style="width:10px;height:10px;border-radius:50%;background:${statutColors[k]};flex-shrink:0;"></span>
+          ${k.replace('_',' ')}
+        </span>
+        <strong>${v}</strong>
+      </div>`).join('');
+
+  } catch(e) { console.error(e); }
+}
+
+// ── CITOYENS ──────────────────────────────────────────────
+let citoyensPage = 1, citoyensTotal = 0;
+
+document.getElementById('refreshCitoyens').addEventListener('click', () => loadCitoyens(1));
+document.getElementById('prevPage').addEventListener('click', () => loadCitoyens(citoyensPage - 1));
+document.getElementById('nextPage').addEventListener('click', () => loadCitoyens(citoyensPage + 1));
+
+async function loadProvinceFilter() {
+  const { data } = await db.from('provinces').select('id,nom').order('nom');
+  const sel = document.getElementById('filterProvince');
+  (data||[]).forEach(p => { const o = document.createElement('option'); o.value=p.id; o.textContent=p.nom; sel.appendChild(o); });
+}
+
+async function loadCitoyens(page) {
+  citoyensPage = page;
+  const statut  = document.getElementById('filterStatut').value;
+  const prov    = document.getElementById('filterProvince').value;
+  const dateMin = document.getElementById('filterDateMin').value;
+  const dateMax = document.getElementById('filterDateMax').value;
+
+  let q = db.from('citoyens')
+    .select('id,nom,post_nom,prenom,statut,score_verification,cin_photo_url,created_at,province_id,provinces(nom)', { count:'exact' })
+    .order('created_at', { ascending:false })
+    .range((page-1)*PAGE_SIZE, page*PAGE_SIZE - 1);
+
+  if (statut)  q = q.eq('statut', statut);
+  if (prov)    q = q.eq('province_id', parseInt(prov));
+  if (dateMin) q = q.gte('created_at', dateMin);
+  if (dateMax) q = q.lte('created_at', dateMax + 'T23:59:59');
+
+  const { data, count, error } = await q;
+  citoyensTotal = count || 0;
+
+  const body = document.getElementById('citoyensBody');
+  if (error || !data?.length) {
+    body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted);">Aucun résultat</td></tr>';
+  } else {
+    body.innerHTML = data.map(c => `
+      <tr>
+        <td style="white-space:nowrap;font-size:0.78rem;color:var(--text-muted);">${fmtDate(c.created_at)}</td>
+        <td><strong>${esc(c.nom||'—')}</strong> ${esc(c.post_nom||'')} ${esc(c.prenom||'')}</td>
+        <td style="font-size:0.8rem;">${esc(c.provinces?.nom||'—')}</td>
+        <td><span class="status-pill st-${c.statut}">${c.statut?.replace('_',' ')||'—'}</span></td>
+        <td>
+          <div style="display:flex;align-items:center;gap:0.4rem;">
+            <div style="width:50px;background:#e5e7eb;border-radius:4px;height:6px;">
+              <div style="width:${c.score_verification||0}%;background:var(--green);border-radius:4px;height:6px;"></div>
+            </div>
+            <span style="font-size:0.75rem;font-weight:700;">${c.score_verification||0}</span>
+          </div>
+        </td>
+        <td style="text-align:center;">${c.cin_photo_url ? '✅' : '—'}</td>
+        <td style="white-space:nowrap;">
+          <button class="act-btn act-verify"  onclick="updateCitoyen('${c.id}','verifie')">✓ Vérifier</button>
+          <button class="act-btn act-reject"  onclick="updateCitoyen('${c.id}','rejete')"  style="margin-left:3px;">✗ Rejeter</button>
+          <button class="act-btn act-suspend" onclick="updateCitoyen('${c.id}','suspendu')" style="margin-left:3px;">⏸</button>
+        </td>
+      </tr>`).join('');
+  }
+
+  const totalPages = Math.ceil(citoyensTotal / PAGE_SIZE);
+  document.getElementById('citoyensPagInfo').textContent = `${citoyensTotal} résultats — page ${page}/${totalPages||1}`;
+  document.getElementById('prevPage').disabled = page <= 1;
+  document.getElementById('nextPage').disabled = page >= totalPages;
+}
+
+async function updateCitoyen(id, statut) {
+  const { data, error } = await db.rpc('admin_update_citoyen', {
+    p_admin_id: adminSession.admin_id, p_citoyen_id: id, p_statut: statut
+  });
+  if (error || !data?.success) { toast('Erreur : ' + (data?.message||error?.message), 'error'); return; }
+  toast(`Citoyen ${statut.replace('_',' ')}.`);
+  loadCitoyens(citoyensPage);
+}
+
+// ── SUJETS ────────────────────────────────────────────────
+document.getElementById('refreshSujets').addEventListener('click', loadSujets);
+document.getElementById('addSujetBtn').addEventListener('click', addSujet);
+
+async function loadSujets() {
+  const [{ data: sujets }, { data: votes }] = await Promise.all([
+    db.from('sujets').select('*').order('created_at', { ascending:false }),
+    db.from('votes').select('sujet_id, choix')
+  ]);
+
+  const votesMap = {};
+  (votes||[]).forEach(v => {
+    if (!votesMap[v.sujet_id]) votesMap[v.sujet_id] = { total:0 };
+    votesMap[v.sujet_id].total++;
+    votesMap[v.sujet_id][v.choix] = (votesMap[v.sujet_id][v.choix]||0) + 1;
+  });
+
+  const body = document.getElementById('sujetsBody');
+  if (!sujets?.length) {
+    body.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-muted);">Aucun sujet</td></tr>';
+    return;
+  }
+  body.innerHTML = sujets.map(s => {
+    const v = votesMap[s.id] || { total:0 };
+    const dominant = Object.entries(VOTE_LABELS).reduce((best, [k]) => {
+      return (v[k]||0) > (v[best]||0) ? k : best;
+    }, 'A');
+    return `<tr>
+      <td><strong>${esc(s.titre)}</strong>${s.description?`<br><span style="font-size:0.78rem;color:var(--text-muted);">${esc(s.description)}</span>`:''}
+      </td>
+      <td><span class="status-pill" style="background:${s.actif?'#d1fae5':'#e5e7eb'};color:${s.actif?'#065f46':'#374151'};">${s.actif?'Actif':'Inactif'}</span></td>
+      <td>${v.total.toLocaleString('fr-FR')} <span style="font-size:0.72rem;color:var(--text-muted);">votes</span>
+        ${v.total ? `<br><span style="font-size:0.72rem;color:${VOTE_COLORS[dominant]};">► ${dominant} : ${VOTE_LABELS[dominant]}</span>` : ''}
+      </td>
+      <td style="font-size:0.78rem;color:var(--text-muted);white-space:nowrap;">${fmtDate(s.created_at)}</td>
+      <td><button class="act-btn act-toggle" onclick="toggleSujet('${s.id}',${!s.actif})">${s.actif?'⏸ Désactiver':'▶ Activer'}</button></td>
+    </tr>`;
+  }).join('');
+}
+
+async function toggleSujet(id, actif) {
+  const { data, error } = await db.rpc('admin_toggle_sujet', {
+    p_admin_id: adminSession.admin_id, p_sujet_id: id, p_actif: actif
+  });
+  if (error || !data?.success) { toast('Erreur', 'error'); return; }
+  toast(`Sujet ${actif?'activé':'désactivé'}.`);
+  loadSujets();
+}
+
+async function addSujet() {
+  const titre = document.getElementById('newSujetTitre').value.trim();
+  const desc  = document.getElementById('newSujetDesc').value.trim();
+  if (!titre) { toast('Le titre est obligatoire.', 'error'); return; }
+  const { data, error } = await db.rpc('admin_add_sujet', {
+    p_admin_id: adminSession.admin_id, p_titre: titre, p_description: desc || null
+  });
+  if (error || !data?.success) { toast('Erreur : ' + (error?.message||''), 'error'); return; }
+  toast('Sujet ajouté !');
+  document.getElementById('newSujetTitre').value = '';
+  document.getElementById('newSujetDesc').value = '';
+  loadSujets();
+}
+
+// ── FORUM / MODÉRATION ────────────────────────────────────
+document.getElementById('refreshForum').addEventListener('click', loadForum);
+document.getElementById('filterForumStatut').addEventListener('change', loadForum);
+
+async function loadForum() {
+  const filterSignaled = document.getElementById('filterForumStatut').value === 'signaled';
+  const { data: comments } = await db.from('commentaires')
+    .select('id,texte,choix,created_at,citoyen_id,pseudo_public,citoyens(pseudo)')
+    .order('created_at', { ascending:false })
+    .limit(50);
+
+  const { data: sigs } = await db.from('signalements')
+    .select('commentaire_id')
+    .eq('traite', false);
+
+  const sigMap = {};
+  (sigs||[]).forEach(s => { sigMap[s.commentaire_id] = (sigMap[s.commentaire_id]||0) + 1; });
+
+  const body = document.getElementById('forumBody');
+  let rows = (comments||[]);
+  if (filterSignaled) rows = rows.filter(r => sigMap[r.id] > 0);
+
+  if (!rows.length) {
+    body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-muted);">Aucun commentaire</td></tr>';
+    return;
+  }
+  body.innerHTML = rows.map(c => `
+    <tr>
+      <td style="white-space:nowrap;font-size:0.78rem;color:var(--text-muted);">${fmtDate(c.created_at)}</td>
+      <td style="font-size:0.82rem;">${esc(c.citoyens?.pseudo||c.pseudo_public||'Anonyme')}</td>
+      <td style="max-width:280px;font-size:0.82rem;">${esc(c.texte?.slice(0,120)+(c.texte?.length>120?'…':''))}</td>
+      <td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${VOTE_COLORS[c.choix]||'#ccc'};"></span> ${c.choix||'—'}</td>
+      <td>${sigMap[c.id] ? `<span class="sig-badge">⚑ ${sigMap[c.id]}</span>` : '—'}</td>
+      <td><button class="act-btn act-delete" onclick="deleteComment('${c.id}')">🗑 Supprimer</button></td>
+    </tr>`).join('');
+}
+
+async function deleteComment(id) {
+  if (!confirm('Supprimer ce commentaire ?')) return;
+  const { data, error } = await db.rpc('admin_delete_commentaire', {
+    p_admin_id: adminSession.admin_id, p_commentaire_id: id
+  });
+  if (error || !data?.success) { toast('Erreur', 'error'); return; }
+  toast('Commentaire supprimé.');
+  loadForum();
+}
+
+// ── PROVINCES ─────────────────────────────────────────────
+document.getElementById('refreshProvinces').addEventListener('click', loadProvinces);
+
+async function loadProvinces() {
+  const [{ data: provs }, { data: citoyens }, { data: votes }] = await Promise.all([
+    db.from('provinces').select('id,nom').order('nom'),
+    db.from('citoyens').select('province_id'),
+    db.from('votes').select('province_id,choix')
+  ]);
+
+  const inscMap = {}, voteMap = {}, voteChoix = {};
+  (citoyens||[]).forEach(c => { inscMap[c.province_id] = (inscMap[c.province_id]||0) + 1; });
+  (votes||[]).forEach(v => {
+    voteMap[v.province_id] = (voteMap[v.province_id]||0) + 1;
+    if (!voteChoix[v.province_id]) voteChoix[v.province_id] = {};
+    voteChoix[v.province_id][v.choix] = (voteChoix[v.province_id][v.choix]||0) + 1;
+  });
+
+  const body = document.getElementById('provincesBody');
+  if (!provs?.length) { body.innerHTML = '<tr><td colspan="6" class="panel-loading">Aucune province</td></tr>'; return; }
+
+  body.innerHTML = provs.map((p, i) => {
+    const ins = inscMap[p.id]||0;
+    const vot = voteMap[p.id]||0;
+    const taux = ins > 0 ? Math.round(vot/ins*100) : 0;
+    const vc   = voteChoix[p.id]||{};
+    const dom  = Object.entries(vc).reduce((a,[k,v]) => v>a[1]?[k,v]:a, ['—',0])[0];
+    return `<tr>
+      <td style="color:var(--text-muted);font-size:0.8rem;">${i+1}</td>
+      <td><strong>${esc(p.nom)}</strong></td>
+      <td>${ins.toLocaleString('fr-FR')}</td>
+      <td>${vot.toLocaleString('fr-FR')}</td>
+      <td>${dom!=='—'?`<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${VOTE_COLORS[dom]};margin-right:4px;"></span>${dom}`:dom}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:0.4rem;">
+          <div style="width:60px;background:#e5e7eb;border-radius:4px;height:6px;">
+            <div style="width:${taux}%;background:var(--green);border-radius:4px;height:6px;max-width:100%;"></div>
+          </div>
+          <span style="font-size:0.75rem;font-weight:700;">${taux}%</span>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── EXPORTS CSV/JSON ──────────────────────────────────────
+async function exportCSV(type) {
+  let rows = [], headers = [], filename = '';
+
+  if (type === 'votes') {
+    const { data } = await db.from('votes').select('choix,province_id,created_at,provinces(nom)').order('created_at');
+    headers = ['Choix','Option','Province','Date'];
+    rows = (data||[]).map(r => [r.choix, VOTE_LABELS[r.choix]||'', r.provinces?.nom||'', r.created_at?.slice(0,10)||'']);
+    filename = 'parlonsnation_votes.csv';
+  } else if (type === 'citoyens') {
+    const { data } = await db.from('citoyens').select('statut,score_verification,created_at,diaspora,provinces(nom)').order('created_at');
+    headers = ['Province','Statut','Score','Diaspora','Date inscription'];
+    rows = (data||[]).map(r => [r.provinces?.nom||'', r.statut||'', r.score_verification||0, r.diaspora?'Oui':'Non', r.created_at?.slice(0,10)||'']);
+    filename = 'parlonsnation_inscrits.csv';
+  } else if (type === 'provinces') {
+    const [{ data: provs }, { data: c2 }, { data: v2 }] = await Promise.all([
+      db.from('provinces').select('id,nom').order('nom'),
+      db.from('citoyens').select('province_id'),
+      db.from('votes').select('province_id,choix')
+    ]);
+    const im = {}, vm = {}, vc2 = {};
+    (c2||[]).forEach(c => { im[c.province_id]=(im[c.province_id]||0)+1; });
+    (v2||[]).forEach(v => { vm[v.province_id]=(vm[v.province_id]||0)+1; if(!vc2[v.province_id])vc2[v.province_id]={}; vc2[v.province_id][v.choix]=(vc2[v.province_id][v.choix]||0)+1; });
+    headers = ['Province','Inscrits','Votes','Option dominante'];
+    rows = (provs||[]).map(p => {
+      const dom = Object.entries(vc2[p.id]||{}).reduce((a,[k,v])=>v>a[1]?[k,v]:a,['—',0])[0];
+      return [p.nom, im[p.id]||0, vm[p.id]||0, dom];
+    });
+    filename = 'parlonsnation_provinces.csv';
+  }
+
+  const csv = [headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(['﻿' + csv], { type:'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a'); a.href=url; a.download=filename; a.click();
+  URL.revokeObjectURL(url);
+  toast('Export CSV téléchargé.');
+}
+
+async function exportJSON() {
+  const [{ data: sujets }, { data: votes }, { count: inscrits }] = await Promise.all([
+    db.from('sujets').select('id,titre,actif'),
+    db.from('votes').select('choix,province_id'),
+    db.from('citoyens').select('*', { count:'exact', head:true })
+  ]);
+  const vc = { A:0, B:0, C:0, D:0 };
+  (votes||[]).forEach(v => { if(vc[v.choix]!==undefined) vc[v.choix]++; });
+  const json = JSON.stringify({ generated_at: new Date().toISOString(), inscrits, votes_totaux: votes?.length||0, repartition: vc, sujets }, null, 2);
+  const blob = new Blob([json], { type:'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a'); a.href=url; a.download='parlonsnation_api.json'; a.click();
+  URL.revokeObjectURL(url);
+  toast('Export JSON téléchargé.');
+}
+
+// ── LOGS ──────────────────────────────────────────────────
+document.getElementById('refreshLogs').addEventListener('click', loadLogs);
+
+async function loadLogs() {
+  const { data } = await db.rpc('get_admin_logs').catch(() => ({ data: null }));
+  // Fallback: try direct select (won't work with deny_all RLS, but graceful)
+  const { data: logs } = data ? { data } :
+    await db.from('admin_logs').select('action,details,created_at,admin_id').order('created_at', { ascending:false }).limit(100).catch(() => ({ data: [] }));
+
+  const body = document.getElementById('logsBody');
+  if (!logs?.length) {
+    body.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:2rem;color:var(--text-muted);">Aucun log disponible</td></tr>';
+    return;
+  }
+  body.innerHTML = logs.map(l => `
+    <tr>
+      <td style="white-space:nowrap;font-size:0.78rem;color:var(--text-muted);">${fmtDate(l.created_at)}</td>
+      <td style="font-size:0.78rem;">${esc(l.email||l.admin_id?.slice(0,8)||'—')}</td>
+      <td><code style="font-size:0.78rem;background:#f3f4f6;padding:0.1rem 0.4rem;border-radius:3px;">${esc(l.action)}</code></td>
+      <td style="font-size:0.78rem;color:var(--text-muted);">${l.details ? JSON.stringify(l.details).slice(0,80) : '—'}</td>
+    </tr>`).join('');
+}
+
+// ── INIT ──────────────────────────────────────────────────
+adminSession = loadSession();
+if (adminSession) enterDashboard();
+</script>
+</body>
+</html>

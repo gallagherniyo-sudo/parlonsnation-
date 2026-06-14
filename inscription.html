@@ -6,7 +6,106 @@
   <title>S'inscrire — ParlonsNation</title>
   <meta name="description" content="Inscrivez-vous pour participer au débat constitutionnel de la RDC.">
   <meta name="theme-color" content="#0F6E56">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src https://*.supabase.co https://api.mindee.net; img-src 'self' data: blob: https://*.supabase.co;">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Grille noms ── */
+    .name-grid { display:grid; grid-template-columns:1fr; gap:0.75rem; }
+    @media(min-width:540px){ .name-grid { grid-template-columns:1fr 1fr; } }
+    @media(min-width:800px){ .name-grid { grid-template-columns:1fr 1fr 1fr; } }
+
+    /* ── Sexe radios ── */
+    .sexe-opts { display:flex; gap:1rem; }
+    .sexe-opts label {
+      display:flex; align-items:center; gap:0.5rem;
+      padding:0.65rem 1.25rem; border:2px solid var(--border);
+      border-radius:var(--radius-sm); cursor:pointer; font-weight:600;
+      transition:all 0.2s; flex:1; justify-content:center;
+    }
+    .sexe-opts label:has(input:checked) {
+      border-color:var(--green); background:var(--green-pale); color:var(--green);
+    }
+
+    /* ── Âge badge ── */
+    .age-badge {
+      display:inline-flex; align-items:center; gap:0.4rem;
+      padding:0.3rem 0.8rem; border-radius:50px; font-size:0.82rem; font-weight:700;
+      margin-top:0.35rem;
+    }
+    .age-ok  { background:#d1fae5; color:#065f46; }
+    .age-bad { background:#fee2e2; color:#991b1b; }
+
+    /* ── CIN Section ── */
+    .cin-section {
+      border:1px solid var(--border); border-radius:var(--radius-sm);
+      padding:1.25rem; background:#fafafa; margin-bottom:1rem;
+    }
+    .cin-section-title {
+      font-family:var(--font-head); font-size:0.82rem; font-weight:700;
+      text-transform:uppercase; letter-spacing:0.06em; color:var(--green);
+      margin-bottom:1rem; display:flex; align-items:center; gap:0.4rem;
+    }
+
+    /* ── Upload photo ── */
+    .photo-upload-zone {
+      border:2px dashed var(--border); border-radius:var(--radius-sm);
+      cursor:pointer; overflow:hidden; transition:border-color 0.2s;
+      background:var(--white); position:relative;
+    }
+    .photo-upload-zone:hover { border-color:var(--green); }
+    .photo-upload-zone.has-file { border-color:var(--green); border-style:solid; }
+    .photo-upload-zone input[type="file"] {
+      position:absolute; inset:0; opacity:0; cursor:pointer; z-index:2;
+    }
+    .photo-placeholder {
+      padding:1.5rem 1rem; text-align:center; pointer-events:none;
+    }
+    .photo-placeholder .icon { font-size:2rem; display:block; margin-bottom:0.4rem; }
+    .photo-placeholder .label { font-size:0.82rem; color:var(--text-muted); }
+    .photo-preview {
+      display:none; width:100%; max-height:180px; object-fit:cover;
+      border-radius:calc(var(--radius-sm) - 2px);
+    }
+    .photo-preview.show { display:block; }
+    .photo-status {
+      font-size:0.75rem; font-weight:600; padding:0.3rem 0.6rem;
+      border-radius:0 0 var(--radius-sm) var(--radius-sm);
+      background:var(--green); color:#fff; text-align:center; display:none;
+    }
+    .photo-status.show { display:block; }
+
+    /* ── OCR status ── */
+    .ocr-box {
+      border-radius:var(--radius-sm); padding:0.75rem 1rem;
+      font-size:0.82rem; margin-top:0.75rem; display:none;
+    }
+    .ocr-box.show { display:block; }
+    .ocr-running { background:#eff6ff; border:1px solid #bfdbfe; color:#1e40af; }
+    .ocr-ok      { background:#d1fae5; border:1px solid #6ee7b7; color:#065f46; }
+    .ocr-warn    { background:#fef3c7; border:1px solid #fcd34d; color:#92400e; }
+
+    /* ── Score badge ── */
+    .score-display {
+      background:var(--white); border:2px solid var(--border);
+      border-radius:var(--radius-sm); padding:0.75rem 1rem;
+      margin-top:1rem; display:flex; align-items:center; gap:0.75rem;
+    }
+    .score-bar-wrap { flex:1; background:var(--border); border-radius:50px; height:8px; }
+    .score-bar { height:8px; border-radius:50px; background:var(--green); transition:width 0.4s; }
+    .score-num { font-family:var(--font-head); font-size:1.1rem; font-weight:800; color:var(--green); min-width:42px; text-align:right; }
+
+    /* ── Diviseur section ── */
+    .form-divider {
+      display:flex; align-items:center; gap:0.75rem;
+      margin:1.25rem 0; color:var(--text-muted); font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:0.06em;
+    }
+    .form-divider::before, .form-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    /* ── Rate limit banner ── */
+    .rate-limit-msg { background:#fee2e2; border:1px solid #fca5a5; border-radius:var(--radius-sm); padding:1rem; color:#991b1b; font-size:0.88rem; margin-bottom:1rem; display:none; }
+    .rate-limit-msg.show { display:block; }
+  </style>
 </head>
 <body>
 
@@ -30,16 +129,21 @@
 <div class="page-header">
   <div class="container">
     <h1>Créer votre compte citoyen</h1>
-    <p>Inscription gratuite • Données sécurisées • Anonymat garanti</p>
+    <p>Inscription gratuite • Identité vérifiée • Anonymat garanti</p>
   </div>
 </div>
 
 <!-- Formulaire d'inscription -->
 <section class="section">
   <div class="container">
-    <div style="max-width:580px;margin:0 auto;">
+    <div style="max-width:600px;margin:0 auto;">
 
-      <!-- Alerte déjà inscrit -->
+      <!-- Rate limit -->
+      <div class="rate-limit-msg" id="rateLimitMsg">
+        ⛔ Trop de tentatives. Veuillez patienter avant de réessayer.
+      </div>
+
+      <!-- Déjà inscrit -->
       <div id="alreadyRegistered" class="alert alert-warning hidden">
         ⚠️ Vous êtes déjà inscrit sur cet appareil. <a href="voter.html">Aller voter →</a>
       </div>
@@ -62,72 +166,169 @@
         </div>
       </div>
 
-      <!-- ÉTAPE 1 : Identité -->
+      <!-- ══════════════════════════════════ -->
+      <!-- ÉTAPE 1 : Identité complète        -->
+      <!-- ══════════════════════════════════ -->
       <div id="formStep1" class="card">
         <h2 style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.25rem;">Étape 1 — Votre identité</h2>
         <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.5rem;">
-          Votre numéro CIN ne sera jamais stocké. Il est converti en empreinte numérique (hash SHA-256) dès votre appareil.
+          Vos données sont chiffrées. Votre CIN n'est jamais stocké en clair.
         </p>
 
-        <div class="alert alert-info mb-3">
-          🔒 Aucune donnée personnelle n'est envoyée vers nos serveurs. Seule une empreinte numérique anonyme est transmise.
+        <!-- Noms -->
+        <div class="form-divider">Noms</div>
+        <div class="name-grid">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="nom">NOM <span class="required">*</span></label>
+            <input type="text" id="nom" class="form-control" placeholder="Ex: KABILA" autocomplete="family-name">
+            <div class="form-error" id="nom-error">Le nom est obligatoire.</div>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="post_nom">POST-NOM <span class="required">*</span></label>
+            <input type="text" id="post_nom" class="form-control" placeholder="Ex: MUNTU" autocomplete="off">
+            <div class="form-error" id="post_nom-error">Le post-nom est obligatoire.</div>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="prenom">PRÉNOM <span class="required">*</span></label>
+            <input type="text" id="prenom" class="form-control" placeholder="Ex: Jean" autocomplete="given-name">
+            <div class="form-error" id="prenom-error">Le prénom est obligatoire.</div>
+          </div>
+        </div>
+        <div style="margin-bottom:1.25rem;"></div>
+
+        <!-- Date de naissance & Sexe -->
+        <div class="form-divider">État civil</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.25rem;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="date_naissance">Date de naissance <span class="required">*</span></label>
+            <input type="date" id="date_naissance" class="form-control" max="">
+            <div id="age-badge"></div>
+            <div class="form-error" id="dob-error">Vous devez avoir au moins 18 ans pour voter.</div>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Sexe <span class="required">*</span></label>
+            <div class="sexe-opts" style="margin-top:0.4rem;">
+              <label><input type="radio" name="sexe" value="M"> 🧔 Homme</label>
+              <label><input type="radio" name="sexe" value="F"> 👩 Femme</label>
+            </div>
+            <div class="form-error" id="sexe-error">Veuillez sélectionner votre sexe.</div>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label" for="cin">
-            Numéro de Carte d'Identité Nationale (CIN) <span class="required">*</span>
-          </label>
-          <input type="text" id="cin" class="form-control" placeholder="Ex: 1234567890123456" maxlength="30" autocomplete="off">
-          <div class="form-hint">Obligatoire. Saisir sans espaces ni tirets.</div>
-          <div class="form-error" id="cin-error">Veuillez entrer un numéro CIN valide.</div>
+        <!-- Pièce d'identité -->
+        <div class="form-divider">Pièce d'identité</div>
+        <div class="cin-section">
+          <div class="cin-section-title">🪪 Carte d'Identité Nationale (CIN)</div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="cin">Numéro CIN <span class="required">*</span></label>
+              <input type="text" id="cin" class="form-control" placeholder="Ex: 1234567890" maxlength="30" autocomplete="off">
+              <div class="form-error" id="cin-error">Numéro CIN invalide (min. 6 caractères).</div>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="cin_expiry">Date d'expiration</label>
+              <input type="date" id="cin_expiry" class="form-control">
+              <div class="form-hint">Optionnel. Affiché si CIN expiré.</div>
+            </div>
+          </div>
+
+          <!-- Photos CIN -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="cin_recto">Photo recto <span class="required">*</span></label>
+              <div class="photo-upload-zone" id="zone-recto">
+                <input type="file" id="cin_recto" accept="image/jpeg,image/png,image/webp">
+                <div class="photo-placeholder">
+                  <span class="icon">📷</span>
+                  <span class="label">Cliquez ou glissez<br>Face avant du CIN</span>
+                </div>
+                <img id="preview-recto" class="photo-preview" alt="Recto CIN">
+                <div class="photo-status" id="status-recto">✓ Photo ajoutée</div>
+              </div>
+              <div class="form-error" id="recto-error">La photo recto est obligatoire.</div>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="cin_verso">Photo verso <small style="font-weight:400;color:var(--text-muted);">(optionnel)</small></label>
+              <div class="photo-upload-zone" id="zone-verso">
+                <input type="file" id="cin_verso" accept="image/jpeg,image/png,image/webp">
+                <div class="photo-placeholder">
+                  <span class="icon">📷</span>
+                  <span class="label">Cliquez ou glissez<br>Face arrière du CIN</span>
+                </div>
+                <img id="preview-verso" class="photo-preview" alt="Verso CIN">
+                <div class="photo-status" id="status-verso">✓ Photo ajoutée</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- OCR status -->
+          <div class="ocr-box ocr-running" id="ocr-running">
+            <strong>⏳ Vérification OCR en cours…</strong> Analyse de votre document.
+          </div>
+          <div class="ocr-box ocr-ok" id="ocr-ok">
+            <strong>✅ Document vérifié par OCR.</strong> Les informations ont été lues automatiquement.
+          </div>
+          <div class="ocr-box ocr-warn" id="ocr-warn">
+            <strong>⚠️ OCR non disponible.</strong> Votre document sera vérifié manuellement par notre équipe.
+          </div>
         </div>
 
+        <!-- Score de vérification -->
+        <div class="score-display" id="scoreDisplay">
+          <div>
+            <div style="font-size:0.78rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Score de vérification</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.2rem;">Se met à jour automatiquement</div>
+          </div>
+          <div class="score-bar-wrap"><div class="score-bar" id="scoreBar" style="width:0%"></div></div>
+          <div class="score-num" id="scoreNum">0/100</div>
+        </div>
+
+        <!-- Contact -->
+        <div class="form-divider">Contact</div>
         <div class="form-group">
-          <label class="form-label" for="telephone">
-            Numéro de téléphone <span class="required">*</span>
-          </label>
-          <input type="tel" id="telephone" class="form-control" placeholder="Ex: +243812345678 ou 0812345678" autocomplete="off" required>
-          <div class="form-hint">Formats acceptés : +243XXXXXXXXX · 08XXXXXXXX · 09XXXXXXXX (minimum 10 chiffres)</div>
-          <div class="form-error" id="telephone-error">Numéro invalide. Exemples : +243812345678, 0812345678, 0912345678</div>
+          <label class="form-label" for="telephone">Numéro de téléphone <span class="required">*</span></label>
+          <input type="tel" id="telephone" class="form-control" placeholder="Ex: +243812345678 ou 0812345678" autocomplete="off">
+          <div class="form-hint">Formats : +243XXXXXXXXX · 08XXXXXXXX · 09XXXXXXXX</div>
+          <div class="form-error" id="telephone-error">Format invalide. Ex: +243812345678 · 0812345678</div>
         </div>
 
         <div class="form-check">
           <input type="checkbox" id="diaspora">
           <label for="diaspora">
             <strong>Je vis en dehors de la RDC (diaspora)</strong><br>
-            <span style="font-size:0.82rem;color:var(--text-muted);">Cocher si vous résidez à l'étranger</span>
+            <span style="font-size:0.82rem;color:var(--text-muted);">Cochez si vous résidez à l'étranger</span>
           </label>
         </div>
 
         <button class="btn btn-primary btn-block mt-3" id="nextStep1">Continuer →</button>
       </div>
 
-      <!-- OTP : Vérification téléphone -->
+      <!-- ══════════════════════════════════ -->
+      <!-- OTP : Vérification téléphone       -->
+      <!-- ══════════════════════════════════ -->
       <div id="formOTP" class="card hidden">
         <h2 style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.25rem;">Vérification du téléphone</h2>
         <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.5rem;">
-          En production, ce code sera envoyé par SMS via <strong>Africa's Talking</strong>. Pour l'instant, utilisez le code affiché ci-dessous.
+          En production, ce code sera envoyé par SMS via <strong>Africa's Talking</strong>. En simulation, il s'affiche ci-dessous.
         </p>
 
         <div style="background:#fefce8;border:2px solid #ca8a04;border-radius:var(--radius-sm);padding:1.25rem;margin-bottom:1.25rem;">
           <div style="font-size:0.8rem;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;">
-            📱 Simulation SMS — Africa's Talking (à intégrer)
+            📱 Simulation SMS — Africa's Talking
           </div>
           <div style="font-size:0.82rem;color:#78350f;margin-bottom:0.5rem;">
-            Numéro enregistré : <strong id="phoneDisplay" style="font-family:monospace;"></strong>
+            Numéro : <strong id="phoneDisplay" style="font-family:monospace;"></strong>
           </div>
-          <div style="font-size:0.82rem;color:#78350f;margin-bottom:0.3rem;">Votre code de vérification :</div>
+          <div style="font-size:0.82rem;color:#78350f;margin-bottom:0.3rem;">Code de vérification :</div>
           <div id="otpDisplay" style="font-size:2.4rem;font-weight:700;letter-spacing:0.4em;color:var(--green-dark);font-family:var(--font-head);margin:0.25rem 0 0.5rem;"></div>
-          <div style="font-size:0.72rem;color:#92400e;opacity:0.8;">Ce code ne sera affiché qu'en mode simulation. En production : envoi SMS automatique.</div>
+          <div style="font-size:0.72rem;color:#92400e;opacity:0.8;">En production : envoi SMS automatique.</div>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="otpInput">
-            Saisissez le code à 6 chiffres <span class="required">*</span>
-          </label>
+          <label class="form-label" for="otpInput">Code à 6 chiffres <span class="required">*</span></label>
           <input type="text" id="otpInput" class="form-control"
-                 placeholder="_ _ _ _ _ _"
-                 maxlength="6" inputmode="numeric" autocomplete="one-time-code"
+                 placeholder="_ _ _ _ _ _" maxlength="6" inputmode="numeric" autocomplete="one-time-code"
                  style="font-size:1.8rem;letter-spacing:0.5em;text-align:center;font-weight:700;padding:0.65rem 0.5rem;">
           <div class="form-error" id="otp-error">Code incorrect. Vérifiez et réessayez.</div>
         </div>
@@ -136,52 +337,45 @@
           <button class="btn btn-outline" id="backOTP">← Retour</button>
           <button class="btn btn-primary" style="flex:1;" id="verifyOTP">Confirmer le code →</button>
         </div>
-
         <p style="text-align:center;margin-top:1rem;font-size:0.82rem;color:var(--text-muted);">
-          Code expiré ou incorrect ?
-          <button id="resendOTP" style="background:none;border:none;color:var(--green);font-weight:600;cursor:pointer;text-decoration:underline;font-size:0.82rem;padding:0;">Générer un nouveau code</button>
+          Code expiré ? <button id="resendOTP" style="background:none;border:none;color:var(--green);font-weight:600;cursor:pointer;text-decoration:underline;font-size:0.82rem;padding:0;">Renvoyer</button>
         </p>
       </div>
 
-      <!-- ÉTAPE 2 : Localisation -->
+      <!-- ══════════════════════════════════ -->
+      <!-- ÉTAPE 2 : Localisation             -->
+      <!-- ══════════════════════════════════ -->
       <div id="formStep2" class="card hidden">
         <h2 style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.25rem;">Étape 2 — Votre localisation</h2>
         <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.5rem;">
-          Ces informations permettent d'afficher les résultats par province et territoire.
+          Permet d'afficher les résultats par province et territoire.
         </p>
 
         <div id="localRDC">
           <div class="form-group">
-            <label class="form-label" for="province">
-              Province <span class="required">*</span>
-            </label>
+            <label class="form-label" for="province">Province <span class="required">*</span></label>
             <select id="province" class="form-control">
               <option value="">— Sélectionnez votre province —</option>
             </select>
             <div class="form-error" id="province-error">Veuillez sélectionner votre province.</div>
           </div>
-
           <div class="form-group">
-            <label class="form-label" for="territoire">
-              Territoire / Commune / Ville
-            </label>
-            <input type="text" id="territoire" class="form-control" placeholder="Ex: Kinshasa, Goma, Lubumbashi...">
-            <div class="form-hint">Optionnel. Commune, territoire ou ville de résidence.</div>
+            <label class="form-label" for="territoire">Territoire / Commune / Ville</label>
+            <input type="text" id="territoire" class="form-control" placeholder="Ex: Kinshasa, Goma, Lubumbashi…">
+            <div class="form-hint">Optionnel.</div>
           </div>
         </div>
 
         <div id="diasporaInfo" class="hidden">
-          <div class="alert alert-info">
-            🌍 En tant que membre de la diaspora, votre voix compte tout autant. La province de localisation est optionnelle.
-          </div>
+          <div class="alert alert-info">🌍 Votre voix compte autant depuis la diaspora.</div>
           <div class="form-group">
             <label class="form-label" for="paysResidence">Pays de résidence</label>
-            <input type="text" id="paysResidence" class="form-control" placeholder="Ex: France, Belgique, Canada...">
+            <input type="text" id="paysResidence" class="form-control" placeholder="Ex: France, Belgique, Canada…">
           </div>
           <div class="form-group">
             <label class="form-label" for="provinceOrigine">Province d'origine (optionnel)</label>
             <select id="provinceOrigine" class="form-control">
-              <option value="">— Aucune / Je ne sais pas —</option>
+              <option value="">— Aucune —</option>
             </select>
           </div>
         </div>
@@ -192,40 +386,39 @@
         </div>
       </div>
 
-      <!-- ÉTAPE 3 : Confidentialité -->
+      <!-- ══════════════════════════════════ -->
+      <!-- ÉTAPE 3 : Confidentialité          -->
+      <!-- ══════════════════════════════════ -->
       <div id="formStep3" class="card hidden">
         <h2 style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.25rem;">Étape 3 — Votre confidentialité</h2>
         <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.5rem;">
-          Choisissez comment vous souhaitez apparaître dans le forum citoyen.
+          Comment souhaitez-vous apparaître dans le forum citoyen ?
         </p>
 
         <div class="form-group">
           <label class="form-label">Mode d'affichage <span class="required">*</span></label>
-
           <div style="display:grid;gap:0.75rem;margin-bottom:0.5rem;">
             <label style="display:flex;align-items:flex-start;gap:0.75rem;padding:1rem;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s;" id="card-anonyme">
               <input type="radio" name="modeAffichage" value="anonyme" id="radio-anonyme" checked style="margin-top:3px;accent-color:var(--green);">
               <div>
                 <strong>🔒 Anonyme (recommandé)</strong><br>
-                <span style="font-size:0.82rem;color:var(--text-muted);">Votre vote et commentaires apparaissent comme "Citoyen anonyme". Votre identité est protégée.</span>
+                <span style="font-size:0.82rem;color:var(--text-muted);">Votre vote apparaît comme "Citoyen anonyme". Identité protégée.</span>
               </div>
             </label>
             <label style="display:flex;align-items:flex-start;gap:0.75rem;padding:1rem;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s;" id="card-public">
               <input type="radio" name="modeAffichage" value="public" id="radio-public" style="margin-top:3px;accent-color:var(--green);">
               <div>
                 <strong>🌐 Public</strong><br>
-                <span style="font-size:0.82rem;color:var(--text-muted);">Votre pseudo et votre province s'affichent dans le forum. Votre CIN reste toujours protégé.</span>
+                <span style="font-size:0.82rem;color:var(--text-muted);">Pseudo + province visibles. CIN toujours protégé.</span>
               </div>
             </label>
           </div>
         </div>
 
         <div class="form-group hidden" id="pseudoGroup">
-          <label class="form-label" for="pseudo">
-            Pseudo public <span class="required">*</span>
-          </label>
-          <input type="text" id="pseudo" class="form-control" placeholder="Ex: CitoyenKinois, VoixDuKivu..." maxlength="30">
-          <div class="form-hint">Entre 3 et 30 caractères. Pas de données personnelles.</div>
+          <label class="form-label" for="pseudo">Pseudo public <span class="required">*</span></label>
+          <input type="text" id="pseudo" class="form-control" placeholder="Ex: CitoyenKinois, VoixDuKivu…" maxlength="30">
+          <div class="form-hint">3 à 30 caractères. Pas de données personnelles.</div>
           <div class="form-error" id="pseudo-error">Le pseudo doit faire entre 3 et 30 caractères.</div>
         </div>
 
@@ -233,29 +426,30 @@
 
         <div style="display:flex;gap:1rem;margin-top:1.5rem;">
           <button class="btn btn-outline" id="backStep2">← Retour</button>
-          <button class="btn btn-primary" style="flex:1;" id="submitInscription" id="submitBtn">
+          <button class="btn btn-primary" style="flex:1;" id="submitInscription">
             <span id="submitText">Finaliser l'inscription</span>
             <span id="submitSpinner" class="hidden" style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-left:6px;"></span>
           </button>
         </div>
         <p style="font-size:0.78rem;color:var(--text-muted);margin-top:0.75rem;text-align:center;">
-          En vous inscrivant, vous confirmez être citoyen congolais et acceptez de voter une seule fois.
+          En vous inscrivant, vous confirmez être citoyen congolais et voter une seule fois.
         </p>
       </div>
 
-      <!-- Succès -->
+      <!-- ══════════════════════════════════ -->
+      <!-- Succès                             -->
+      <!-- ══════════════════════════════════ -->
       <div id="successCard" class="card text-center hidden">
         <div style="font-size:3.5rem;margin-bottom:1rem;">🎉</div>
         <h2 style="font-family:var(--font-head);font-size:1.5rem;font-weight:700;color:var(--green);margin-bottom:0.5rem;">Inscription réussie !</h2>
         <p style="color:var(--text-muted);margin-bottom:1.5rem;">
-          Bienvenue, <strong id="welcomeName">citoyen</strong> ! Vous faites maintenant partie des <strong id="successCount">…</strong> Congolais qui participent à ce débat historique.
+          Bienvenue, <strong id="welcomeName">citoyen</strong> ! Vous faites partie des <strong id="successCount">…</strong> Congolais qui participent à ce débat historique.
         </p>
-        <div class="alert alert-success mb-3">
-          ✅ Votre compte a été créé avec succès. Vous pouvez maintenant voter.
+        <div class="alert alert-info mb-3" id="pendingVerifNote" style="display:none;">
+          ⏳ Votre compte est <strong>en attente de vérification</strong>. Notre équipe validera votre identité sous 24–48h.
         </div>
-        <a href="voter.html" class="btn btn-primary btn-lg btn-block">
-          🗳️ Aller voter maintenant
-        </a>
+        <div class="alert alert-success mb-3">✅ Compte créé avec succès. Vous pouvez maintenant voter.</div>
+        <a href="voter.html" class="btn btn-primary btn-lg btn-block">🗳️ Aller voter maintenant</a>
         <a href="index.html" class="btn btn-outline btn-block mt-2">Retour à l'accueil</a>
         <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
           <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.75rem;">Partagez avec vos proches :</p>
@@ -270,10 +464,37 @@
 <!-- Footer -->
 <footer class="footer">
   <div class="container">
-    <div class="footer-bottom" style="border-top:none;padding-top:0;">
-      <span>© 2025 ParlonsNation</span>
-      <span>🔒 Données chiffrées • Hébergement sécurisé</span>
-      <a href="index.html" style="color:rgba(255,255,255,0.7);">← Retour à l'accueil</a>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">🇨🇩 Parlons<span>Nation</span></a>
+        <p>Plateforme de consultation citoyenne sur le débat constitutionnel de la RDC. Neutre, sécurisée, accessible à tous.</p>
+      </div>
+      <div>
+        <h4>Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="inscription.html">S'inscrire</a></li>
+          <li><a href="voter.html">Voter</a></li>
+          <li><a href="resultats.html">Résultats</a></li>
+          <li><a href="constitution.html">Constitution</a></li>
+          <li><a href="forum.html">Forum citoyen</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informations</h4>
+        <ul class="footer-links">
+          <li><a href="#">À propos</a></li>
+          <li><a href="#">Confidentialité</a></li>
+          <li><a href="#">Sécurité des données</a></li>
+        </ul>
+        <div style="margin-top:1rem;">
+          <p style="font-size:0.8rem;opacity:0.6;">🔒 Données chiffrées.<br>Aucun CIN stocké en clair.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 ParlonsNation — Tous droits réservés</span>
+      <span>🇨🇩 Fait pour les Congolais, par des Congolais</span>
     </div>
   </div>
 </footer>
@@ -282,19 +503,41 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ── CONFIG ────────────────────────────────────────────────
 const SUPABASE_URL = 'https://yagvezgfmxvrnngrxeuv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_ZwpN3mfLueArH7Iq_dJdYA_4ZxY2Ke_';
+const MINDEE_API_KEY = ''; // Optionnel: saisir votre clé API Mindee ici
 const { createClient } = window.supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Navigation mobile
+// ── RATE LIMITING (client-side) ───────────────────────────
+const RATE_KEY = 'pn_inscr_attempts';
+const RATE_MAX = 5;
+const RATE_WINDOW = 60 * 60 * 1000; // 1 heure
+
+function checkRateLimit() {
+  const raw = localStorage.getItem(RATE_KEY);
+  const state = raw ? JSON.parse(raw) : { count: 0, since: Date.now() };
+  if (Date.now() - state.since > RATE_WINDOW) {
+    state.count = 0; state.since = Date.now();
+  }
+  if (state.count >= RATE_MAX) {
+    document.getElementById('rateLimitMsg').classList.add('show');
+    return false;
+  }
+  state.count++;
+  localStorage.setItem(RATE_KEY, JSON.stringify(state));
+  return true;
+}
+
+// ── NAVIGATION ────────────────────────────────────────────
 document.getElementById('navToggle').addEventListener('click', () => {
   document.getElementById('navLinks').classList.toggle('open');
 });
 
-// ── Utilitaires ─────────────────────────────────────────
+// ── UTILITAIRES ───────────────────────────────────────────
 async function sha256(str) {
-  if (!str || !str.trim()) return null;
+  if (!str?.trim()) return null;
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str.trim().toUpperCase()));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
@@ -307,106 +550,260 @@ function toast(msg, type = 'success') {
   setTimeout(() => t.remove(), 3200);
 }
 
-// ── Vérifier si déjà inscrit ──────────────────────────
+// ── SCORE DE VÉRIFICATION ─────────────────────────────────
+let scoreState = { info: 0, age: 0, phone: 0, photo: 0, ocr: 0 };
+function updateScore() {
+  const total = Object.values(scoreState).reduce((a, b) => a + b, 0);
+  const capped = Math.min(total, 100);
+  document.getElementById('scoreBar').style.width = capped + '%';
+  document.getElementById('scoreNum').textContent = capped + '/100';
+  const bar = document.getElementById('scoreBar');
+  bar.style.background = capped >= 70 ? 'var(--green)' : capped >= 40 ? '#f59e0b' : '#ef4444';
+}
+
+// ── DÉJÀ INSCRIT ──────────────────────────────────────────
 if (localStorage.getItem('pn_citoyen_id')) {
   document.getElementById('alreadyRegistered').classList.remove('hidden');
 }
 
-// ── Charger les provinces ─────────────────────────────
+// ── DATE NAISSANCE & ÂGE ─────────────────────────────────
+const dobInput = document.getElementById('date_naissance');
+const today = new Date();
+dobInput.max = `${today.getFullYear() - 18}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+
+dobInput.addEventListener('change', function() {
+  const dob = new Date(this.value);
+  const ageBadge = document.getElementById('age-badge');
+  if (!this.value) { ageBadge.innerHTML = ''; return; }
+  let age = today.getFullYear() - dob.getFullYear();
+  const m = today.getMonth() - dob.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+  if (age >= 18) {
+    ageBadge.innerHTML = `<span class="age-badge age-ok">✓ ${age} ans — éligible</span>`;
+    document.getElementById('dob-error').classList.remove('show');
+    scoreState.age = 20;
+  } else {
+    ageBadge.innerHTML = `<span class="age-badge age-bad">✗ ${age} ans — non éligible (18 ans minimum)</span>`;
+    scoreState.age = 0;
+  }
+  updateScore();
+});
+
+// Infos de base → score
+['nom','post_nom','prenom'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    const n = document.getElementById('nom').value.trim();
+    const pn = document.getElementById('post_nom').value.trim();
+    const pr = document.getElementById('prenom').value.trim();
+    scoreState.info = (n && pn && pr) ? 10 : 0;
+    updateScore();
+  });
+});
+
+// ── UPLOAD PHOTOS CIN ─────────────────────────────────────
+let rectoFile = null, versoFile = null;
+
+function setupPhotoUpload(inputId, previewId, statusId, zoneId, isRequired) {
+  const input    = document.getElementById(inputId);
+  const preview  = document.getElementById(previewId);
+  const status   = document.getElementById(statusId);
+  const zone     = document.getElementById(zoneId);
+
+  input.addEventListener('change', async function() {
+    const file = this.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast('Image trop lourde (max 5 MB)', 'error');
+      this.value = '';
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    preview.src = url;
+    preview.classList.add('show');
+    zone.classList.add('has-file');
+    zone.querySelector('.photo-placeholder').style.display = 'none';
+    status.classList.add('show');
+
+    if (inputId === 'cin_recto') {
+      rectoFile = file;
+      scoreState.photo = 30;
+      updateScore();
+      if (MINDEE_API_KEY) runMindeeOCR(file);
+    } else {
+      versoFile = file;
+      scoreState.photo = Math.min(scoreState.photo + 10, 40);
+      updateScore();
+    }
+  });
+}
+
+setupPhotoUpload('cin_recto', 'preview-recto', 'status-recto', 'zone-recto', true);
+setupPhotoUpload('cin_verso',  'preview-verso',  'status-verso',  'zone-verso',  false);
+
+// ── OCR MINDEE ────────────────────────────────────────────
+async function runMindeeOCR(file) {
+  if (!MINDEE_API_KEY) return;
+  document.getElementById('ocr-running').classList.add('show');
+  document.getElementById('ocr-ok').classList.remove('show');
+  document.getElementById('ocr-warn').classList.remove('show');
+  try {
+    const body = new FormData();
+    body.append('document', file);
+    const res = await fetch('https://api.mindee.net/v1/products/mindee/international_id/v2/predict', {
+      method: 'POST',
+      headers: { 'Authorization': `Token ${MINDEE_API_KEY}` },
+      body
+    });
+    document.getElementById('ocr-running').classList.remove('show');
+    if (!res.ok) throw new Error('OCR failed');
+    const json = await res.json();
+    const pred = json?.document?.inference?.pages?.[0]?.prediction;
+    if (pred) {
+      // Pré-remplir les champs si vides
+      if (pred.surnames?.length > 0 && !document.getElementById('nom').value)
+        document.getElementById('nom').value = pred.surnames[0].value || '';
+      if (pred.given_names?.length > 0 && !document.getElementById('prenom').value)
+        document.getElementById('prenom').value = pred.given_names[0].value || '';
+      if (pred.birth_date?.value && !document.getElementById('date_naissance').value)
+        document.getElementById('date_naissance').value = pred.birth_date.value;
+      scoreState.ocr = 10;
+      updateScore();
+      document.getElementById('ocr-ok').classList.add('show');
+    } else {
+      document.getElementById('ocr-warn').classList.add('show');
+    }
+  } catch {
+    document.getElementById('ocr-running').classList.remove('show');
+    document.getElementById('ocr-warn').classList.add('show');
+  }
+}
+
+// ── CIN EXPIRY CHECK ──────────────────────────────────────
+document.getElementById('cin_expiry').addEventListener('change', function() {
+  if (this.value && new Date(this.value) < new Date()) {
+    toast('⚠️ Votre CIN semble expiré. Cela peut affecter la vérification.', 'error');
+  }
+});
+
+// ── PROVINCES ─────────────────────────────────────────────
 async function loadProvinces() {
   const { data } = await db.from('provinces').select('id, nom').order('nom');
   if (!data) return;
-  const selects = ['province', 'provinceOrigine'];
-  selects.forEach(id => {
+  ['province','provinceOrigine'].forEach(id => {
     const sel = document.getElementById(id);
     data.forEach(p => {
       const opt = document.createElement('option');
-      opt.value = p.id;
-      opt.textContent = p.nom;
+      opt.value = p.id; opt.textContent = p.nom;
       sel.appendChild(opt);
     });
   });
 }
 loadProvinces();
 
-// ── Diaspora toggle ───────────────────────────────────
+// ── DIASPORA TOGGLE ───────────────────────────────────────
 document.getElementById('diaspora').addEventListener('change', function() {
   document.getElementById('localRDC').classList.toggle('hidden', this.checked);
   document.getElementById('diasporaInfo').classList.toggle('hidden', !this.checked);
 });
 
-// ── Mode affichage toggle ─────────────────────────────
-document.querySelectorAll('input[name="modeAffichage"]').forEach(radio => {
-  radio.addEventListener('change', function() {
-    const isPublic = this.value === 'public';
-    document.getElementById('pseudoGroup').classList.toggle('hidden', !isPublic);
-    document.getElementById('card-anonyme').style.borderColor = !isPublic ? 'var(--green)' : 'var(--border)';
-    document.getElementById('card-public').style.borderColor  = isPublic  ? 'var(--green)' : 'var(--border)';
+// ── MODE AFFICHAGE ────────────────────────────────────────
+document.querySelectorAll('input[name="modeAffichage"]').forEach(r => {
+  r.addEventListener('change', function() {
+    const pub = this.value === 'public';
+    document.getElementById('pseudoGroup').classList.toggle('hidden', !pub);
+    document.getElementById('card-anonyme').style.borderColor = !pub ? 'var(--green)' : 'var(--border)';
+    document.getElementById('card-public').style.borderColor  =  pub ? 'var(--green)' : 'var(--border)';
   });
 });
-// Initialiser
 document.getElementById('card-anonyme').style.borderColor = 'var(--green)';
 
-// ── Validation téléphone ──────────────────────────────
+// ── VALIDATION TÉLÉPHONE ──────────────────────────────────
 function validatePhone(raw) {
   const n = raw.replace(/[\s\-\.\(\)]/g, '');
   return /^(\+?243\d{9}|0[89]\d{8})$/.test(n);
 }
-function normalizePhone(raw) {
-  return raw.replace(/[\s\-\.\(\)]/g, '');
-}
-let generatedOTP = null;
-let phoneVerified = false;
+function normalizePhone(raw) { return raw.replace(/[\s\-\.\(\)]/g, ''); }
+let generatedOTP = null, phoneVerified = false;
 
-// ── Navigation entre étapes ───────────────────────────
-let currentStep = 1;
-
+// ── NAVIGATION ÉTAPES ─────────────────────────────────────
 function showStep(n) {
   [1,2,3].forEach(i => {
     document.getElementById(`formStep${i}`).classList.toggle('hidden', i !== n);
     const ind = document.getElementById(`step-ind-${i}`);
-    ind.classList.remove('active', 'done');
+    ind.classList.remove('active','done');
     if (i < n)  ind.classList.add('done');
     if (i === n) ind.classList.add('active');
-    if (i < 3) {
-      document.getElementById(`line-${i}`).classList.toggle('done', i < n);
-    }
+    if (i < 3) document.getElementById(`line-${i}`).classList.toggle('done', i < n);
   });
-  currentStep = n;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Étape 1 → OTP → 2
+// ── ÉTAPE 1 → OTP ─────────────────────────────────────────
 document.getElementById('nextStep1').addEventListener('click', () => {
-  const cin   = document.getElementById('cin').value.trim();
-  const phone = document.getElementById('telephone').value.trim();
+  if (!checkRateLimit()) return;
+
   let valid = true;
 
+  // Nom / post-nom / prénom
+  ['nom','post_nom','prenom'].forEach(id => {
+    const el = document.getElementById(id);
+    const errEl = document.getElementById(id+'-error');
+    if (!el.value.trim()) { errEl.classList.add('show'); if(valid){el.focus();} valid=false; }
+    else errEl.classList.remove('show');
+  });
+
+  // Date de naissance & âge >= 18
+  const dob = document.getElementById('date_naissance').value;
+  if (!dob) {
+    document.getElementById('dob-error').textContent = 'La date de naissance est obligatoire.';
+    document.getElementById('dob-error').classList.add('show'); valid = false;
+  } else {
+    const age = Math.floor((new Date() - new Date(dob)) / (365.25 * 24 * 3600 * 1000));
+    if (age < 18) {
+      document.getElementById('dob-error').textContent = 'Vous devez avoir au moins 18 ans pour voter.';
+      document.getElementById('dob-error').classList.add('show'); valid = false;
+    } else {
+      document.getElementById('dob-error').classList.remove('show');
+    }
+  }
+
+  // Sexe
+  if (!document.querySelector('input[name="sexe"]:checked')) {
+    document.getElementById('sexe-error').classList.add('show'); valid = false;
+  } else {
+    document.getElementById('sexe-error').classList.remove('show');
+  }
+
+  // CIN
+  const cin = document.getElementById('cin').value.trim();
   if (cin.length < 6) {
-    document.getElementById('cin-error').classList.add('show');
-    document.getElementById('cin').focus();
-    valid = false;
+    document.getElementById('cin-error').classList.add('show'); if(valid){document.getElementById('cin').focus();} valid = false;
   } else {
     document.getElementById('cin-error').classList.remove('show');
   }
 
+  // Photo recto obligatoire
+  if (!rectoFile) {
+    document.getElementById('recto-error').classList.add('show'); valid = false;
+  } else {
+    document.getElementById('recto-error').classList.remove('show');
+  }
+
+  // Téléphone
+  const phone = document.getElementById('telephone').value.trim();
   if (!phone) {
     document.getElementById('telephone-error').textContent = 'Le numéro de téléphone est obligatoire.';
-    document.getElementById('telephone-error').classList.add('show');
-    if (valid) document.getElementById('telephone').focus();
-    valid = false;
+    document.getElementById('telephone-error').classList.add('show'); if(valid){document.getElementById('telephone').focus();} valid = false;
   } else if (!validatePhone(phone)) {
-    document.getElementById('telephone-error').textContent = 'Format invalide. Exemples : +243812345678 · 0812345678 · 0912345678';
-    document.getElementById('telephone-error').classList.add('show');
-    if (valid) document.getElementById('telephone').focus();
-    valid = false;
+    document.getElementById('telephone-error').textContent = 'Format invalide. Ex: +243812345678 · 0812345678';
+    document.getElementById('telephone-error').classList.add('show'); if(valid){document.getElementById('telephone').focus();} valid = false;
   } else {
     document.getElementById('telephone-error').classList.remove('show');
   }
 
   if (!valid) return;
 
-  // Générer OTP et afficher le panel de vérification
+  // Générer OTP
   generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
   document.getElementById('phoneDisplay').textContent = normalizePhone(phone);
   document.getElementById('otpDisplay').textContent = generatedOTP;
@@ -418,64 +815,40 @@ document.getElementById('nextStep1').addEventListener('click', () => {
   setTimeout(() => document.getElementById('otpInput').focus(), 150);
 });
 
-// Étape 2 → 3
-document.getElementById('nextStep2').addEventListener('click', () => {
-  const isDiaspora = document.getElementById('diaspora').checked;
-  if (!isDiaspora) {
-    const prov = document.getElementById('province').value;
-    if (!prov) {
-      document.getElementById('province-error').classList.add('show');
-      document.getElementById('province').focus();
-      return;
-    }
-    document.getElementById('province-error').classList.remove('show');
-  }
-  showStep(3);
-});
-
-// Retour 2 → 1
-document.getElementById('backStep1').addEventListener('click', () => showStep(1));
-// Retour 3 → 2
-document.getElementById('backStep2').addEventListener('click', () => showStep(2));
-
-// ── OTP : retour vers étape 1 ─────────────────────────
+// ── OTP RETOUR ────────────────────────────────────────────
 document.getElementById('backOTP').addEventListener('click', () => {
   document.getElementById('formOTP').classList.add('hidden');
   document.getElementById('formStep1').classList.remove('hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// ── OTP : vérification du code ────────────────────────
+// ── OTP VÉRIFICATION ─────────────────────────────────────
 document.getElementById('verifyOTP').addEventListener('click', () => {
   const entered = document.getElementById('otpInput').value.trim();
   if (entered.length !== 6) {
     document.getElementById('otp-error').textContent = 'Entrez les 6 chiffres du code.';
     document.getElementById('otp-error').classList.add('show');
-    document.getElementById('otpInput').focus();
-    return;
+    document.getElementById('otpInput').focus(); return;
   }
   if (entered !== generatedOTP) {
     document.getElementById('otp-error').textContent = 'Code incorrect. Vérifiez et réessayez.';
     document.getElementById('otp-error').classList.add('show');
-    document.getElementById('otpInput').select();
-    return;
+    document.getElementById('otpInput').select(); return;
   }
   document.getElementById('otp-error').classList.remove('show');
   phoneVerified = true;
+  scoreState.phone = 30;
+  updateScore();
   document.getElementById('formOTP').classList.add('hidden');
   showStep(2);
-  toast('Téléphone vérifié avec succès !');
+  toast('✅ Téléphone vérifié !');
 });
 
-// ── OTP : auto-vérification à 6 chiffres ─────────────
 document.getElementById('otpInput').addEventListener('input', function() {
   this.value = this.value.replace(/\D/g, '').slice(0, 6);
-  if (this.value.length === 6) {
-    setTimeout(() => document.getElementById('verifyOTP').click(), 250);
-  }
+  if (this.value.length === 6) setTimeout(() => document.getElementById('verifyOTP').click(), 250);
 });
 
-// ── OTP : renvoyer un nouveau code ────────────────────
 document.getElementById('resendOTP').addEventListener('click', () => {
   generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
   document.getElementById('otpDisplay').textContent = generatedOTP;
@@ -485,7 +858,22 @@ document.getElementById('resendOTP').addEventListener('click', () => {
   toast('Nouveau code généré : ' + generatedOTP);
 });
 
-// ── Soumission finale ─────────────────────────────────
+// ── ÉTAPE 2 → 3 ──────────────────────────────────────────
+document.getElementById('nextStep2').addEventListener('click', () => {
+  if (!document.getElementById('diaspora').checked) {
+    if (!document.getElementById('province').value) {
+      document.getElementById('province-error').classList.add('show');
+      document.getElementById('province').focus(); return;
+    }
+    document.getElementById('province-error').classList.remove('show');
+  }
+  showStep(3);
+});
+
+document.getElementById('backStep1').addEventListener('click', () => showStep(1));
+document.getElementById('backStep2').addEventListener('click', () => showStep(2));
+
+// ── SOUMISSION FINALE ─────────────────────────────────────
 document.getElementById('submitInscription').addEventListener('click', async () => {
   const modeAffichage = document.querySelector('input[name="modeAffichage"]:checked').value;
   const pseudo = document.getElementById('pseudo').value.trim();
@@ -494,8 +882,7 @@ document.getElementById('submitInscription').addEventListener('click', async () 
 
   if (modeAffichage === 'public' && (pseudo.length < 3 || pseudo.length > 30)) {
     document.getElementById('pseudo-error').classList.add('show');
-    document.getElementById('pseudo').focus();
-    return;
+    document.getElementById('pseudo').focus(); return;
   }
   document.getElementById('pseudo-error').classList.remove('show');
 
@@ -509,71 +896,99 @@ document.getElementById('submitInscription').addEventListener('click', async () 
     const telephone  = document.getElementById('telephone').value.trim();
     const isDiaspora = document.getElementById('diaspora').checked;
     const territoire = document.getElementById('territoire').value.trim();
+    const nom        = document.getElementById('nom').value.trim();
+    const post_nom   = document.getElementById('post_nom').value.trim();
+    const prenom     = document.getElementById('prenom').value.trim();
+    const sexe       = document.querySelector('input[name="sexe"]:checked')?.value || null;
+    const dob        = document.getElementById('date_naissance').value;
+    const cinExpiry  = document.getElementById('cin_expiry').value;
+    const cinExpired = cinExpiry ? new Date(cinExpiry) < new Date() : false;
 
-    const cinHash  = await sha256(cin);
-    const telHash  = telephone ? await sha256(telephone) : null;
+    // Calcul du score final
+    const finalScore = Math.min(Object.values(scoreState).reduce((a,b) => a+b, 0), 100);
+
+    const cinHash = await sha256(cin);
+    const telHash = telephone ? await sha256(telephone) : null;
+
+    // Upload photos vers Supabase Storage
+    let cinPhotoUrl = null, cinVersoUrl = null;
+    if (rectoFile) {
+      const path = `${cinHash}/${Date.now()}_recto.${rectoFile.name.split('.').pop()}`;
+      const { data: up } = await db.storage.from('cin-photos').upload(path, rectoFile, { contentType: rectoFile.type });
+      cinPhotoUrl = up?.path || null;
+    }
+    if (versoFile) {
+      const path = `${cinHash}/${Date.now()}_verso.${versoFile.name.split('.').pop()}`;
+      const { data: up } = await db.storage.from('cin-photos').upload(path, versoFile, { contentType: versoFile.type });
+      cinVersoUrl = up?.path || null;
+    }
 
     let provinceId = null;
-    if (!isDiaspora) {
-      provinceId = document.getElementById('province').value || null;
-    } else {
-      const provOrig = document.getElementById('provinceOrigine').value;
-      provinceId = provOrig || null;
+    if (!isDiaspora) provinceId = document.getElementById('province').value || null;
+    else {
+      const po = document.getElementById('provinceOrigine').value;
+      provinceId = po || null;
     }
 
     const payload = {
-      cin_hash:       cinHash,
-      telephone_hash: telHash,
-      province_id:    provinceId ? parseInt(provinceId) : null,
-      territoire:     territoire || null,
-      mode_affichage: modeAffichage,
-      pseudo:         modeAffichage === 'public' ? pseudo : null,
+      cin_hash:          cinHash,
+      telephone_hash:    telHash,
+      nom,
+      post_nom,
+      prenom,
+      date_naissance:    dob || null,
+      sexe,
+      cin_expire:        cinExpired,
+      cin_expiry_date:   cinExpiry || null,
+      cin_photo_url:     cinPhotoUrl,
+      cin_verso_url:     cinVersoUrl,
+      score_verification: finalScore,
+      province_id:       provinceId ? parseInt(provinceId) : null,
+      territoire:        territoire || null,
+      mode_affichage:    modeAffichage,
+      pseudo:            modeAffichage === 'public' ? pseudo : null,
       diaspora:          isDiaspora,
-      telephone_verifie: phoneVerified
+      telephone_verifie: phoneVerified,
+      age_verifie:       true,
+      statut:            finalScore >= 60 ? 'en_attente' : 'en_attente'
     };
 
     let { data, error } = await db.from('citoyens').insert(payload).select('id').single();
 
-    // Fallback : si la colonne telephone_verifie n'existe pas encore dans Supabase
-    if (error && error.message && error.message.includes('telephone_verifie')) {
-      const { telephone_verifie, ...payloadSans } = payload;
-      ({ data, error } = await db.from('citoyens').insert(payloadSans).select('id').single());
-    }
-
     if (error) {
       if (error.code === '23505') {
-        errDiv.textContent = '⚠️ Ce numéro CIN ou téléphone est déjà inscrit. Si c\'est vous, vous avez peut-être déjà voté.';
+        errDiv.textContent = '⚠️ Ce numéro CIN ou téléphone est déjà inscrit.';
       } else {
         errDiv.textContent = `Erreur : ${error.message}`;
       }
-      errDiv.classList.remove('hidden');
-      return;
+      errDiv.classList.remove('hidden'); return;
     }
 
-    // Stocker la session locale
+    // Session locale
     localStorage.setItem('pn_citoyen_id', data.id);
     localStorage.setItem('pn_province_id', provinceId || '');
     localStorage.setItem('pn_mode', modeAffichage);
     localStorage.setItem('pn_pseudo', modeAffichage === 'public' ? pseudo : '');
 
-    // Afficher le succès
+    // Succès
     document.getElementById('formStep3').classList.add('hidden');
     document.getElementById('stepsIndicator').classList.add('hidden');
     document.getElementById('successCard').classList.remove('hidden');
 
+    if (finalScore < 70) {
+      document.getElementById('pendingVerifNote').style.display = 'flex';
+    }
+
     const displayName = modeAffichage === 'public' ? pseudo : 'Citoyen';
     document.getElementById('welcomeName').textContent = displayName;
-
-    // Recharger le compteur
-    const { count } = await db.from('citoyens').select('*', { count: 'exact', head: true });
-    document.getElementById('successCount').textContent = (count || 0).toLocaleString('fr-FR');
-
+    const { count } = await db.from('citoyens').select('*', { count:'exact', head:true });
+    document.getElementById('successCount').textContent = (count||0).toLocaleString('fr-FR');
     document.getElementById('shareSuccess').href =
-      `https://wa.me/?text=${encodeURIComponent('🇨🇩 Je viens de m\'inscrire sur ParlonsNation pour donner mon avis sur la Constitution de la RDC. Rejoins-moi : ' + window.location.origin + '/inscription.html')}`;
+      `https://wa.me/?text=${encodeURIComponent('🇨🇩 Je viens de m\'inscrire sur ParlonsNation. Rejoins-moi : ' + window.location.origin + '/inscription.html')}`;
 
   } catch (err) {
-    errDiv.textContent = `Erreur inattendue : ${err.message}`;
-    errDiv.classList.remove('hidden');
+    document.getElementById('inscriptionError').textContent = `Erreur inattendue : ${err.message}`;
+    document.getElementById('inscriptionError').classList.remove('hidden');
   } finally {
     btn.disabled = false;
     document.getElementById('submitText').textContent = 'Finaliser l\'inscription';
